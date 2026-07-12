@@ -1,14 +1,16 @@
-from app.core.config import settings
 from app.core.filesystem import DirectoryManager
+from app.core.logging import LoggerManager
 
 
 def main() -> None:
-    manager = DirectoryManager()
-    manager.prepare()
+    DirectoryManager().prepare()
 
-    print(f"Application : {settings.app_name}")
-    print(f"Database    : {settings.database_path}")
-    print("Directories are ready.")
+    logger_manager = LoggerManager()
+    logger_manager.configure()
+
+    logger = logger_manager.logger
+
+    logger.info("Application started successfully.")
 
 
 if __name__ == "__main__":

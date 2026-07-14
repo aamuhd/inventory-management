@@ -25,3 +25,4 @@ SQLAlchemy==2.0.51
 sqlmodel==0.0.39
 typing-inspection==0.4.2
 typing_extensions==4.16.0
+argon2-cffi

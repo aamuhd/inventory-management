@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlmodel import Field
 
-from desktop.app.core.database.models.base import BaseModel
+from app.core.database.models.base import BaseModel
 
 
 class Role(BaseModel, table=True):

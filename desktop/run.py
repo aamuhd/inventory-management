@@ -6,8 +6,13 @@ from app.modules.authentication.repositories.user_repository import UserReposito
 from app.core.security.password_hasher import PasswordHasher
 from app.modules.authentication.services.authentication_service import AuthenticationService
 from app.core.session.current_session import CurrentSession
-from app.modules.authentication.ui.login_window import LoginWindow
 from PySide6.QtWidgets import QApplication
+
+import sys
+
+from app.core.application.application_controller import ApplicationController
+from app.modules.authentication.ui.login_window import LoginWindow
+
 
 
 def main() -> None:
@@ -20,32 +25,36 @@ def main() -> None:
 
     logger.info("Application started successfully.")
 
-    
+    app = QApplication(sys.argv)
 
-
-if __name__ == "__main__":
-    main()
     database_manager = DatabaseManager()
+
     SQLModel.metadata.create_all(database_manager.engine)
 
     session = Session(database_manager.engine)
 
     user_repository = UserRepository(session)
+
     password_hasher = PasswordHasher()
 
     authentication_service = AuthenticationService(
-        user_repository,
-        password_hasher,
+        user_repository=user_repository,
+        password_hasher=password_hasher,
     )
 
     current_session = CurrentSession()
-    app = QApplication([])
 
     window = LoginWindow(
-        authentication_service,
-        current_session,
-    )
+    authentication_service=authentication_service,
+    current_session=current_session,
+)
 
     window.show()
-   
-    app.exec()
+
+    sys.exit(app.exec())
+        
+
+
+if __name__ == "__main__":
+    main()
+    

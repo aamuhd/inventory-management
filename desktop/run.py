@@ -44,12 +44,12 @@ def main() -> None:
 
     current_session = CurrentSession()
 
-    window = LoginWindow(
-    authentication_service=authentication_service,
-    current_session=current_session,
-)
+    controller = ApplicationController(
+        authentication_service=authentication_service,
+        current_session=current_session,
+    )
 
-    window.show()
+    controller.show_login()
 
     sys.exit(app.exec())
         

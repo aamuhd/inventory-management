@@ -10,6 +10,7 @@ from app.modules.authentication.services.authentication_service import (
     AuthenticationService,
 )
 from app.modules.dashboard.ui.dashboard_window import DashboardWindow
+from app.core.application.navigation import Navigation
 
 
 from .login_form import LoginForm
@@ -18,13 +19,13 @@ from .login_form import LoginForm
 class LoginWindow(QMainWindow):
     def __init__(
         self,
-        #controller: "ApplicationController",
+        navigation: Navigation,
         authentication_service: AuthenticationService,
         current_session: CurrentSession,
     ) -> None:
         super().__init__()
 
-        #self._controller = controller
+        self._navigation = navigation
         self._authentication_service = authentication_service
         self._current_session = current_session
 
@@ -71,14 +72,9 @@ class LoginWindow(QMainWindow):
                 f"Welcome {user.full_name}!",
             )
 
-            self.dashboard = DashboardWindow(
-                self._current_session,
-            )
-
-            self.dashboard.show()
-
             self.close()
-            #self._controller.show_dashboard()
+            self._navigation.show_dashboard()
+            
 
         except AuthenticationError as exc:
             QMessageBox.warning(

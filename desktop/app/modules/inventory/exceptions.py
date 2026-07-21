@@ -12,3 +12,27 @@ class CategoryNotFoundError(CategoryError):
 
 class InvalidCategoryNameError(CategoryError):
     """Raised when the category name is invalid."""
+
+
+# Product Exceptions
+
+class ProductError(Exception):
+    """Base category exception."""
+
+
+class ProductAlreadyExistsError(ProductError):
+    """Raised when a product already exists."""
+
+
+class ProductNotFoundError(ProductError):
+    """Raised when a product cannot be found."""
+
+
+class InvalidProductNameError(ProductError):
+    """Raised when the product name is invalid."""
+
+
+
+
+
+

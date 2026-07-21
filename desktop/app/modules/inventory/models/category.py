@@ -1,6 +1,12 @@
 from datetime import datetime, timezone
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship, SQLModel, Field
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.modules.inventory.models.product import Product
+
 
 
 class Category(SQLModel, table=True):
@@ -19,3 +25,9 @@ class Category(SQLModel, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    products: list["Product"] = Relationship(
+        sa_relationship_kwargs={
+            "back_populates": "category",
+        }
+    )

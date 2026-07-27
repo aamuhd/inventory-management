@@ -323,3 +323,39 @@ class PurchaseOrderService:
             )
 
         return item
+    
+    def receive_all(
+        self,
+        purchase_order_id: UUID,
+    ) -> None:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        if purchase_order.status not in (
+            PurchaseOrderStatus.ORDERED,
+            PurchaseOrderStatus.PARTIALLY_RECEIVED,
+        ):
+            raise InvalidPurchaseOrderStateError(
+                "Purchase order cannot receive goods."
+            )
+
+        items = (
+            self._purchase_order_item_repository.get_by_purchase_order(
+                purchase_order_id,
+            )
+        )
+
+        for item in items:
+
+            outstanding = (
+                item.quantity - item.received_quantity
+            )
+
+            if outstanding > 0:
+
+                self.receive_item(
+                    item.id,
+                    outstanding,
+                )

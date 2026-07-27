@@ -780,3 +780,112 @@ def test_receive_unknown_item():
         )
 
 
+def test_receive_all_items():
+
+    (
+        supplier_service,
+        product_service,
+        variant_service,
+        purchase_order_service,
+    ) = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    variant1 = create_variant(
+        product_service,
+        variant_service,
+    )
+
+    variant2 = variant_service.create(
+        product_id=variant1.product_id,
+        length=10,
+        stock_quantity=0,
+        reorder_level=5,
+        cost_price=Decimal("2000"),
+        selling_price=Decimal("2500"),
+    )
+
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    purchase_order_service.add_item(
+        purchase_order.id,
+        variant1.id,
+        10,
+        Decimal("2000"),
+    )
+
+    purchase_order_service.add_item(
+        purchase_order.id,
+        variant2.id,
+        20,
+        Decimal("2100"),
+    )
+
+    purchase_order_service.submit(
+        purchase_order.id,
+    )
+
+    purchase_order_service.receive_all(
+        purchase_order.id,
+    )
+
+    variant1 = variant_service.get_by_id(
+        variant1.id,
+    )
+
+    variant2 = variant_service.get_by_id(
+        variant2.id,
+    )
+
+    assert variant1.stock_quantity == 10
+    assert variant2.stock_quantity == 20
+
+    purchase_order = purchase_order_service.get_by_id(
+        purchase_order.id,
+    )
+
+    assert purchase_order.status == PurchaseOrderStatus.RECEIVED
+
+
+def test_receive_all_after_partial():
+
+    (
+        purchase_order_service,
+        variant_service,
+        purchase_order,
+        item,
+        variant,
+    ) = create_submitted_purchase_order()
+
+    purchase_order_service.receive_item(
+        item.id,
+        4,
+    )
+
+    purchase_order_service.receive_all(
+        purchase_order.id,
+    )
+
+    variant = variant_service.get_by_id(
+        variant.id,
+    )
+
+    assert variant.stock_quantity == 10
+
+    item = purchase_order_service.get_item(
+        item.id,
+    )
+
+    assert item.received_quantity == 10
+
+    purchase_order = purchase_order_service.get_by_id(
+        purchase_order.id,
+    )
+
+    assert purchase_order.status == PurchaseOrderStatus.RECEIVED

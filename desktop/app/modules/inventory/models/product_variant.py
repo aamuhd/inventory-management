@@ -9,6 +9,7 @@ from app.core.database.models.base import BaseModel
 if TYPE_CHECKING:
     from app.modules.inventory.models.product import Product
     from app.modules.inventory.models.stock_movement import StockMovement
+    from app.modules.inventory.models.purchase_order_item import PurchaseOrderItem
 
 
 class ProductVariant(BaseModel, table=True):
@@ -53,4 +54,8 @@ class ProductVariant(BaseModel, table=True):
 
     movements: List["StockMovement"] = Relationship(
         back_populates="variant"
+    )
+
+    purchase_order_items: List["PurchaseOrderItem"] = Relationship(
+        back_populates="product_variant"
     )

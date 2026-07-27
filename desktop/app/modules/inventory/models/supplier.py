@@ -1,6 +1,12 @@
-from sqlmodel import Field
+from sqlmodel import Field, Relationship
+
+from typing import TYPE_CHECKING, List
 
 from app.core.database.models.base import BaseModel
+
+
+if TYPE_CHECKING:
+    from app.modules.inventory.models.purchase_order import PurchaseOrder
 
 
 class Supplier(BaseModel, table=True):
@@ -35,4 +41,8 @@ class Supplier(BaseModel, table=True):
     notes: str | None = Field(
         default=None,
         max_length=500,
+    )
+
+    purchase_orders: List["PurchaseOrder"] = Relationship(
+        back_populates="supplier"
     )

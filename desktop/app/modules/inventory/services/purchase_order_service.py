@@ -1,0 +1,114 @@
+from datetime import date
+from decimal import Decimal
+from uuid import UUID
+
+from app.modules.inventory.enums.purchase_order_status import (
+    PurchaseOrderStatus,
+)
+from app.modules.inventory.exceptions import (
+    InvalidPurchaseOrderStateError,
+    PurchaseOrderNotFoundError,
+)
+from app.modules.inventory.models.purchase_order import PurchaseOrder
+from app.modules.inventory.repositories.purchase_order_item_repository import (
+    PurchaseOrderItemRepository,
+)
+from app.modules.inventory.repositories.purchase_order_repository import (
+    PurchaseOrderRepository,
+)
+from app.modules.inventory.services.product_variant_service import (
+    ProductVariantService,
+)
+from app.modules.inventory.services.stock_movement_service import (
+    StockMovementService,
+)
+from app.modules.inventory.services.supplier_service import (
+    SupplierService,
+)
+
+
+class PurchaseOrderService:
+
+    def __init__(
+        self,
+        purchase_order_repository: PurchaseOrderRepository,
+        purchase_order_item_repository: PurchaseOrderItemRepository,
+        supplier_service: SupplierService,
+        product_variant_service: ProductVariantService,
+        stock_movement_service: StockMovementService,
+    ) -> None:
+
+        self._purchase_order_repository = purchase_order_repository
+        self._purchase_order_item_repository = purchase_order_item_repository
+        self._supplier_service = supplier_service
+        self._product_variant_service = product_variant_service
+        self._stock_movement_service = stock_movement_service
+
+    def create(
+        self,
+        supplier_id: UUID,
+        order_number: str,
+        order_date: date,
+        expected_date: date | None = None,
+        notes: str | None = None,
+    ) -> PurchaseOrder:
+
+        self._supplier_service.get_by_id(
+            supplier_id,
+        )
+
+        purchase_order = PurchaseOrder(
+            supplier_id=supplier_id,
+            order_number=order_number,
+            order_date=order_date,
+            expected_date=expected_date,
+            notes=notes,
+            status=PurchaseOrderStatus.DRAFT,
+            total_amount=Decimal("0.00"),
+        )
+
+        return self._purchase_order_repository.create(
+            purchase_order,
+        )
+
+    def get_by_id(
+        self,
+        purchase_order_id: UUID,
+    ) -> PurchaseOrder:
+
+        purchase_order = (
+            self._purchase_order_repository.get_by_id(
+                purchase_order_id,
+            )
+        )
+
+        if purchase_order is None:
+            raise PurchaseOrderNotFoundError(
+                "Purchase order not found."
+            )
+
+        return purchase_order
+
+    def get_all(
+        self,
+    ) -> list[PurchaseOrder]:
+
+        return self._purchase_order_repository.get_all()
+
+    def delete(
+        self,
+        purchase_order_id: UUID,
+    ) -> None:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        if purchase_order.status != PurchaseOrderStatus.DRAFT:
+            raise InvalidPurchaseOrderStateError(
+                "Only draft purchase orders can be deleted."
+            )
+
+        self._purchase_order_repository.delete(
+            purchase_order,
+        )

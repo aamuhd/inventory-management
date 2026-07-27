@@ -88,6 +88,17 @@ class SupplierAlreadyExistsError(Exception):
 class InvalidSupplierNameError(Exception):
     pass
 
+
+
+######
+
+class InvalidPurchaseOrderStateError(Exception):
+    pass
+
+
+class PurchaseOrderNotFoundError(Exception):
+    pass
+
    
    
 

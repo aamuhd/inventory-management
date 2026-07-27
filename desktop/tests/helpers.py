@@ -7,6 +7,8 @@ from app.modules.inventory.models.product import *
 from app.modules.inventory.models.stock_movement import *
 from app.modules.inventory.models.product_variant import *
 from app.modules.inventory.models.supplier import Supplier
+from app.modules.inventory.models.purchase_order import PurchaseOrder
+from app.modules.inventory.models.purchase_order_item import PurchaseOrderItem
 
 
 def create_test_session() -> Session:

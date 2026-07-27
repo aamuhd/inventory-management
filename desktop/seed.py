@@ -1,4 +1,4 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.core.database.manager import DatabaseManager
 from app.core.security.password_hasher import PasswordHasher
@@ -23,17 +23,21 @@ def main():
         service = AuthenticationService(repository, hasher)
 
         # Create role if it doesn't exist
-        role = Role(name="Administrator")
-        session.add(role)
-        session.commit()
-        session.refresh(role)
+        admin = session.exec(
+            select(Role).where(Role.name == "Admin")
+        ).first()
+
+        if admin is None:
+            admin = Role(name="Admin")
+            session.add(admin)
+            session.commit()
 
         # Create test user
         user = User(
             username="admin",
             full_name="Administrator",
             password_hash=hasher.hash_password("ChangeMe123!"),
-            role_id=role.id,
+            role_id=admin.id,
         )
 
         repository.create(user)

@@ -74,6 +74,20 @@ class InvalidMovementQuantityError(Exception):
 class InsufficientStockError(Exception):
     pass
 
+
+# Supplier
+
+class SupplierNotFoundError(Exception):
+    pass
+
+
+class SupplierAlreadyExistsError(Exception):
+    pass
+
+
+class InvalidSupplierNameError(Exception):
+    pass
+
    
    
 

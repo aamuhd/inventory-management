@@ -20,6 +20,17 @@ class ProductVariantRepository:
         self._session.refresh(variant)
 
         return variant
+    
+    def update(
+        self,
+        variant: ProductVariant,
+    ) -> ProductVariant:
+
+        self._session.add(variant)
+        self._session.commit()
+        self._session.refresh(variant)
+
+        return variant
 
     def update_stock(
         self,

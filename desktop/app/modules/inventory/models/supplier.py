@@ -5,8 +5,10 @@ from typing import TYPE_CHECKING, List
 from app.core.database.models.base import BaseModel
 
 
+
 if TYPE_CHECKING:
     from app.modules.inventory.models.purchase_order import PurchaseOrder
+    from app.modules.inventory.models.supplier_return import SupplierReturn
 
 
 class Supplier(BaseModel, table=True):
@@ -44,5 +46,9 @@ class Supplier(BaseModel, table=True):
     )
 
     purchase_orders: List["PurchaseOrder"] = Relationship(
+        back_populates="supplier"
+    )
+
+    returns: List["SupplierReturn"] = Relationship(
         back_populates="supplier"
     )

@@ -14,6 +14,7 @@ from app.modules.inventory.enums.purchase_order_status import (
 if TYPE_CHECKING:
     from app.modules.inventory.models.supplier import Supplier
     from app.modules.inventory.models.purchase_order_item import PurchaseOrderItem
+    from app.modules.inventory.models.supplier_return import SupplierReturn
 
 
 class PurchaseOrder(BaseModel, table=True):
@@ -55,4 +56,8 @@ class PurchaseOrder(BaseModel, table=True):
     items: List["PurchaseOrderItem"] = Relationship(
         back_populates="purchase_order",
         cascade_delete=True,
+    )
+
+    returns: List["SupplierReturn"] = Relationship(
+        back_populates="purchase_order"
     )

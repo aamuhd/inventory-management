@@ -12,6 +12,7 @@ from app.modules.inventory.enums.purchase_order_status import (
 
 from app.modules.inventory.exceptions import (
     DuplicatePurchaseOrderItemError,
+    EmptyPurchaseOrderError,
     InvalidPurchaseOrderStateError,
     ProductVariantNotFoundError,
     PurchaseOrderNotFoundError,
@@ -468,4 +469,111 @@ def test_add_item_variant_not_found():
             uuid4(),
             5,
             Decimal("2500"),
+        )
+
+
+def test_submit_purchase_order():
+
+    (
+        supplier_service,
+        product_service,
+        variant_service,
+        purchase_order_service,
+    ) = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    variant = create_variant(
+        product_service,
+        variant_service,
+    )
+
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    purchase_order_service.add_item(
+        purchase_order.id,
+        variant.id,
+        10,
+        Decimal("2500"),
+    )
+
+    purchase_order_service.submit(
+        purchase_order.id,
+    )
+
+    purchase_order = purchase_order_service.get_by_id(
+        purchase_order.id,
+    )
+
+    assert purchase_order.status == PurchaseOrderStatus.ORDERED
+
+
+def test_submit_empty_purchase_order():
+
+    supplier_service, _, _, purchase_order_service = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    with pytest.raises(
+        EmptyPurchaseOrderError,
+    ):
+        purchase_order_service.submit(
+            purchase_order.id,
+        )
+
+
+def test_submit_purchase_order_twice():
+
+    (
+        supplier_service,
+        product_service,
+        variant_service,
+        purchase_order_service,
+    ) = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    variant = create_variant(
+        product_service,
+        variant_service,
+    )
+
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    purchase_order_service.add_item(
+        purchase_order.id,
+        variant.id,
+        5,
+        Decimal("2500"),
+    )
+
+    purchase_order_service.submit(
+        purchase_order.id,
+    )
+
+    with pytest.raises(
+        InvalidPurchaseOrderStateError,
+    ):
+        purchase_order_service.submit(
+            purchase_order.id,
         )

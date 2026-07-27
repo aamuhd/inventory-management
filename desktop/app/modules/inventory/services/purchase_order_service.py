@@ -6,6 +6,7 @@ from app.modules.inventory.enums.purchase_order_status import (
     PurchaseOrderStatus,
 )
 from app.modules.inventory.exceptions import (
+    EmptyPurchaseOrderError,
     InvalidPurchaseOrderStateError,
     PurchaseOrderNotFoundError,
     DuplicatePurchaseOrderItemError,
@@ -186,6 +187,35 @@ class PurchaseOrderService:
             total += item.quantity * item.unit_cost
 
         purchase_order.total_amount = total
+
+        self._purchase_order_repository.update(
+            purchase_order,
+        )
+
+    def submit(
+        self,
+        purchase_order_id: UUID,
+    ) -> None:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        if purchase_order.status != PurchaseOrderStatus.DRAFT:
+            raise InvalidPurchaseOrderStateError(
+                "Purchase order has already been submitted."
+            )
+
+        items = self._purchase_order_item_repository.get_by_purchase_order(
+            purchase_order_id,
+        )
+
+        if not items:
+            raise EmptyPurchaseOrderError(
+                "Purchase order contains no items."
+            )
+
+        purchase_order.status = PurchaseOrderStatus.ORDERED
 
         self._purchase_order_repository.update(
             purchase_order,

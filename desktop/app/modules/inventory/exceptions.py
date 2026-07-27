@@ -99,11 +99,16 @@ class InvalidPurchaseOrderStateError(Exception):
 class PurchaseOrderNotFoundError(Exception):
     pass
 
+class EmptyPurchaseOrderError(Exception):
+    """Purchase order has no items."""
+
 
 ######
 
 class DuplicatePurchaseOrderItemError(Exception):
     pass
+
+
 
    
    

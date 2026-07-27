@@ -99,6 +99,12 @@ class InvalidPurchaseOrderStateError(Exception):
 class PurchaseOrderNotFoundError(Exception):
     pass
 
+
+######
+
+class DuplicatePurchaseOrderItemError(Exception):
+    pass
+
    
    
 

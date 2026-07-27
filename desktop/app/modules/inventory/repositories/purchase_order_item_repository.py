@@ -100,3 +100,21 @@ class PurchaseOrderItemRepository:
         return list(
             self._session.exec(statement),
         )
+    
+    
+    def get_by_purchase_order_and_variant(
+        self,
+        purchase_order_id: UUID,
+        variant_id: UUID,
+    ) -> PurchaseOrderItem | None:
+
+        statement = select(
+            PurchaseOrderItem,
+        ).where(
+            PurchaseOrderItem.purchase_order_id == purchase_order_id,
+            PurchaseOrderItem.product_variant_id == variant_id,
+        )
+
+        return self._session.exec(
+            statement,
+        ).first()

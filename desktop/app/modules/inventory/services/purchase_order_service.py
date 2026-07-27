@@ -8,6 +8,7 @@ from app.modules.inventory.enums.purchase_order_status import (
 from app.modules.inventory.exceptions import (
     InvalidPurchaseOrderStateError,
     PurchaseOrderNotFoundError,
+    DuplicatePurchaseOrderItemError,
 )
 from app.modules.inventory.models.purchase_order import PurchaseOrder
 from app.modules.inventory.repositories.purchase_order_item_repository import (
@@ -25,6 +26,7 @@ from app.modules.inventory.services.stock_movement_service import (
 from app.modules.inventory.services.supplier_service import (
     SupplierService,
 )
+from app.modules.inventory.models.purchase_order_item import PurchaseOrderItem
 
 
 class PurchaseOrderService:
@@ -110,5 +112,81 @@ class PurchaseOrderService:
             )
 
         self._purchase_order_repository.delete(
+            purchase_order,
+        )
+
+    def add_item(
+        self,
+        purchase_order_id: UUID,
+        variant_id: UUID,
+        quantity: int,
+        unit_cost: Decimal,
+    ) -> PurchaseOrderItem:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        if purchase_order.status != PurchaseOrderStatus.DRAFT:
+            raise InvalidPurchaseOrderStateError(
+                "Only draft purchase orders can be modified."
+            )
+
+        self._product_variant_service.get_by_id(
+            variant_id,
+        )
+
+        existing_item = (
+            self._purchase_order_item_repository.get_by_purchase_order_and_variant(
+                purchase_order_id,
+                variant_id,
+            )
+        )
+
+        if existing_item is not None:
+            raise DuplicatePurchaseOrderItemError(
+                "Variant already exists in this purchase order."
+            )
+
+        item = PurchaseOrderItem(
+            purchase_order_id=purchase_order_id,
+            product_variant_id=variant_id,
+            quantity=quantity,
+            unit_cost=unit_cost,
+        )
+
+        item = self._purchase_order_item_repository.create(
+            item,
+        )
+
+        self._recalculate_total(
+            purchase_order_id,
+        )
+
+        return item
+    
+    def _recalculate_total(
+        self,
+        purchase_order_id: UUID,
+    ) -> None:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        items = (
+            self._purchase_order_item_repository.get_by_purchase_order(
+                purchase_order_id,
+            )
+        )
+
+        total = Decimal("0.00")
+
+        for item in items:
+            total += item.quantity * item.unit_cost
+
+        purchase_order.total_amount = total
+
+        self._purchase_order_repository.update(
             purchase_order,
         )

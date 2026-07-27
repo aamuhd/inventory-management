@@ -14,7 +14,9 @@ from app.modules.inventory.exceptions import (
     DuplicatePurchaseOrderItemError,
     EmptyPurchaseOrderError,
     InvalidPurchaseOrderStateError,
+    OverReceiveError,
     ProductVariantNotFoundError,
+    PurchaseOrderItemNotFoundError,
     PurchaseOrderNotFoundError,
 )
 
@@ -577,3 +579,204 @@ def test_submit_purchase_order_twice():
         purchase_order_service.submit(
             purchase_order.id,
         )
+
+
+def create_submitted_purchase_order():
+
+    (
+        supplier_service,
+        product_service,
+        variant_service,
+        purchase_order_service,
+    ) = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    variant = create_variant(
+        product_service,
+        variant_service,
+    )
+
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    item = purchase_order_service.add_item(
+        purchase_order.id,
+        variant.id,
+        quantity=10,
+        unit_cost=Decimal("2500"),
+    )
+
+    purchase_order_service.submit(
+        purchase_order.id,
+    )
+
+    return (
+        purchase_order_service,
+        variant_service,
+        purchase_order,
+        item,
+        variant,
+    )
+
+
+def test_receive_purchase_order_item():
+
+    (
+        purchase_order_service,
+        variant_service,
+        purchase_order,
+        item,
+        variant,
+    ) = create_submitted_purchase_order()
+
+    purchase_order_service.receive_item(
+        item.id,
+        10,
+    )
+
+    updated_variant = variant_service.get_by_id(
+        variant.id,
+    )
+
+    assert updated_variant.stock_quantity == 10
+
+
+def test_partial_receive():
+
+    (
+        purchase_order_service,
+        variant_service,
+        purchase_order,
+        item,
+        variant,
+    ) = create_submitted_purchase_order()
+
+    purchase_order_service.receive_item(
+        item.id,
+        4,
+    )
+
+    updated_item = purchase_order_service.get_item(
+        item.id,
+    )
+
+    assert updated_item.received_quantity == 4
+
+    purchase_order = purchase_order_service.get_by_id(
+        purchase_order.id,
+    )
+
+    assert purchase_order.status == PurchaseOrderStatus.PARTIALLY_RECEIVED
+
+
+def test_complete_receive():
+
+    (
+        purchase_order_service,
+        variant_service,
+        purchase_order,
+        item,
+        variant,
+    ) = create_submitted_purchase_order()
+
+    purchase_order_service.receive_item(
+        item.id,
+        4,
+    )
+
+    purchase_order_service.receive_item(
+        item.id,
+        6,
+    )
+
+    purchase_order = purchase_order_service.get_by_id(
+        purchase_order.id,
+    )
+
+    assert purchase_order.status == PurchaseOrderStatus.RECEIVED
+
+
+def test_over_receive():
+
+    (
+        purchase_order_service,
+        _,
+        _,
+        item,
+        _,
+    ) = create_submitted_purchase_order()
+
+    with pytest.raises(
+        OverReceiveError,
+    ):
+        purchase_order_service.receive_item(
+            item.id,
+            11,
+        )
+
+
+def test_receive_draft_purchase_order():
+
+    (
+        supplier_service,
+        product_service,
+        variant_service,
+        purchase_order_service,
+    ) = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    variant = create_variant(
+        product_service,
+        variant_service,
+    )
+
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    item = purchase_order_service.add_item(
+        purchase_order.id,
+        variant.id,
+        10,
+        Decimal("2500"),
+    )
+
+    with pytest.raises(
+        InvalidPurchaseOrderStateError,
+    ):
+        purchase_order_service.receive_item(
+            item.id,
+            5,
+        )
+
+
+def test_receive_unknown_item():
+
+    (
+        purchase_order_service,
+        _,
+        _,
+        _,
+        _,
+    ) = create_submitted_purchase_order()
+
+    with pytest.raises(
+        PurchaseOrderItemNotFoundError,
+    ):
+        purchase_order_service.receive_item(
+            uuid4(),
+            5,
+        )
+
+

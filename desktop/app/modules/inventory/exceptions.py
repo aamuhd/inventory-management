@@ -109,6 +109,14 @@ class DuplicatePurchaseOrderItemError(Exception):
     pass
 
 
+class OverReceiveError(Exception):
+    """Received quantity exceeds ordered quantity."""
+
+
+class PurchaseOrderItemNotFoundError(Exception):
+    """Purchase order item not found."""
+
+
 
    
    

@@ -8,6 +8,8 @@ from app.modules.inventory.enums.purchase_order_status import (
 from app.modules.inventory.exceptions import (
     EmptyPurchaseOrderError,
     InvalidPurchaseOrderStateError,
+    OverReceiveError,
+    PurchaseOrderItemNotFoundError,
     PurchaseOrderNotFoundError,
     DuplicatePurchaseOrderItemError,
 )
@@ -220,3 +222,104 @@ class PurchaseOrderService:
         self._purchase_order_repository.update(
             purchase_order,
         )
+
+
+    def receive_item(
+        self,
+        item_id: UUID,
+        quantity: int,
+    ) -> None:
+
+        item = self._purchase_order_item_repository.get_by_id(
+            item_id,
+        )
+
+        if item is None:
+            raise PurchaseOrderItemNotFoundError(
+                "Purchase order item not found."
+            )
+
+        purchase_order = self.get_by_id(
+            item.purchase_order_id,
+        )
+
+        if purchase_order.status not in (
+            PurchaseOrderStatus.ORDERED,
+            PurchaseOrderStatus.PARTIALLY_RECEIVED,
+        ):
+            raise InvalidPurchaseOrderStateError(
+                "Purchase order cannot receive goods."
+            )
+
+        outstanding = item.quantity - item.received_quantity
+
+        if quantity > outstanding:
+            raise OverReceiveError(
+                "Cannot receive more than ordered."
+            )
+
+        self._stock_movement_service.purchase_stock(
+            variant_id=item.product_variant_id,
+            quantity=quantity,
+            reference=purchase_order.order_number,
+            notes="Purchase Order Receipt",
+        )
+
+        item.received_quantity += quantity
+
+        self._purchase_order_item_repository.update(
+            item,
+        )
+
+        self._update_purchase_order_status(
+            purchase_order.id,
+        )
+
+    def _update_purchase_order_status(
+        self,
+        purchase_order_id: UUID,
+    ) -> None:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        items = (
+            self._purchase_order_item_repository.get_by_purchase_order(
+                purchase_order_id,
+            )
+        )
+
+        if all(
+            item.received_quantity == item.quantity
+            for item in items
+        ):
+            purchase_order.status = PurchaseOrderStatus.RECEIVED
+
+        elif any(
+            item.received_quantity > 0
+            for item in items
+        ):
+            purchase_order.status = (
+                PurchaseOrderStatus.PARTIALLY_RECEIVED
+            )
+
+        self._purchase_order_repository.update(
+            purchase_order,
+        )
+
+    def get_item(
+        self,
+        item_id: UUID,
+    ) -> PurchaseOrderItem:
+
+        item = self._purchase_order_item_repository.get_by_id(
+            item_id,
+        )
+
+        if item is None:
+            raise PurchaseOrderItemNotFoundError(
+                "Purchase order item not found."
+            )
+
+        return item

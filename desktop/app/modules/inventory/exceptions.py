@@ -34,5 +34,47 @@ class InvalidProductNameError(ProductError):
 
 
 
+# Product variant
+
+
+class ProductVariantError(Exception):
+    """Base category exception."""
+
+
+class InvalidLengthError(ProductVariantError):
+    """Raised when a length is not valid."""
+
+
+class  InvalidPriceError(ProductVariantError):
+    """Raised when a price is invalid."""
+
+
+class InvalidStockQuantityError(ProductVariantError):
+    """Raised when stock quantity is not valid."""
+
+
+class  ProductVariantAlreadyExistsError(ProductVariantError):
+    """Raised when a product variant already exists."""
+
+
+class  ProductVariantNotFoundError(ProductVariantError):
+    """Raised when a product variant cannot be found."""
+
+
+# Stock Movement
+
+class StockMovementNotFoundError(Exception):
+    pass
+
+
+class InvalidMovementQuantityError(Exception):
+    pass
+
+
+class InsufficientStockError(Exception):
+    pass
+
+   
+   
 
 

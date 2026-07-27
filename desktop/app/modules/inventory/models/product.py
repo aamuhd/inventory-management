@@ -1,11 +1,14 @@
+from typing import TYPE_CHECKING
+
 from sqlmodel import Field, Relationship
 
 from app.core.database.models.base import BaseModel
-#from app.modules.inventory.models.category import Category
-from typing import TYPE_CHECKING
+
+from typing import Optional, List
 
 if TYPE_CHECKING:
     from app.modules.inventory.models.category import Category
+    from app.modules.inventory.models.product_variant import ProductVariant
 
 
 class Product(BaseModel, table=True):
@@ -22,8 +25,10 @@ class Product(BaseModel, table=True):
         foreign_key="categories.id",
     )
 
-    category: "Category" = Relationship(
-        sa_relationship_kwargs={
-            "back_populates": "products",
-        }
+    category: Optional["Category"] = Relationship(
+        back_populates="products",
+    )
+
+    variants: List["ProductVariant"] = Relationship(
+        back_populates="product",
     )

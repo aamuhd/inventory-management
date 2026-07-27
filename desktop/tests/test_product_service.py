@@ -6,11 +6,11 @@ from app.modules.inventory.services.product_service import ProductService
 
 from tests.helpers import create_test_session
 
+from app.modules.inventory.models.category import Category
+from app.modules.inventory.models.product import Product
+
 
 def create_service() -> ProductService:
-    manager = DatabaseManager()
-
-    #SQLModel.metadata.create_all(manager.engine)
 
     session = create_test_session()
 
@@ -24,14 +24,14 @@ def test_create_product() -> None:
 
     product = service.create(
         name="Swiss Lace",
-        brand="ABC",
+        brand="ABCD",
         description="Luxury lace",
         category_id=None,
     )
 
     assert product.id is not None
     assert product.name == "Swiss Lace"
-    assert product.brand == "ABC"
+    assert product.brand == "ABCD"
 
 
 import pytest
@@ -44,7 +44,7 @@ def test_duplicate_product() -> None:
 
     service.create(
         name="Swiss Lace",
-        brand="ABC",
+        brand="ABCD",
         description="Luxury lace",
         category_id=None,
     )
@@ -52,7 +52,7 @@ def test_duplicate_product() -> None:
     with pytest.raises(ProductAlreadyExistsError):
         service.create(
             name="Swiss Lace",
-            brand="ABC",
+            brand="ABCD",
             description="Another description",
             category_id=None,
         )
@@ -63,7 +63,7 @@ def test_same_name_different_brand() -> None:
 
     service.create(
         name="Swiss Lace",
-        brand="ABC",
+        brand="ABCD",
         description="",
         category_id=None,
     )
@@ -83,7 +83,7 @@ def test_update_product() -> None:
 
     product = service.create(
         name="Swiss Lace",
-        brand="ABC",
+        brand="ABCD",
         description="Luxury lace",
         category_id=None,
     )
@@ -91,7 +91,7 @@ def test_update_product() -> None:
     updated = service.update(
         product.id,
         name="Premium Swiss Lace",
-        brand="ABC",
+        brand="ABCD",
         description="Updated description",
         category_id=None,
     )
@@ -110,7 +110,7 @@ def test_delete_product() -> None:
 
     product = service.create(
         name="Swiss Lace",
-        brand="ABC",
+        brand="ABCD",
         description="Luxury lace",
         category_id=None,
     )
@@ -130,7 +130,7 @@ def test_empty_name() -> None:
     with pytest.raises(InvalidProductNameError):
         service.create(
             name="   ",
-            brand="ABC",
+            brand="ABCD",
             description="Luxury lace",
             category_id=None,
         )

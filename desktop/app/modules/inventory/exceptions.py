@@ -117,6 +117,31 @@ class PurchaseOrderItemNotFoundError(Exception):
     """Purchase order item not found."""
 
 
+##########
+
+class SupplierReturnNotFoundError(Exception):
+    pass
+
+
+class InvalidSupplierReturnStateError(Exception):
+    pass
+
+
+class DuplicateSupplierReturnError(Exception):
+    pass
+
+
+class SupplierReturnItemNotFoundError(Exception):
+    pass
+
+class DuplicateSupplierReturnItemError(Exception):
+    pass
+
+
+class EmptySupplierReturnError(Exception):
+    pass
+
+
 
    
    

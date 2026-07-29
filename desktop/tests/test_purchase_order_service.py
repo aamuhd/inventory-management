@@ -889,3 +889,32 @@ def test_receive_all_after_partial():
     )
 
     assert purchase_order.status == PurchaseOrderStatus.RECEIVED
+
+
+def test_get_purchase_orders_by_supplier():
+
+    (
+        supplier_service,
+        _,
+        _,
+        purchase_order_service,
+    ) = create_services()
+
+    supplier = create_supplier(
+        supplier_service,
+    )
+
+    
+    purchase_order = purchase_order_service.create(
+        supplier.id,
+        "PO-001",
+        date.today(),
+    )
+
+    orders = purchase_order_service.get_by_supplier(
+        supplier.id,
+    )
+
+    assert len(orders) == 1
+
+    assert orders[0].supplier_id == supplier.id

@@ -31,8 +31,9 @@ class DashboardWindow(QMainWindow):
         self.resize(1200, 700)
 
         self._build_ui()
+        self._connect_signals()
 
-        self.logout_button.clicked.connect(self.logout)
+        #self.logout_button.clicked.connect(self.logout)
 
     def _build_ui(self) -> None:
         central_widget = QWidget()
@@ -54,19 +55,33 @@ class DashboardWindow(QMainWindow):
         # Sidebar
         sidebar = QVBoxLayout()
 
+        self.dashboard_button = QPushButton("Dashboard")
+        self.category_button = QPushButton("Categories")
+        self.product_button = QPushButton("Products")
+        self.supplier_button = QPushButton("Suppliers")
+        self.purchase_order_button = QPushButton("Purchase Orders")
+        self.supplier_return_button = QPushButton("Supplier Returns")
+        self.sales_button = QPushButton("Sales")
+        self.user_button = QPushButton("Users")
+        self.report_button = QPushButton("Reports")
+        self.backup_button = QPushButton("Backup")
+        self.settings_button = QPushButton("Settings")
+
         buttons = [
-            "Dashboard",
-            "Categories",
-            "Products",
-            "Sales",
-            "Users",
-            "Reports",
-            "Backup",
-            "Settings"
+            self.dashboard_button,
+            self.category_button,
+            self.product_button,
+            self.supplier_button,
+            self.purchase_order_button,
+            self.supplier_return_button,
+            self.sales_button,
+            self.user_button,
+            self.report_button,
+            self.backup_button,
+            self.settings_button,
         ]
 
-        for text in buttons:
-            button = QPushButton(text)
+        for button in buttons:
             button.setMinimumHeight(40)
             sidebar.addWidget(button)
 
@@ -101,5 +116,31 @@ class DashboardWindow(QMainWindow):
         self._current_session.logout()
         self.close()
         self._navigation.show_login()
-        
+
+    def _connect_signals(self):
+
+        self.logout_button.clicked.connect(
+            self.logout,
+        )
+
+        self.category_button.clicked.connect(
+            self._navigation.show_categories,
+        )
+
+        self.product_button.clicked.connect(
+            self._navigation.show_products,
+        )
+
+        self.supplier_button.clicked.connect(
+            self._navigation.show_suppliers,
+        )
+
+        self.purchase_order_button.clicked.connect(
+            self._navigation.show_purchase_orders,
+        )
+
+        self.supplier_return_button.clicked.connect(
+            self._navigation.show_supplier_returns,
+        )
+                    
 

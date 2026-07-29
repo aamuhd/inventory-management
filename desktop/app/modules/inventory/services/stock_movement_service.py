@@ -1,4 +1,3 @@
-from decimal import Decimal
 from uuid import UUID
 
 from app.modules.inventory.enums.movement_type import MovementType
@@ -211,3 +210,19 @@ class StockMovementService:
             raise
 
         return movement
+    
+    def return_to_supplier(
+        self,
+        variant_id: UUID,
+        quantity: int,
+        reference: str | None = None,
+        notes: str | None = None,
+    ) -> StockMovement:
+
+        return self._record_movement(
+            variant_id=variant_id,
+            movement_type=MovementType.RETURN_TO_SUPPLIER,
+            quantity=-quantity,
+            reference=reference,
+            notes=notes,
+        )

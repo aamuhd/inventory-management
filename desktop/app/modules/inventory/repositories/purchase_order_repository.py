@@ -98,3 +98,5 @@ class PurchaseOrderRepository:
         return list(
             self._session.exec(statement),
         )
+    
+    

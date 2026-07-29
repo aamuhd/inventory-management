@@ -1,6 +1,7 @@
 from enum import Enum
+from enum import StrEnum
 
-
+"""
 class MovementType(str, Enum):
     PURCHASE = "PURCHASE"
     SALE = "SALE"
@@ -9,3 +10,14 @@ class MovementType(str, Enum):
     RETURN_OUT = "RETURN_OUT"
     DAMAGED = "DAMAGED"
     TRANSFER = "TRANSFER"
+
+"""
+
+class MovementType(StrEnum):
+    PURCHASE = "Purchase"
+    SALE = "Sale"
+    ADJUSTMENT = "Adjustment"
+    RETURN_IN = "Return In"
+    DAMAGED = "Damaged"
+
+    RETURN_TO_SUPPLIER = "Return To Supplier"

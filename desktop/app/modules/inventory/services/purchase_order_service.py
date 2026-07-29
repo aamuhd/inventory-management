@@ -359,3 +359,12 @@ class PurchaseOrderService:
                     item.id,
                     outstanding,
                 )
+    
+    def get_by_supplier(
+        self,
+        supplier_id,
+    ):
+
+        return self._purchase_order_repository.get_by_supplier(
+            supplier_id,
+        )

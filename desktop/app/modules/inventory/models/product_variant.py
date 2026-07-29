@@ -63,5 +63,5 @@ class ProductVariant(BaseModel, table=True):
     )
 
     supplier_return_items: List["SupplierReturnItem"] = Relationship(
-        back_populates="variant"
+        back_populates="product_variant"
     )

@@ -23,3 +23,6 @@ class Navigation(Protocol):
 
     def show_supplier_returns(self) -> None:
         ...
+
+    def show_product_variants(self) -> None:
+        ...

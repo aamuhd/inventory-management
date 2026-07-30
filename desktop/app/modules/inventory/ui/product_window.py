@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
-    QWidget,
 )
 
 from app.modules.inventory.exceptions import (
@@ -16,9 +15,10 @@ from app.modules.inventory.services.category_service import CategoryService
 from app.modules.inventory.services.product_service import ProductService
 from app.modules.inventory.ui.product_form import ProductForm
 from app.modules.inventory.ui.product_table import ProductTable
+from app.core.ui.base_window import BaseWindow
 
 
-class ProductWindow(QWidget):
+class ProductWindow(BaseWindow):
 
     def __init__(
         self,
@@ -104,10 +104,14 @@ class ProductWindow(QWidget):
             if self._selected_product_id is None:
 
                 self._product_service.create(**data)
-
+                """
                 QMessageBox.information(
                     self,
                     "Success",
+                    "Product created successfully.",
+                )
+                """
+                self.show_information(
                     "Product created successfully.",
                 )
 
@@ -117,10 +121,14 @@ class ProductWindow(QWidget):
                     self._selected_product_id,
                     **data,
                 )
-
+                """
                 QMessageBox.information(
                     self,
                     "Success",
+                    "Product updated successfully.",
+                )
+                """
+                self.show_information(
                     "Product updated successfully.",
                 )
 
@@ -161,7 +169,7 @@ class ProductWindow(QWidget):
 
         if product is None:
             return
-
+        """
         answer = QMessageBox.question(
             self,
             "Delete Product",
@@ -169,6 +177,12 @@ class ProductWindow(QWidget):
         )
 
         if answer != QMessageBox.StandardButton.Yes:
+            return
+        """
+        if not self.ask_confirmation(
+            "Delete Product",
+            f'Delete "{product.name}"?',
+        ):
             return
 
         try:

@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
-    QWidget,
 )
 
 from app.modules.inventory.exceptions import (
@@ -15,9 +14,10 @@ from app.modules.inventory.models.category import Category
 from app.modules.inventory.services.category_service import CategoryService
 from app.modules.inventory.ui.category_form import CategoryForm
 from app.modules.inventory.ui.category_table import CategoryTable
+from app.core.ui.base_window import BaseWindow
 
 
-class CategoryWindow(QWidget):
+class CategoryWindow(BaseWindow):
 
     def __init__(
         self,
@@ -82,10 +82,14 @@ class CategoryWindow(QWidget):
                     name,
                     description,
                 )
-
+                """
                 QMessageBox.information(
                     self,
                     "Success",
+                    "Category created successfully.",
+                )
+                """
+                self.show_information(
                     "Category created successfully.",
                 )
 
@@ -96,10 +100,14 @@ class CategoryWindow(QWidget):
                     name,
                     description,
                 )
-
+                """
                 QMessageBox.information(
                     self,
                     "Success",
+                    "Category updated successfully.",
+                )
+                """
+                self.show_information(
                     "Category updated successfully.",
                 )
 
@@ -135,7 +143,7 @@ class CategoryWindow(QWidget):
 
         if category is None or category.id is None:
             return
-
+        """
         answer = QMessageBox.question(
             self,
             "Delete Category",
@@ -143,6 +151,12 @@ class CategoryWindow(QWidget):
         )
 
         if answer != QMessageBox.StandardButton.Yes:
+            return
+        """
+        if not self.ask_confirmation(
+            "Delete Category",
+            f"Are you sure you want to delete {category.name}?",
+        ):
             return
 
         try:

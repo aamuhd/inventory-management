@@ -368,3 +368,77 @@ class PurchaseOrderService:
         return self._purchase_order_repository.get_by_supplier(
             supplier_id,
         )
+    
+    def update_item(
+        self,
+        item_id: UUID,
+        quantity: int,
+        unit_cost: Decimal,
+    ) -> PurchaseOrderItem:
+
+        item = self.get_item(item_id)
+
+        purchase_order = self.get_by_id(
+            item.purchase_order_id,
+        )
+
+        if purchase_order.status != PurchaseOrderStatus.DRAFT:
+            raise InvalidPurchaseOrderStateError(
+                "Only draft purchase orders can be modified."
+            )
+
+        item.quantity = quantity
+        item.unit_cost = unit_cost
+
+        self._purchase_order_item_repository.update(
+            item,
+        )
+
+        self._recalculate_total(
+            purchase_order.id,
+        )
+
+        return item
+    
+    def delete_item(
+        self,
+        item_id: UUID,
+    ) -> None:
+
+        item = self.get_item(item_id)
+
+        purchase_order = self.get_by_id(
+            item.purchase_order_id,
+        )
+
+        if purchase_order.status != PurchaseOrderStatus.DRAFT:
+            raise InvalidPurchaseOrderStateError(
+                "Only draft purchase orders can be modified."
+            )
+
+        self._purchase_order_item_repository.delete(
+            item,
+        )
+
+        self._recalculate_total(
+            purchase_order.id,
+        )
+
+    def receive(
+        self,
+        purchase_order_id: UUID,
+    ) -> None:
+
+        purchase_order = self.get_by_id(
+            purchase_order_id,
+        )
+
+        if purchase_order.status == PurchaseOrderStatus.DRAFT:
+
+            self.submit(
+                purchase_order_id,
+            )
+
+        self.receive_all(
+            purchase_order_id,
+        )

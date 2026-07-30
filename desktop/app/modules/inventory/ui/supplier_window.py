@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
-    QWidget,
 )
 
 from app.modules.inventory.exceptions import (
@@ -17,9 +16,10 @@ from app.modules.inventory.services.supplier_service import (
 )
 from app.modules.inventory.ui.supplier_form import SupplierForm
 from app.modules.inventory.ui.supplier_table import SupplierTable
+from app.core.ui.base_window import BaseWindow
 
 
-class SupplierWindow(QWidget):
+class SupplierWindow(BaseWindow):
 
     def __init__(
         self,
@@ -117,10 +117,15 @@ class SupplierWindow(QWidget):
                     address=address,
                     notes=notes,
                 )
-
+                """
                 QMessageBox.information(
                     self,
                     "Success",
+                    "Supplier created successfully.",
+                )
+                """
+                #####
+                self.show_information(
                     "Supplier created successfully.",
                 )
 
@@ -135,11 +140,15 @@ class SupplierWindow(QWidget):
                     address=address,
                     notes=notes,
                 )
-
+                """
                 QMessageBox.information(
                     self,
                     "Success",
                     "Supplier updated successfully.",
+                )
+                """
+                self.show_information(
+                    "Supplier created successfully.",
                 )
 
             self.clear_form()
@@ -184,7 +193,7 @@ class SupplierWindow(QWidget):
 
         if supplier is None or supplier.id is None:
             return
-
+        """
         answer = QMessageBox.question(
             self,
             "Delete Supplier",
@@ -192,6 +201,12 @@ class SupplierWindow(QWidget):
         )
 
         if answer != QMessageBox.StandardButton.Yes:
+            return
+        """
+        if not self.ask_confirmation(
+            "Delete Supplier",
+            f'Delete "{supplier.name}"?',
+        ):
             return
 
         try:

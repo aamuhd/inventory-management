@@ -43,7 +43,7 @@ class DashboardWindow(QMainWindow):
 
         # Header
         header = QLabel(
-            f"Welcome, {self._current_session.user.full_name}"
+            f"Welcome, {self._current_session.user.full_name if self._current_session.user else None}"
         )
         header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -58,6 +58,7 @@ class DashboardWindow(QMainWindow):
         self.dashboard_button = QPushButton("Dashboard")
         self.category_button = QPushButton("Categories")
         self.product_button = QPushButton("Products")
+        self.product_variants_button = QPushButton("Product Variants")
         self.supplier_button = QPushButton("Suppliers")
         self.purchase_order_button = QPushButton("Purchase Orders")
         self.supplier_return_button = QPushButton("Supplier Returns")
@@ -71,6 +72,7 @@ class DashboardWindow(QMainWindow):
             self.dashboard_button,
             self.category_button,
             self.product_button,
+            self.product_variants_button,
             self.supplier_button,
             self.purchase_order_button,
             self.supplier_return_button,
@@ -141,6 +143,9 @@ class DashboardWindow(QMainWindow):
 
         self.supplier_return_button.clicked.connect(
             self._navigation.show_supplier_returns,
+        )
+        self.product_variants_button.clicked.connect(
+            self._navigation.show_product_variants,
         )
                     
 

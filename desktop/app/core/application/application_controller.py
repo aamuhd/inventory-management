@@ -14,6 +14,7 @@ from app.modules.inventory.ui.product_window import ProductWindow
 from app.modules.inventory.ui.purchase_order_window import PurchaseOrderWindow
 from app.modules.inventory.ui.supplier_return_window import SupplierReturnWindow
 from app.modules.inventory.ui.supplier_window import SupplierWindow
+from app.modules.inventory.ui.product_variant_window import ProductVariantWindow
 
 
 class ApplicationController(Navigation):
@@ -45,11 +46,47 @@ class ApplicationController(Navigation):
         self._supplier_window = None
         self._purchase_order_window = None
         self._supplier_return_window = None
+        self._product_variant_window = None
 
         if self._category_window is not None:
             self._category_window.destroyed.connect(
                 lambda: setattr(self, "_category_window", None),
             )
+
+    def _show_window(
+        self,
+        attribute_name: str,
+        factory,
+    ) -> None:
+
+        window = getattr(
+            self,
+            attribute_name,
+        )
+
+        if window is None:
+
+            window = factory()
+
+            setattr(
+                self,
+                attribute_name,
+                window,
+            )
+
+            window.destroyed.connect(
+                lambda _, name=attribute_name: setattr(
+                    self,
+                    name,
+                    None,
+                )
+            )
+
+        window.show()
+
+        window.raise_()
+
+        window.activateWindow()
 
     def show_login(self) -> None:
         if self._dashboard_window:
@@ -76,60 +113,60 @@ class ApplicationController(Navigation):
 
     def show_categories(self) -> None:
 
-        if self._category_window is None:
-
-            self._category_window = CategoryWindow(
+        self._show_window(
+            "_category_window",
+            lambda: CategoryWindow(
                 category_service=self._category_service,
-            )
-
-        self._category_window.show()
-        self._category_window.raise_()
-        self._category_window.activateWindow()
+            ),
+        )
 
     def show_products(self) -> None:
 
-        if self._product_window is None:
-            self._product_window = ProductWindow(
+        self._show_window(
+            "_product_window",
+            lambda: ProductWindow(
                 product_service=self._product_service,
                 category_service=self._category_service,
-            )
-        self._product_window.show()
-        self._product_window.raise_()
-        self._product_window.activateWindow()
+            ),
+        )
 
     def show_suppliers(self) -> None:
 
-        if self._supplier_window is None:
-            self._supplier_window = SupplierWindow(
+        self._show_window(
+            "_supplier_window",
+            lambda: SupplierWindow(
                 supplier_service=self._supplier_service,
-            )
-        self._supplier_window.show()
-        self._supplier_window.raise_()
-        self._supplier_window.activateWindow()
+            ),
+        )
 
     def show_purchase_orders(self) -> None:
 
-        if self._purchase_order_window is None:
-            self._purchase_order_window = PurchaseOrderWindow(
+        self._show_window(
+            "_purchase_order_window",
+            lambda: PurchaseOrderWindow(
                 purchase_order_service=self._purchase_order_service,
                 supplier_service=self._supplier_service,
                 variant_service=self._variant_service,
-            )
-
-        self._purchase_order_window.show()
-        self._purchase_order_window.raise_()
-        self._purchase_order_window.activateWindow()
+            ),
+        )
 
     def show_supplier_returns(self) -> None:
 
-        if self._supplier_return_window is None:
-            self._supplier_return_window = SupplierReturnWindow(
+        self._show_window(
+            "_supplier_return_window",
+            lambda: SupplierReturnWindow(
                 supplier_return_service=self._supplier_return_service,
                 supplier_service=self._supplier_service,
                 purchase_order_service=self._purchase_order_service,
                 variant_service=self._variant_service,
-            )
+            ),
+        )
 
-        self._supplier_return_window.show()
-        self._supplier_return_window.raise_()
-        self._supplier_return_window.activateWindow()
+    def show_product_variants(self) -> None:
+
+        self._product_variant_window = ProductVariantWindow(
+            variant_service=self._variant_service,
+            product_service=self._product_service,
+        )
+
+        self._product_variant_window.show()

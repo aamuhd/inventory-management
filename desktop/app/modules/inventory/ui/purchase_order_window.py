@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
-    QWidget,
 )
 from PySide6.QtCore import QDate
 
@@ -14,9 +13,10 @@ from app.modules.inventory.ui.add_purchase_order_item_dialog import (
     AddPurchaseOrderItemDialog,
 )
 from app.modules.inventory.enums.purchase_order_status import PurchaseOrderStatus
+from app.core.ui.base_window import BaseWindow
 
 
-class PurchaseOrderWindow(QWidget):
+class PurchaseOrderWindow(BaseWindow):
 
     def __init__(
          self,
@@ -269,7 +269,7 @@ class PurchaseOrderWindow(QWidget):
             self._clear_form()
 
         except Exception as error:
-            self._show_error(
+            self.show_error(
                 str(error),
             )
     
@@ -298,7 +298,7 @@ class PurchaseOrderWindow(QWidget):
             self._clear_form()
 
         except Exception as error:
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -314,19 +314,7 @@ class PurchaseOrderWindow(QWidget):
         self.edit_item_button.setEnabled(False)
         self.delete_item_button.setEnabled(False)
         self.receive_button.setEnabled(False)
-        self.delete_button.setEnabled(True)
-
-
-    def _show_error(
-        self,
-        message: str,
-    ):
-
-        QMessageBox.critical(
-            self,
-            "Error",
-            message,
-        )
+        self.delete_button.setEnabled(False)
 
     def _delete_purchase_order(self):
 
@@ -345,7 +333,7 @@ class PurchaseOrderWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -367,7 +355,7 @@ class PurchaseOrderWindow(QWidget):
                 purchase_order_id=self._selected_order.id,
                 variant_id=values["variant_id"],
                 quantity=values["quantity"],
-                cost_price=values["cost_price"],
+                unit_cost=values["cost_price"],
             )
 
 
@@ -436,7 +424,7 @@ class PurchaseOrderWindow(QWidget):
 
         if self._selected_item is None:
             return
-
+        """
         answer = QMessageBox.question(
             self,
             "Delete Item",
@@ -444,6 +432,12 @@ class PurchaseOrderWindow(QWidget):
         )
 
         if answer != QMessageBox.StandardButton.Yes:
+            return
+        """
+        if not self.ask_confirmation(
+            "Delete Item",
+            "Delete selected item?",
+        ):
             return
 
         self._purchase_order_service.delete_item(
@@ -513,6 +507,6 @@ class PurchaseOrderWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )

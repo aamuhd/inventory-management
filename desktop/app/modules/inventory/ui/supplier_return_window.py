@@ -4,7 +4,6 @@ from PySide6.QtWidgets import (
     QPushButton,
     QSplitter,
     QVBoxLayout,
-    QWidget,
 )
 
 from app.modules.inventory.models.supplier_return import (
@@ -34,9 +33,10 @@ from app.modules.inventory.ui.supplier_return_item_table import (
     SupplierReturnItemTable,
 )
 from app.modules.inventory.ui.add_supplier_return_item_dialog import AddSupplierReturnItemDialog
+from app.core.ui.base_window import BaseWindow
 
 
-class SupplierReturnWindow(QWidget):
+class SupplierReturnWindow(BaseWindow):
 
     def __init__(
         self,
@@ -285,7 +285,7 @@ class SupplierReturnWindow(QWidget):
             )
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -311,7 +311,7 @@ class SupplierReturnWindow(QWidget):
                 supplier_return,
             )
         except Exception as error:
-            self._show_error(
+           self.show_error(
                 str(error),
             )
 
@@ -410,7 +410,7 @@ class SupplierReturnWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )    
 
@@ -447,7 +447,7 @@ class SupplierReturnWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -476,7 +476,7 @@ class SupplierReturnWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -501,7 +501,7 @@ class SupplierReturnWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -522,7 +522,7 @@ class SupplierReturnWindow(QWidget):
 
         except Exception as error:
 
-            self._show_error(
+            self.show_error(
                 str(error),
             )
 
@@ -547,15 +547,3 @@ class SupplierReturnWindow(QWidget):
         self.delete_button.setEnabled(
             False,
         )
-
-    def _show_error(
-        self,
-        message: str,
-    ):
-
-        QMessageBox.critical(
-            self,
-            "Error",
-            message,
-        )
-        

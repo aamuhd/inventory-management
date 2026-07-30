@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel
 
 from .manager import DatabaseManager
+from app.modules.inventory.models.category import Category
 
 
 class DatabaseInitializer:

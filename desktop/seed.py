@@ -30,7 +30,7 @@ def main():
         if admin is None:
             admin = Role(name="Admin")
             session.add(admin)
-            session.commit()
+            commit()
 
         # Create test user
         user = User(

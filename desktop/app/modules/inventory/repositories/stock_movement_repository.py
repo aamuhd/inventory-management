@@ -3,9 +3,10 @@ from uuid import UUID
 from sqlmodel import Session, select
 
 from app.modules.inventory.models.stock_movement import StockMovement
+from app.modules.base_repo import BaseRepository
 
 
-class StockMovementRepository:
+class StockMovementRepository(BaseRepository):
 
     def __init__(self, session: Session):
         self._session = session
@@ -26,7 +27,7 @@ class StockMovementRepository:
     ) -> StockMovement:
 
         self._session.add(movement)
-        self._session.commit()
+        self._commit()
         self._session.refresh(movement)
 
         return movement
@@ -37,7 +38,7 @@ class StockMovementRepository:
     ) -> None:
 
         self._session.delete(movement)
-        self._session.commit()
+        self._commit()
 
     def get_by_id(
         self,
@@ -74,7 +75,7 @@ class StockMovementRepository:
         )
     
     def commit(self) -> None:
-        self._session.commit()
+        self._commit()
 
     def rollback(self) -> None:
         self._session.rollback()

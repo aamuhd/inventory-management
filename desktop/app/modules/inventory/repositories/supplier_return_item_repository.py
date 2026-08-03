@@ -5,9 +5,10 @@ from sqlmodel import Session, select
 from app.modules.inventory.models.supplier_return_item import (
     SupplierReturnItem,
 )
+from app.modules.base_repo import BaseRepository
 
 
-class SupplierReturnItemRepository:
+class SupplierReturnItemRepository(BaseRepository):
 
     def __init__(
         self,
@@ -25,7 +26,7 @@ class SupplierReturnItemRepository:
             item,
         )
 
-        self._session.commit()
+        self._commit()
 
         self._session.refresh(
             item,
@@ -42,7 +43,7 @@ class SupplierReturnItemRepository:
             item,
         )
 
-        self._session.commit()
+        self._commit()
 
         self._session.refresh(
             item,
@@ -112,4 +113,4 @@ class SupplierReturnItemRepository:
             item,
         )
 
-        self._session.commit()
+        self._commit()

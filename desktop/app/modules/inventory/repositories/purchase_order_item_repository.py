@@ -5,9 +5,10 @@ from sqlmodel import Session, select
 from app.modules.inventory.models.purchase_order_item import (
     PurchaseOrderItem,
 )
+from app.modules.base_repo import BaseRepository
 
 
-class PurchaseOrderItemRepository:
+class PurchaseOrderItemRepository(BaseRepository):
 
     def __init__(
         self,
@@ -21,7 +22,7 @@ class PurchaseOrderItemRepository:
     ) -> PurchaseOrderItem:
 
         self._session.add(item)
-        self._session.commit()
+        self._commit()
         self._session.refresh(item)
 
         return item
@@ -32,7 +33,7 @@ class PurchaseOrderItemRepository:
     ) -> PurchaseOrderItem:
 
         self._session.add(item)
-        self._session.commit()
+        self._commit()
         self._session.refresh(item)
 
         return item
@@ -43,7 +44,7 @@ class PurchaseOrderItemRepository:
     ) -> None:
 
         self._session.delete(item)
-        self._session.commit()
+        self._commit()
 
     def get_by_id(
         self,

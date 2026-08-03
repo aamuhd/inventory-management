@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.modules.inventory.models.stock_movement import StockMovement
     from app.modules.inventory.models.purchase_order_item import PurchaseOrderItem
     from app.modules.inventory.models.supplier_return_item import SupplierReturnItem
+    from app.modules.sales.models.sale_item import SaleItem
 
 
 
@@ -64,4 +65,8 @@ class ProductVariant(BaseModel, table=True):
 
     supplier_return_items: List["SupplierReturnItem"] = Relationship(
         back_populates="product_variant"
+    )
+
+    sale_items: List["SaleItem"] = Relationship(
+        back_populates="product_variant",
     )

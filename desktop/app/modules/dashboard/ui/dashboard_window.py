@@ -62,7 +62,8 @@ class DashboardWindow(QMainWindow):
         self.supplier_button = QPushButton("Suppliers")
         self.purchase_order_button = QPushButton("Purchase Orders")
         self.supplier_return_button = QPushButton("Supplier Returns")
-        self.sales_button = QPushButton("Sales")
+        self.sale_button = QPushButton("Sales")
+        self.customer_button = QPushButton("Customers")
         self.user_button = QPushButton("Users")
         self.report_button = QPushButton("Reports")
         self.backup_button = QPushButton("Backup")
@@ -76,7 +77,8 @@ class DashboardWindow(QMainWindow):
             self.supplier_button,
             self.purchase_order_button,
             self.supplier_return_button,
-            self.sales_button,
+            self.sale_button,
+            self.customer_button,
             self.user_button,
             self.report_button,
             self.backup_button,
@@ -136,6 +138,13 @@ class DashboardWindow(QMainWindow):
         self.supplier_button.clicked.connect(
             self._navigation.show_suppliers,
         )
+        self.sale_button.clicked.connect(
+            self._navigation.show_sales,
+        )
+
+        self.customer_button.clicked.connect(
+            self._navigation.show_customers,
+        )
 
         self.purchase_order_button.clicked.connect(
             self._navigation.show_purchase_orders,
@@ -147,5 +156,6 @@ class DashboardWindow(QMainWindow):
         self.product_variants_button.clicked.connect(
             self._navigation.show_product_variants,
         )
+        
                     
 

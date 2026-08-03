@@ -197,3 +197,28 @@ class ProductVariantService:
         )
 
         self._repository.delete(variant)
+
+    def adjust_stock(
+        self,
+        variant_id: UUID,
+        quantity_change: int,
+    ) -> ProductVariant:
+
+        variant = self.get_by_id(
+            variant_id,
+        )
+
+        new_quantity = (
+            variant.stock_quantity + quantity_change
+        )
+
+        if new_quantity < 0:
+            raise InvalidStockQuantityError(
+                "Stock cannot become negative."
+            )
+
+        variant.stock_quantity = new_quantity
+
+        return self._repository.update(
+            variant,
+        )

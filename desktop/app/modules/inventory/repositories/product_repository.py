@@ -3,9 +3,11 @@ from uuid import UUID
 from sqlmodel import Session, select
 
 from app.modules.inventory.models.product import Product
+from app.modules.base_repo import BaseRepository
 
 
-class ProductRepository:
+
+class ProductRepository(BaseRepository):
     """
     Handles database operations for Product.
     """
@@ -15,7 +17,7 @@ class ProductRepository:
 
     def create(self, product: Product) -> Product:
         self._session.add(product)
-        self._session.commit()
+        self._commit()
         self._session.refresh(product)
         return product
 
@@ -42,10 +44,10 @@ class ProductRepository:
 
     def update(self, product: Product) -> Product:
         self._session.add(product)
-        self._session.commit()
+        self._commit()
         self._session.refresh(product)
         return product
 
     def delete(self, product: Product) -> None:
         self._session.delete(product)
-        self._session.commit()
+        self._commit()

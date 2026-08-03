@@ -28,7 +28,11 @@ from app.modules.inventory.services.purchase_order_service import PurchaseOrderS
 from app.modules.inventory.services.stock_movement_service import StockMovementService
 from app.modules.inventory.services.supplier_return_service import SupplierReturnService
 from app.modules.inventory.services.supplier_service import SupplierService
-
+from app.modules.sales.repositories.customer_repository import CustomerRepository
+from app.modules.sales.services.customer_service import CustomerService
+from app.modules.sales.repositories.sale_repository import SaleRepository
+from app.modules.sales.services.sale_service import SaleService
+from app.modules.sales.repositories.sale_item_repository import SaleItemRepository
 
 
 def main() -> None:
@@ -54,11 +58,14 @@ def main() -> None:
     product_repository = ProductRepository(session)
     variant_repository = ProductVariantRepository(session)
     supplier_repository = SupplierRepository(session)
+    customer_repository = CustomerRepository(session)
     purchase_order_repository = PurchaseOrderRepository(session)
     supplier_return_repository = SupplierReturnRepository(session)
     supplier_return_item_repository = SupplierReturnItemRepository(session)
     purchase_order_item_repository = PurchaseOrderItemRepository(session)
     movement_repository = StockMovementRepository(session)
+    sale_repository = SaleRepository(session)
+    sale_item_repository = SaleItemRepository(session)
 
     password_hasher = PasswordHasher()
 
@@ -82,6 +89,9 @@ def main() -> None:
     supplier_service = SupplierService(
         repository=supplier_repository,
     )
+    customer_service = CustomerService(
+        repository=customer_repository,
+    )
 
     stock_movement_service = StockMovementService(
         movement_repository=movement_repository,
@@ -102,6 +112,14 @@ def main() -> None:
         stock_movement_service=stock_movement_service
     )
 
+    sale_service = SaleService(
+        sale_repository=sale_repository,
+        sale_item_repository=sale_item_repository,
+        customer_service=customer_service,
+        product_variant_service=product_variant_service,
+        stock_movement_service=stock_movement_service
+    )
+
     current_session = CurrentSession()
 
     controller = ApplicationController(
@@ -112,7 +130,9 @@ def main() -> None:
         variant_service=product_variant_service,
         supplier_service=supplier_service,
         purchase_order_service=purchase_order_service,
-        supplier_return_service=supplier_return_service
+        supplier_return_service=supplier_return_service,
+        customer_service=customer_service,
+        sale_service=sale_service
     )
 
     controller.show_login()

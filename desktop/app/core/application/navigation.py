@@ -26,3 +26,9 @@ class Navigation(Protocol):
 
     def show_product_variants(self) -> None:
         ...
+
+    def show_customers(self) -> None:
+        ...
+
+    def show_sales(self) -> None:
+            ...

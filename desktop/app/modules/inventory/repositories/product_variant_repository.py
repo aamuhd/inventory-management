@@ -3,9 +3,10 @@ from uuid import UUID
 from sqlmodel import Session, select
 
 from app.modules.inventory.models.product_variant import ProductVariant
+from app.modules.base_repo import BaseRepository
 
 
-class ProductVariantRepository:
+class ProductVariantRepository(BaseRepository):
 
     def __init__(self, session: Session) -> None:
         self._session = session
@@ -16,7 +17,7 @@ class ProductVariantRepository:
     ) -> ProductVariant:
 
         self._session.add(variant)
-        self._session.commit()
+        self._commit()
         self._session.refresh(variant)
 
         return variant
@@ -27,7 +28,7 @@ class ProductVariantRepository:
     ) -> ProductVariant:
 
         self._session.add(variant)
-        self._session.commit()
+        self._commit()
         self._session.refresh(variant)
 
         return variant
@@ -48,7 +49,7 @@ class ProductVariantRepository:
     ) -> None:
 
         self._session.delete(variant)
-        self._session.commit()
+        self._commit()
 
     def get_by_id(
         self,
@@ -102,7 +103,7 @@ class ProductVariantRepository:
     
     
     def commit(self) -> None:
-        self._session.commit()
+        self._commit()
 
     def rollback(self) -> None:
         self._session.rollback()

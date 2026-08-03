@@ -3,9 +3,10 @@ from uuid import UUID
 from sqlmodel import Session, select
 
 from app.modules.inventory.models.supplier import Supplier
+from app.modules.base_repo import BaseRepository
 
 
-class SupplierRepository:
+class SupplierRepository(BaseRepository):
 
     def __init__(
         self,
@@ -19,7 +20,7 @@ class SupplierRepository:
     ) -> Supplier:
 
         self._session.add(supplier)
-        self._session.commit()
+        self._commit()
         self._session.refresh(supplier)
 
         return supplier
@@ -30,7 +31,7 @@ class SupplierRepository:
     ) -> Supplier:
 
         self._session.add(supplier)
-        self._session.commit()
+        self._commit()
         self._session.refresh(supplier)
 
         return supplier
@@ -41,7 +42,7 @@ class SupplierRepository:
     ) -> None:
 
         self._session.delete(supplier)
-        self._session.commit()
+        self._commit()
 
     def get_by_id(
         self,

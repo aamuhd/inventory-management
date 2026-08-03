@@ -15,6 +15,10 @@ from app.modules.inventory.ui.purchase_order_window import PurchaseOrderWindow
 from app.modules.inventory.ui.supplier_return_window import SupplierReturnWindow
 from app.modules.inventory.ui.supplier_window import SupplierWindow
 from app.modules.inventory.ui.product_variant_window import ProductVariantWindow
+from app.modules.sales.ui.customer_window import CustomerWindow
+from app.modules.sales.services.customer_service import CustomerService
+from app.modules.sales.ui.sale_window import SaleWindow
+from app.modules.sales.services.sale_service import SaleService
 
 
 class ApplicationController(Navigation):
@@ -28,6 +32,8 @@ class ApplicationController(Navigation):
             supplier_service: SupplierService,
             purchase_order_service: PurchaseOrderService,
             supplier_return_service: SupplierReturnService,
+            customer_service: CustomerService,
+            sale_service: SaleService,
     ):
 
         self._authentication_service = authentication_service
@@ -38,6 +44,8 @@ class ApplicationController(Navigation):
         self._supplier_service = supplier_service
         self._purchase_order_service = purchase_order_service
         self._supplier_return_service = supplier_return_service
+        self._customer_service = customer_service
+        self._sale_service = sale_service
 
         self._login_window = None
         self._dashboard_window = None
@@ -47,6 +55,8 @@ class ApplicationController(Navigation):
         self._purchase_order_window = None
         self._supplier_return_window = None
         self._product_variant_window = None
+        self._customer_window = None
+        self._sale_window = None
 
         if self._category_window is not None:
             self._category_window.destroyed.connect(
@@ -170,3 +180,24 @@ class ApplicationController(Navigation):
         )
 
         self._product_variant_window.show()
+
+    
+    def show_customers(self) -> None:
+
+        self._show_window(
+            "_customer_window",
+            lambda: CustomerWindow(
+                customer_service=self._customer_service,
+            ),
+        )
+
+    def show_sales(self) -> None:
+    
+        self._show_window(
+            "_sale_window",
+            lambda: SaleWindow(
+                sale_service=self._sale_service,
+                customer_service=self._customer_service,
+                variant_service=self._variant_service,
+            ),
+        )

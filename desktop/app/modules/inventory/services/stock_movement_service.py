@@ -226,3 +226,24 @@ class StockMovementService:
             reference=reference,
             notes=notes,
         )
+
+    def sale_stock(
+        self,
+        *,
+        variant_id: UUID,
+        quantity: int,
+        reference: str,
+        notes: str | None = None,
+    ) -> StockMovement:
+
+        movement = StockMovement(
+            variant_id=variant_id,
+            movement_type=MovementType.SALE,
+            quantity=-quantity,
+            reference=reference,
+            notes=notes,
+        )
+
+        return self._movement_repository.create(
+            movement,
+        )

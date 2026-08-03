@@ -13,7 +13,7 @@ class UserRepository:
 
     def create(self, user: User) -> User:
         self._session.add(user)
-        self._session.commit()
+        self._commit()
         self._session.refresh(user)
         return user
 
@@ -27,6 +27,6 @@ class UserRepository:
 
     def update(self, user: User) -> User:
         self._session.add(user)
-        self._session.commit()
+        self._commit()
         self._session.refresh(user)
         return user

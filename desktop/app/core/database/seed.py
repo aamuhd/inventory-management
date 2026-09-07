@@ -1,6 +1,5 @@
 from sqlmodel import Session, select
 
-from app.core.database.application_database import DatabaseManager
 from app.core.security.password_hasher import PasswordHasher
 
 from app.modules.authentication.models.role import Role
@@ -10,21 +9,8 @@ from app.modules.authentication.repositories.user_repository import (
     UserRepository,
 )
 
-from app.modules.authentication.services.authentication_service import (
-    AuthenticationService,
-)
 
-
-database_manager = DatabaseManager()
-engine = database_manager.engine
-
-from sqlmodel import SQLModel
-
-
-SQLModel.metadata.create_all(engine)
-
-
-def main():
+def seed_database(engine) -> None:
 
     with Session(engine) as session:
 
@@ -32,11 +18,6 @@ def main():
 
         repository = UserRepository(
             session
-        )
-
-        service = AuthenticationService(
-            repository,
-            hasher,
         )
 
         # =====================================================
@@ -86,12 +67,6 @@ def main():
                     )
                 ),
                 role_id=admin.id,
-
-                # -------------------------------------------------
-                # Force the administrator to change the default
-                # password on the first login.
-                # -------------------------------------------------
-
                 must_change_password=True,
             )
 
@@ -100,17 +75,3 @@ def main():
             )
 
             session.commit()
-
-        # =====================================================
-        # TEST AUTHENTICATION
-        # =====================================================
-
-        
-        service.authenticate(
-            "admin",
-            "ChangeMe123!",
-        )
-
-if __name__ == "__main__":
-    main()
-

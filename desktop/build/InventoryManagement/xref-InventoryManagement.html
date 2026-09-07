@@ -27,6 +27,7 @@ imports:
  &#8226;   <a href="#app.core.config.settings">app.core.config.settings</a>
  &#8226;   <a href="#app.core.database.application_database">app.core.database.application_database</a>
  &#8226;   <a href="#app.core.database.manager">app.core.database.manager</a>
+ &#8226;   <a href="#app.core.database.seed">app.core.database.seed</a>
  &#8226;   <a href="#app.core.filesystem">app.core.filesystem</a>
  &#8226;   <a href="#app.core.logging">app.core.logging</a>
  &#8226;   <a href="#app.core.security.password_hasher">app.core.security.password_hasher</a>
@@ -204,6 +205,7 @@ imports:
  &#8226;   <a href="#keyword">keyword</a>
  &#8226;   <a href="#linecache">linecache</a>
  &#8226;   <a href="#locale">locale</a>
+ &#8226;   <a href="#multiprocessing">multiprocessing</a>
  &#8226;   <a href="#ntpath">ntpath</a>
  &#8226;   <a href="#operator">operator</a>
  &#8226;   <a href="#os">os</a>
@@ -3795,6 +3797,7 @@ imported by:
     <a href="#app.core.database.application_database">app.core.database.application_database</a>
  &#8226;   <a href="#app.core.database.manager">app.core.database.manager</a>
  &#8226;   <a href="#app.core.database.models">app.core.database.models</a>
+ &#8226;   <a href="#app.core.database.seed">app.core.database.seed</a>
  &#8226;   <a href="#app.core.database.session">app.core.database.session</a>
 
   </div>
@@ -3887,6 +3890,27 @@ imported by:
  &#8226;   <a href="#app.modules.sales.models.sales_return">app.modules.sales.models.sales_return</a>
  &#8226;   <a href="#app.modules.sales.models.sales_return_item">app.modules.sales.models.sales_return_item</a>
  &#8226;   <a href="#app.modules.settings.models.settings">app.modules.settings.models.settings</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.core.database.seed"></a>
+  <a target="code" href="///home/aliyu/Desktop/musab/inventory-management/desktop/app/core/database/seed.py" type="text/plain"><tt>app.core.database.seed</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#app.core.database">app.core.database</a>
+ &#8226;   <a href="#app.core.security.password_hasher">app.core.security.password_hasher</a>
+ &#8226;   <a href="#app.modules.authentication.models.role">app.modules.authentication.models.role</a>
+ &#8226;   <a href="#app.modules.authentication.models.user">app.modules.authentication.models.user</a>
+ &#8226;   <a href="#app.modules.authentication.repositories.user_repository">app.modules.authentication.repositories.user_repository</a>
+ &#8226;   <a href="#sqlmodel">sqlmodel</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#main.py">main.py</a>
 
   </div>
 
@@ -4030,7 +4054,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#app.modules.authentication.services.authentication_service">app.modules.authentication.services.authentication_service</a>
+    <a href="#app.core.database.seed">app.core.database.seed</a>
+ &#8226;   <a href="#app.modules.authentication.services.authentication_service">app.modules.authentication.services.authentication_service</a>
  &#8226;   <a href="#app.modules.authentication.services.user_service">app.modules.authentication.services.user_service</a>
  &#8226;   <a href="#app.modules.settings.services.settings_service">app.modules.settings.services.settings_service</a>
  &#8226;   <a href="#main.py">main.py</a>
@@ -4243,7 +4268,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#app.modules.authentication.models.user">app.modules.authentication.models.user</a>
+    <a href="#app.core.database.seed">app.core.database.seed</a>
+ &#8226;   <a href="#app.modules.authentication.models.user">app.modules.authentication.models.user</a>
  &#8226;   <a href="#app.modules.authentication.repositories.role_repository">app.modules.authentication.repositories.role_repository</a>
  &#8226;   <a href="#app.modules.authentication.services.role_service">app.modules.authentication.services.role_service</a>
  &#8226;   <a href="#app.modules.authentication.ui.role_table">app.modules.authentication.ui.role_table</a>
@@ -4269,7 +4295,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#app.core.session.current_session">app.core.session.current_session</a>
+    <a href="#app.core.database.seed">app.core.database.seed</a>
+ &#8226;   <a href="#app.core.session.current_session">app.core.session.current_session</a>
  &#8226;   <a href="#app.modules.authentication.models.role">app.modules.authentication.models.role</a>
  &#8226;   <a href="#app.modules.authentication.repositories.user_repository">app.modules.authentication.repositories.user_repository</a>
  &#8226;   <a href="#app.modules.authentication.services.authentication_service">app.modules.authentication.services.authentication_service</a>
@@ -4337,7 +4364,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#app.modules.authentication.services.authentication_service">app.modules.authentication.services.authentication_service</a>
+    <a href="#app.core.database.seed">app.core.database.seed</a>
+ &#8226;   <a href="#app.modules.authentication.services.authentication_service">app.modules.authentication.services.authentication_service</a>
  &#8226;   <a href="#app.modules.authentication.services.user_service">app.modules.authentication.services.user_service</a>
  &#8226;   <a href="#main.py">main.py</a>
 
@@ -16484,6 +16512,7 @@ imported by:
     <a href="#concurrent.futures.process">concurrent.futures.process</a>
  &#8226;   <a href="#loguru._handler">loguru._handler</a>
  &#8226;   <a href="#loguru._logger">loguru._logger</a>
+ &#8226;   <a href="#main.py">main.py</a>
  &#8226;   <a href="#multiprocessing">multiprocessing</a>
  &#8226;   <a href="#multiprocessing.connection">multiprocessing.connection</a>
  &#8226;   <a href="#multiprocessing.context">multiprocessing.context</a>
@@ -36383,6 +36412,7 @@ imported by:
     <a href="#app.core.database.application_database">app.core.database.application_database</a>
  &#8226;   <a href="#app.core.database.manager">app.core.database.manager</a>
  &#8226;   <a href="#app.core.database.models.base">app.core.database.models.base</a>
+ &#8226;   <a href="#app.core.database.seed">app.core.database.seed</a>
  &#8226;   <a href="#app.core.database.session">app.core.database.session</a>
  &#8226;   <a href="#app.modules.authentication.models.role">app.modules.authentication.models.role</a>
  &#8226;   <a href="#app.modules.authentication.models.user">app.modules.authentication.models.user</a>

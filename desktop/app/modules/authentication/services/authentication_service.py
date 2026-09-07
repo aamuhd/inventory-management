@@ -38,4 +38,11 @@ class AuthenticationService:
         if not user.is_active:
             raise InactiveUserError("User account is inactive.")
 
+        print(
+            "AUTH DEBUG:",
+            user.username,
+            "must_change_password =",
+            user.must_change_password,
+        )
+
         return user

@@ -1,0 +1,100 @@
+/* =========================================================
+   CATEGORY WINDOW
+   ========================================================= */
+
+#categoryWindow {
+    background-color: #1b1b1b;
+}
+
+
+/* =========================================================
+   FORM CONTAINER
+   ========================================================= */
+
+#categoryFormContainer {
+    background-color: #242424;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+
+    padding: 4px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+QTableWidget#categoryTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+
+    gridline-color: #333333;
+
+    selection-background-color: #354b61;
+    selection-color: #ffffff;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+QTableWidget#categoryTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLE CELLS
+   ========================================================= */
+
+QTableWidget#categoryTable::item {
+    padding: 7px;
+}
+
+QTableWidget#categoryTable::item:selected {
+    background-color: #354b61;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+QPushButton#dangerButton {
+    background-color: #8f3030;
+
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    padding: 8px 18px;
+
+    font-weight: 600;
+}
+
+QPushButton#dangerButton:hover {
+    background-color: #aa3838;
+}
+
+QPushButton#dangerButton:pressed {
+    background-color: #752626;
+}

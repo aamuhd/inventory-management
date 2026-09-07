@@ -1,0 +1,256 @@
+/* =========================================================
+   ROLE WINDOW
+   ========================================================= */
+
+#roleWindow {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+   FORM CONTAINER
+   ========================================================= */
+
+#roleFormContainer {
+    background-color: #202020;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+#roleForm {
+    background-color: #202020;
+}
+
+/* =========================================================
+   FORM TITLE
+   ========================================================= */
+
+#roleFormTitle {
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    padding-bottom: 5px;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+#roleFormContainer QLabel {
+    color: #cfcfcf;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#roleFormContainer QLineEdit,
+#roleFormContainer QTextEdit {
+    background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #404040;
+    border-radius: 6px;
+
+    padding: 7px 9px;
+}
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+#roleFormContainer QLineEdit:focus,
+#roleFormContainer QTextEdit:focus {
+    border: 1px solid #4c9aff;
+}
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+#roleSaveButton {
+    background-color: #3d7eff;
+
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#roleSaveButton:hover {
+    background-color: #528eff;
+}
+
+#roleSaveButton:pressed {
+    background-color: #326bd6;
+}
+
+#roleSaveButton:disabled {
+    background-color: #303030;
+    color: #777777;
+}
+
+/* =========================================================
+   CLEAR BUTTON
+   ========================================================= */
+
+#roleClearButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    font-weight: 500;
+
+    padding: 8px 16px;
+}
+
+#roleClearButton:hover {
+    background-color: #3a3a3a;
+
+    color: #ffffff;
+}
+
+#roleClearButton:pressed {
+    background-color: #282828;
+}
+
+/* =========================================================
+   ACTIVATE / DEACTIVATE BUTTON
+   ========================================================= */
+
+#roleDeactivateButton {
+    background-color: #3a2525;
+
+    color: #f0b0b0;
+
+    border: 1px solid #633737;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#roleDeactivateButton:hover {
+    background-color: #542d2d;
+
+    color: #ffffff;
+}
+
+#roleDeactivateButton:pressed {
+    background-color: #302020;
+}
+
+/* =========================================================
+   SPLITTER
+   ========================================================= */
+
+#roleSplitter::handle {
+    background-color: #363636;
+
+    width: 2px;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+#roleTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+/* =========================================================
+   TABLE ITEMS
+   ========================================================= */
+
+#roleTable::item {
+    padding: 7px;
+}
+
+#roleTable::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+#roleTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+/* =========================================================
+   SCROLLBARS
+   ========================================================= */
+
+#roleTable QScrollBar:vertical {
+    background-color: #202020;
+
+    width: 10px;
+}
+
+#roleTable QScrollBar::handle:vertical {
+    background-color: #454545;
+
+    border-radius: 5px;
+}
+
+#roleTable QScrollBar::handle:vertical:hover {
+    background-color: #555555;
+}
+
+#roleTable QScrollBar:horizontal {
+    background-color: #202020;
+
+    height: 10px;
+}
+
+#roleTable QScrollBar::handle:horizontal {
+    background-color: #454545;
+
+    border-radius: 5px;
+}
+
+#roleTable QScrollBar::add-line,
+#roleTable QScrollBar::sub-line {
+    background: none;
+    border: none;
+}

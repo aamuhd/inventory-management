@@ -1,0 +1,174 @@
+/* =========================================================
+   SUPPLIER WINDOW
+   ========================================================= */
+
+#supplierWindow {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+   FORM CONTAINER
+   ========================================================= */
+
+#supplierFormContainer {
+    background-color: #242424;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+
+    padding: 8px;
+}
+
+/* =========================================================
+   FORM TITLE
+   ========================================================= */
+
+#supplierFormTitle {
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    padding-bottom: 4px;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#supplierForm QLineEdit,
+#supplierForm QTextEdit,
+#supplierForm QComboBox {
+    background-color: #202020;
+
+    color: #eeeeee;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    padding: 6px 8px;
+}
+
+#supplierForm QLineEdit:focus,
+#supplierForm QTextEdit:focus,
+#supplierForm QComboBox:focus {
+    border: 1px solid #4c9aff;
+}
+
+/* =========================================================
+   FORM LABELS
+   ========================================================= */
+
+#supplierForm QLabel {
+    color: #cccccc;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   SAVE / CLEAR BUTTONS
+   ========================================================= */
+
+#supplierForm QPushButton {
+    min-height: 35px;
+
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#supplierForm #saveButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+}
+
+#supplierForm #saveButton:hover {
+    background-color: #528eff;
+}
+
+#supplierForm #saveButton:pressed {
+    background-color: #326bd6;
+}
+
+#supplierForm #clearButton {
+    background-color: #303030;
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#supplierForm #clearButton:hover {
+    background-color: #383838;
+}
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+#supplierWindow #deleteButton {
+    background-color: #3a2525;
+
+    color: #ffb0b0;
+
+    border: 1px solid #633838;
+    border-radius: 6px;
+
+    min-height: 40px;
+
+    font-weight: 600;
+}
+
+#supplierWindow #deleteButton:hover {
+    background-color: #4a2b2b;
+}
+
+#supplierWindow #deleteButton:pressed {
+    background-color: #572f2f;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+#supplierTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+#supplierTable::item {
+    padding: 6px;
+}
+
+#supplierTable::item:selected {
+    background-color: #354b61;
+    color: #ffffff;
+}
+
+#supplierTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 7px;
+
+    font-weight: 600;
+}
+
+#supplierTable QTableCornerButton::section {
+    background-color: #292929;
+}

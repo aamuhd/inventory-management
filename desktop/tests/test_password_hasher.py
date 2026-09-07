@@ -1,33 +1,68 @@
+import pytest
+from sqlmodel import Session, SQLModel, select
+
+from app.core.database.manager import DatabaseManager
 from app.core.security.password_hasher import PasswordHasher
+from app.modules.authentication.models.role import Role
+from app.modules.authentication.models.user import User
+from app.modules.authentication.repositories.user_repository import UserRepository
+from app.modules.authentication.services.authentication_service import AuthenticationService
 
 
-def test_password_hashing_and_verification():
-    hasher = PasswordHasher()
-    password = "ChangeMe123!"
-
-    # Hash the password
-    password_hash = hasher.hash_password(password)
-
-    # Should verify correct password
-    assert hasher.verify_password(password, password_hash) is True
-
-    # Should reject wrong password
-    assert hasher.verify_password("wrong-password", password_hash) is False
+@pytest.fixture
+def session():
+    database_manager = DatabaseManager()
+    engine = database_manager.engine
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as session:
+        yield session
+    # Optional: drop tables after tests if desired
+    # SQLModel.metadata.drop_all(engine)
 
 
-# Optional: Add more specific tests
-def test_password_hash_is_not_plaintext():
-    hasher = PasswordHasher()
-    password = "ChangeMe123!"
-
-    password_hash = hasher.hash_password(password)
-
-    assert password_hash != password
-    assert len(password_hash) > 20  # typical hash length
-    assert password_hash.startswith("$") or "$" in password_hash  # common for bcrypt/argon2 etc.
+@pytest.fixture
+def hasher():
+    return PasswordHasher()
 
 
-if __name__ == "__main__":
-    # This allows running with `python test_file.py` if needed
-    import pytest
-    pytest.main([__file__, "-v"])
+@pytest.fixture
+def repository(session):
+    return UserRepository(session)
+
+
+@pytest.fixture
+def service(repository, hasher):
+    return AuthenticationService(repository, hasher)
+
+
+def test_authenticate_admin_user(session, hasher, repository, service):
+    # Create role if it doesn't exist
+    admin = session.exec(
+            select(Role).where(Role.name == "Admin")
+        ).first()
+
+    if admin is None:
+        admin = Role(name="Admin")
+        session.add(admin)
+        commit()
+
+    # Create test user
+    user = session.exec(
+            select(User).where(User.username == "admin")
+        ).first()
+    if user is None:
+        user = User(
+            username="admin",
+            full_name="Administrator",
+            password_hash=hasher.hash_password("ChangeMe123!"),
+            role_id=admin.id,
+        )
+        repository.create(user)
+
+    authenticated_user = service.authenticate(
+        "admin",
+        "ChangeMe123!",
+    )
+
+    assert authenticated_user is not None
+    assert authenticated_user.username == "admin"

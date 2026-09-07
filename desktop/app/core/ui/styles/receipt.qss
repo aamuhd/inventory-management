@@ -1,0 +1,265 @@
+/* =========================================================
+   RECEIPT
+   ========================================================= */
+
+body {
+    background-color: #ffffff;
+
+    color: #202020;
+
+    font-family: "Noto Sans", Arial, sans-serif;
+
+    font-size: 9pt;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   RECEIPT CONTAINER
+   ========================================================= */
+
+.receipt {
+    width: 100%;
+}
+
+
+/* =========================================================
+   BUSINESS HEADER
+   ========================================================= */
+
+.header {
+    text-align: center;
+
+    padding-bottom: 8px;
+}
+
+.business-name {
+    color: #202020;
+
+    font-size: 18pt;
+
+    font-weight: 600;
+}
+
+.business-info {
+    color: #666666;
+
+    font-size: 8.5pt;
+
+    margin-top: 2px;
+}
+
+.receipt-title {
+    color: #202020;
+
+    font-size: 13pt;
+
+    font-weight: 600;
+
+    margin-top: 10px;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.divider {
+    border-top: 1px solid #d6d6d6;
+
+    height: 1px;
+
+    margin: 8px 0;
+}
+
+
+/* =========================================================
+   SALE INFORMATION
+   ========================================================= */
+
+.sale-info {
+    width: 100%;
+
+    margin-top: 5px;
+
+    margin-bottom: 5px;
+}
+
+.sale-info td {
+    padding: 3px 0;
+
+    vertical-align: top;
+}
+
+.sale-info-label {
+    color: #555555;
+
+    font-weight: 600;
+
+    width: 25%;
+}
+
+.sale-info-value {
+    color: #202020;
+}
+
+
+/* =========================================================
+   CUSTOMER
+   ========================================================= */
+
+.customer-name {
+    font-weight: 600;
+}
+
+.customer-detail {
+    color: #666666;
+
+    font-size: 8pt;
+}
+
+
+/* =========================================================
+   ITEMS TABLE
+   ========================================================= */
+
+.items {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 6px;
+}
+
+.items th {
+    background-color: #f1f1f1;
+
+    color: #404040;
+
+    border-top: 1px solid #d2d2d2;
+
+    border-bottom: 1px solid #d2d2d2;
+
+    padding: 6px 4px;
+
+    font-size: 8.5pt;
+
+    font-weight: 600;
+}
+
+.items td {
+    color: #202020;
+
+    border-bottom: 1px solid #e3e3e3;
+
+    padding: 6px 4px;
+
+    vertical-align: top;
+}
+
+.item-column {
+    width: 42%;
+}
+
+.quantity-column {
+    width: 12%;
+
+    text-align: right;
+}
+
+.price-column {
+    width: 23%;
+
+    text-align: right;
+}
+
+.amount-column {
+    width: 23%;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   PRODUCT
+   ========================================================= */
+
+.product-name {
+    color: #202020;
+
+    font-weight: 500;
+}
+
+.variant {
+    color: #777777;
+
+    font-size: 7.5pt;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.total-table {
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+.total-table td {
+    padding: 4px 0;
+}
+
+.total-label {
+    color: #404040;
+
+    text-align: right;
+
+    font-weight: 600;
+}
+
+.total-amount {
+    color: #202020;
+
+    text-align: right;
+
+    font-size: 13pt;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    color: #666666;
+
+    text-align: center;
+
+    font-size: 8.5pt;
+
+    margin-top: 16px;
+
+    padding-top: 8px;
+
+    border-top: 1px solid #d6d6d6;
+}
+
+
+/* =========================================================
+   PRINT ACCENT
+   ========================================================= */
+
+.accent {
+    color: #3d7eff;
+
+    font-weight: 600;
+}

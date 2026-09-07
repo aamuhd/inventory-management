@@ -1,0 +1,425 @@
+/* =========================================================
+   SALE WINDOW
+========================================================= */
+
+#saleWindow {
+    background-color: #1b1b1b;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+#saleForm {
+    background-color: #242424;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+
+    padding: 12px;
+}
+
+
+/* =========================================================
+   FORM LABELS
+========================================================= */
+
+#saleForm QLabel {
+    color: #dddddd;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+#saleForm QLineEdit,
+#saleForm QComboBox,
+#saleForm QDateEdit,
+#saleForm QTextEdit {
+    background-color: #202020;
+
+    color: #ffffff;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    padding: 7px;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+#saleForm QLineEdit:focus,
+#saleForm QComboBox:focus,
+#saleForm QDateEdit:focus,
+#saleForm QTextEdit:focus {
+    border: 1px solid #4d90fe;
+}
+
+
+/* =========================================================
+   COMBOBOX
+========================================================= */
+
+#saleForm QComboBox {
+    padding-right: 10px;
+}
+
+#saleForm QComboBox QAbstractItemView {
+    background-color: #292929;
+
+    color: #ffffff;
+
+    border: 1px solid #464646;
+
+    selection-background-color: #354b61;
+    selection-color: #ffffff;
+}
+
+
+/* =========================================================
+   DATE EDIT
+========================================================= */
+
+#saleForm QDateEdit {
+    padding-right: 8px;
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+#createButton,
+#updateButton,
+#clearButton {
+    min-height: 36px;
+
+    border-radius: 6px;
+
+    padding: 0 18px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CREATE
+========================================================= */
+
+#createButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+}
+
+#createButton:hover {
+    background-color: #528eff;
+}
+
+#createButton:pressed {
+    background-color: #326bd6;
+}
+
+#createButton:disabled {
+    background-color: #303030;
+    color: #777777;
+}
+
+
+/* =========================================================
+   UPDATE
+========================================================= */
+
+#updateButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+}
+
+#updateButton:hover {
+    background-color: #528eff;
+}
+
+#updateButton:pressed {
+    background-color: #326bd6;
+}
+
+#updateButton:disabled {
+    background-color: #303030;
+    color: #777777;
+}
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
+
+#clearButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#clearButton:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+#clearButton:pressed {
+    background-color: #282828;
+}
+
+
+/* =========================================================
+   SALE TABLE
+========================================================= */
+
+#saleTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+
+/* =========================================================
+   SALE TABLE ITEMS
+========================================================= */
+
+#saleTable::item {
+    padding: 7px;
+}
+
+#saleTable::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   SALE TABLE HEADER
+========================================================= */
+
+#saleTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SALE ITEM TABLE
+========================================================= */
+
+#saleItemTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+
+/* =========================================================
+   SALE ITEM TABLE ITEMS
+========================================================= */
+
+#saleItemTable::item {
+    padding: 7px;
+}
+
+#saleItemTable::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   SALE ITEM TABLE HEADER
+========================================================= */
+
+#saleItemTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ITEM BUTTONS
+========================================================= */
+
+#addItemButton,
+#editItemButton,
+#deleteItemButton,
+#completeButton,
+#deleteSaleButton {
+    min-height: 36px;
+
+    border-radius: 6px;
+
+    padding: 0 16px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ADD ITEM
+========================================================= */
+
+#addItemButton {
+    background-color: #3d7eff;
+
+    color: #ffffff;
+
+    border: none;
+}
+
+#addItemButton:hover {
+    background-color: #528eff;
+}
+
+#addItemButton:pressed {
+    background-color: #326bd6;
+}
+
+
+/* =========================================================
+   EDIT ITEM
+========================================================= */
+
+#editItemButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#editItemButton:hover {
+    background-color: #3a3a3a;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DELETE ITEM
+========================================================= */
+
+#deleteItemButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#deleteItemButton:hover {
+    background-color: #493030;
+
+    color: #ffb0b0;
+}
+
+
+/* =========================================================
+   COMPLETE SALE
+========================================================= */
+
+#completeButton {
+    background-color: #2f7d4a;
+
+    color: #ffffff;
+
+    border: none;
+}
+
+#completeButton:hover {
+    background-color: #39945a;
+}
+
+#completeButton:pressed {
+    background-color: #286b3f;
+}
+
+
+/* =========================================================
+   DELETE SALE
+========================================================= */
+
+#deleteSaleButton {
+    background-color: #4a2929;
+
+    color: #ffb0b0;
+
+    border: 1px solid #663838;
+}
+
+#deleteSaleButton:hover {
+    background-color: #5a3030;
+
+    color: #ffffff;
+}
+
+#deleteSaleButton:pressed {
+    background-color: #3d2222;
+}
+
+
+/* =========================================================
+   DISABLED ACTION BUTTONS
+========================================================= */
+
+#addItemButton:disabled,
+#editItemButton:disabled,
+#deleteItemButton:disabled,
+#completeButton:disabled,
+#deleteSaleButton:disabled {
+    background-color: #292929;
+
+    color: #666666;
+
+    border: 1px solid #353535;
+}

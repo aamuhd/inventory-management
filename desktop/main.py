@@ -1,4 +1,5 @@
 
+import multiprocessing
 import os
 from pathlib import Path
 import sys
@@ -144,6 +145,7 @@ from app.modules.sales.services.payment_service import (
 from app.modules.authentication.services.password_recovery_service import (
     PasswordRecoveryService,
 )
+from app.core.database.seed import seed_database
 
 def main() -> None:
 
@@ -193,6 +195,10 @@ def main() -> None:
     database_manager = DatabaseManager()
 
     SQLModel.metadata.create_all(
+        database_manager.engine
+    )
+
+    seed_database(
         database_manager.engine
     )
 
@@ -628,6 +634,6 @@ def main() -> None:
         app.exec()
     )
 
-
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     main()

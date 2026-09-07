@@ -164,11 +164,6 @@ class LoginWindow(QMainWindow):
                 )
             )
 
-            print(
-                "DEBUG must_change_password:",
-                user.must_change_password,
-            )
-
             self._current_session.login(
                 user
             )

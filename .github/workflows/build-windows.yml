@@ -25,7 +25,6 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
-
         with:
           python-version: "3.13"
 
@@ -35,6 +34,7 @@ jobs:
       # =====================================================
 
       - name: Upgrade pip
+        working-directory: desktop
         run: |
           python -m pip install --upgrade pip
 
@@ -44,6 +44,7 @@ jobs:
       # =====================================================
 
       - name: Install dependencies
+        working-directory: desktop
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
@@ -54,6 +55,7 @@ jobs:
       # =====================================================
 
       - name: Build Windows application
+        working-directory: desktop
         run: |
           pyinstaller InventoryManagement.spec --clean
 
@@ -64,7 +66,6 @@ jobs:
 
       - name: Upload Windows application
         uses: actions/upload-artifact@v4
-
         with:
           name: InventoryManagement-Windows
-          path: dist/InventoryManagement.exe
+          path: desktop/dist/InventoryManagement.exe

@@ -1,0 +1,258 @@
+/* =========================================================
+   CUSTOMER DETAIL WINDOW
+   ========================================================= */
+
+#customerDetailWindow {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+   GROUP BOXES
+   ========================================================= */
+
+#customerDetailWindow QGroupBox {
+    background-color: #202020;
+    color: #ffffff;
+
+    border: 1px solid #383838;
+    border-radius: 6px;
+
+    margin-top: 10px;
+    padding: 12px;
+}
+
+#customerDetailWindow QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+
+    padding: 0 6px;
+
+    color: #bbbbbb;
+    font-weight: 600;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+#customerDetailWindow QLabel {
+    color: #bbbbbb;
+}
+
+#customerDetailWindow QGroupBox QLabel {
+    color: #bbbbbb;
+}
+
+/* =========================================================
+   CUSTOMER INFORMATION VALUES
+   ========================================================= */
+
+#customerDetailWindow QGroupBox QLabel:last-child {
+    color: #eeeeee;
+    font-weight: 600;
+}
+
+/* =========================================================
+   DATE EDITS
+   ========================================================= */
+
+#customerDetailWindow QDateEdit {
+    background-color: #252525;
+    color: #eeeeee;
+
+    border: 1px solid #3d3d3d;
+    border-radius: 6px;
+
+    padding: 7px 9px;
+
+    min-width: 120px;
+}
+
+#customerDetailWindow QDateEdit:focus {
+    border: 1px solid #4c9aff;
+}
+
+/* =========================================================
+   GENERATE BUTTON
+   ========================================================= */
+
+#customerDetailGenerateButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#customerDetailGenerateButton:hover {
+    background-color: #528eff;
+}
+
+#customerDetailGenerateButton:pressed {
+    background-color: #326bd6;
+}
+
+/* =========================================================
+   PRINT BUTTON
+   ========================================================= */
+
+#customerDetailPrintButton {
+    background-color: #2f8f5b;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#customerDetailPrintButton:hover {
+    background-color: #3aa86c;
+}
+
+#customerDetailPrintButton:pressed {
+    background-color: #26764b;
+}
+
+/* =========================================================
+   SAVE PDF BUTTON
+   ========================================================= */
+
+#customerDetailSavePdfButton {
+    background-color: #7a5cff;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#customerDetailSavePdfButton:hover {
+    background-color: #896fff;
+}
+
+#customerDetailSavePdfButton:pressed {
+    background-color: #6548d6;
+}
+
+/* =========================================================
+   SALES SUMMARY
+   ========================================================= */
+
+#customerDetailWindow QGroupBox {
+    /* Keep existing group box styling */
+}
+
+/* Summary value labels */
+#customerDetailWindow QLabel#customerDetailTotalSalesLabel,
+#customerDetailWindow QLabel#customerDetailPaidLabel,
+#customerDetailWindow QLabel#customerDetailBalanceLabel,
+#customerDetailWindow QLabel#customerDetailNumberOfSalesLabel,
+#customerDetailWindow QLabel#customerDetailTotalItemsLabel,
+#customerDetailWindow QLabel#customerDetailAverageSaleLabel {
+    color: #eeeeee;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* =========================================================
+   TOTAL SALES
+   ========================================================= */
+
+#customerDetailTotalSalesLabel {
+    color: #4c9aff;
+    font-weight: 700;
+}
+
+/* =========================================================
+   PAID
+   ========================================================= */
+
+#customerDetailPaidLabel {
+    color: #4caf78;
+    font-weight: 700;
+}
+
+/* =========================================================
+   BALANCE
+   ========================================================= */
+
+#customerDetailBalanceLabel {
+    color: #ffb84d;
+    font-weight: 700;
+}
+
+/* =========================================================
+   NUMBER OF SALES
+   ========================================================= */
+
+#customerDetailNumberOfSalesLabel {
+    color: #eeeeee;
+}
+
+/* =========================================================
+   TOTAL ITEMS
+   ========================================================= */
+
+#customerDetailTotalItemsLabel {
+    color: #eeeeee;
+}
+
+/* =========================================================
+   AVERAGE SALE
+   ========================================================= */
+
+#customerDetailAverageSaleLabel {
+    color: #eeeeee;
+}
+
+/* =========================================================
+   SALES TABLE
+   ========================================================= */
+
+#customerDetailSalesTable {
+    background-color: #222222;
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+#customerDetailSalesTable::item {
+    padding: 6px;
+}
+
+#customerDetailSalesTable::item:selected {
+    background-color: #354b61;
+    color: #ffffff;
+}
+
+#customerDetailSalesTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+#customerDetailSalesTable QTableCornerButton::section {
+    background-color: #292929;
+}

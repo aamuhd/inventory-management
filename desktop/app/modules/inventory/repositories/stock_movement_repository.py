@@ -18,6 +18,7 @@ class StockMovementRepository(BaseRepository):
 
         self._session.add(movement)
         self._session.flush()
+        self._session.refresh(movement)
 
         return movement
 
@@ -27,8 +28,7 @@ class StockMovementRepository(BaseRepository):
     ) -> StockMovement:
 
         self._session.add(movement)
-        self._commit()
-        self._session.refresh(movement)
+        self._session.flush()
 
         return movement
 

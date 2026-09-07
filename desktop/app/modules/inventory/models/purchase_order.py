@@ -1,10 +1,10 @@
-
 from datetime import date
 from decimal import Decimal
 from typing import TYPE_CHECKING, List
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 from app.modules.inventory.enums.purchase_order_status import (
@@ -49,15 +49,15 @@ class PurchaseOrder(BaseModel, table=True):
 
     notes: str | None = None
 
-    supplier: "Supplier" = Relationship(
+    supplier: Mapped["Supplier"] = Relationship(
         back_populates="purchase_orders"
     )
 
-    items: List["PurchaseOrderItem"] = Relationship(
+    items: Mapped[List["PurchaseOrderItem"]] = Relationship(
         back_populates="purchase_order",
         cascade_delete=True,
     )
 
-    returns: List["SupplierReturn"] = Relationship(
+    returns: Mapped[List["SupplierReturn"]] = Relationship(
         back_populates="purchase_order"
     )

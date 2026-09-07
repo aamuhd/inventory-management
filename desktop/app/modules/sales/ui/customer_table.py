@@ -13,7 +13,7 @@ from app.modules.sales.models.customer import Customer
 
 class CustomerTable(QWidget):
     """
-    Displays Customers in a table.
+    Displays customers in a table.
 
     This widget is responsible only for displaying data.
     It does not communicate with the service layer.
@@ -24,21 +24,29 @@ class CustomerTable(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
+        self.setObjectName(
+            "customerTable"
+        )
+
         self._customers: list[Customer] = []
 
         self._build_ui()
 
     def _build_ui(self) -> None:
 
+        # =====================================================
+        # TABLE
+        # =====================================================
+
         self.table = QTableWidget()
 
-        self.table.itemDoubleClicked.connect(
-            self._on_item_double_clicked
+        self.table.setObjectName(
+            "customerTableWidget"
         )
 
-        self.table.setSortingEnabled(True)
-
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(
+            4
+        )
 
         self.table.setHorizontalHeaderLabels(
             [
@@ -61,9 +69,21 @@ class CustomerTable(QWidget):
             QAbstractItemView.EditTrigger.NoEditTriggers
         )
 
-        self.table.setAlternatingRowColors(True)
+        self.table.setAlternatingRowColors(
+            True
+        )
 
-        self.table.verticalHeader().setVisible(False)
+        self.table.setSortingEnabled(
+            True
+        )
+
+        self.table.verticalHeader().setVisible(
+            False
+        )
+
+        # -----------------------------------------------------
+        # Header
+        # -----------------------------------------------------
 
         header = self.table.horizontalHeader()
 
@@ -71,30 +91,64 @@ class CustomerTable(QWidget):
             QHeaderView.ResizeMode.Stretch
         )
 
-        layout = QVBoxLayout(self)
+        # -----------------------------------------------------
+        # Double click
+        # -----------------------------------------------------
 
-        layout.addWidget(self.table)
+        self.table.itemDoubleClicked.connect(
+            self._on_item_double_clicked
+        )
+
+        # =====================================================
+        # LAYOUT
+        # =====================================================
+
+        layout = QVBoxLayout(
+            self
+        )
+
+        layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        layout.addWidget(
+            self.table
+        )
+
+    # =========================================================
+    # LOAD
+    # =========================================================
 
     def set_customers(
         self,
         customers: list[Customer],
     ) -> None:
         """
-        Populate the table with Customers.
+        Populate the table with customers.
         """
 
-        self._customers = customers
+        self._customers = list(
+            customers
+        )
 
-        self.table.setRowCount(len(customers))
+        self.table.setRowCount(
+            len(self._customers)
+        )
 
-        for row, customer in enumerate(customers):
+        for row, customer in enumerate(
+            self._customers
+        ):
 
             self.table.setItem(
                 row,
                 0,
-                QTableWidgetItem(customer.name),
+                QTableWidgetItem(
+                    customer.name
+                ),
             )
-
 
             self.table.setItem(
                 row,
@@ -120,12 +174,15 @@ class CustomerTable(QWidget):
                 ),
             )
 
+    # =========================================================
+    # SELECTION
+    # =========================================================
 
     def selected_customer(
         self,
     ) -> Customer | None:
         """
-        Returns the currently selected Customer.
+        Return the currently selected customer.
         """
 
         row = self.table.currentRow()
@@ -133,28 +190,41 @@ class CustomerTable(QWidget):
         if row < 0:
             return None
 
-        if row >= len(self._customers):
+        if row >= len(
+            self._customers
+        ):
             return None
 
         return self._customers[row]
 
-    def clear(self) -> None:
-        """
-        Clears the table.
-        """
-
-        self._customers.clear()
-
-        self.table.setRowCount(0)
-
     def _on_item_double_clicked(
         self,
+        _item,
     ) -> None:
 
-        customer = self.selected_customer()
+        customer = (
+            self.selected_customer()
+        )
 
         if customer is not None:
 
             self.customer_selected.emit(
-                customer,
+                customer
             )
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
+
+    def clear(self) -> None:
+        """
+        Clear the table.
+        """
+
+        self.table.clearContents()
+
+        self.table.setRowCount(
+            0
+        )
+
+        self._customers.clear()

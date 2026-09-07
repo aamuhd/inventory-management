@@ -168,8 +168,7 @@ class SupplierReturnForm(QWidget):
                 purchase_order.id,
             )
 
-    def supplier_id(self) -> UUID:
-
+    def supplier_id(self) -> UUID | None:
         return self.supplier_combo.currentData()
 
     def purchase_order_id(self) -> UUID | None:
@@ -211,3 +210,17 @@ class SupplierReturnForm(QWidget):
         self.update_button.setEnabled(
             False,
         )
+
+    def set_supplier(
+        self,
+        supplier_id: UUID,
+    ) -> None:
+
+        index = self.supplier_combo.findData(
+            supplier_id,
+        )
+
+        if index >= 0:
+            self.supplier_combo.setCurrentIndex(
+                index,
+            )

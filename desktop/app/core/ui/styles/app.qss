@@ -1,0 +1,234 @@
+/* =========================================================
+   GLOBAL APPLICATION
+   ========================================================= */
+
+QWidget {
+    background-color: #1f1f1f;
+    color: #eeeeee;
+
+    font-family: "Noto Sans";
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MAIN WINDOWS
+   ========================================================= */
+
+QMainWindow {
+    background-color: #1f1f1f;
+}
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+QLabel {
+    color: #eeeeee;
+}
+
+
+/* =========================================================
+   PUSH BUTTON
+   ========================================================= */
+
+QPushButton {
+    background-color: #2b2b2b;
+
+    color: #eeeeee;
+
+    border: 1px solid #414141;
+    border-radius: 6px;
+
+    padding: 7px 14px;
+}
+
+QPushButton:hover {
+    background-color: #353535;
+    border-color: #555555;
+}
+
+QPushButton:pressed {
+    background-color: #222222;
+}
+
+QPushButton:disabled {
+    background-color: #252525;
+    color: #666666;
+    border-color: #333333;
+}
+
+
+/* =========================================================
+   LINE EDIT
+   ========================================================= */
+
+QLineEdit {
+    background-color: #242424;
+
+    color: #ffffff;
+
+    border: 1px solid #414141;
+    border-radius: 5px;
+
+    padding: 7px 9px;
+}
+
+QLineEdit:focus {
+    border-color: #4c9aff;
+}
+
+
+/* =========================================================
+   COMBO BOX
+   ========================================================= */
+
+QComboBox {
+    background-color: #242424;
+
+    color: #eeeeee;
+
+    border: 1px solid #414141;
+    border-radius: 5px;
+
+    padding: 7px 9px;
+}
+
+QComboBox:focus {
+    border-color: #4c9aff;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #292929;
+
+    color: #eeeeee;
+
+    border: 1px solid #414141;
+
+    selection-background-color: #3d6f9e;
+}
+
+
+/* =========================================================
+   DATE EDIT
+   ========================================================= */
+
+QDateEdit {
+    background-color: #242424;
+
+    color: #eeeeee;
+
+    border: 1px solid #414141;
+    border-radius: 5px;
+
+    padding: 7px 9px;
+}
+
+QDateEdit:focus {
+    border-color: #4c9aff;
+}
+
+
+/* =========================================================
+   TEXT EDIT
+   ========================================================= */
+
+QTextEdit {
+    background-color: #242424;
+
+    color: #eeeeee;
+
+    border: 1px solid #414141;
+    border-radius: 5px;
+
+    padding: 7px;
+}
+
+QTextEdit:focus {
+    border-color: #4c9aff;
+}
+
+
+/* =========================================================
+   GROUP BOX
+   ========================================================= */
+
+QGroupBox {
+    background-color: #222222;
+
+    border: 1px solid #383838;
+    border-radius: 7px;
+
+    margin-top: 12px;
+    padding: 14px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+
+    left: 12px;
+
+    padding: 0 6px;
+
+    color: #dddddd;
+}
+
+
+/* =========================================================
+   SCROLL AREA
+   ========================================================= */
+
+QScrollArea {
+    border: none;
+
+    background-color: transparent;
+}
+
+
+/* =========================================================
+   STATUS BAR
+   ========================================================= */
+
+QStatusBar {
+    background-color: #191919;
+
+    color: #999999;
+
+    border-top: 1px solid #333333;
+}
+
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+QTableWidget {
+    background-color: #222222;
+
+    alternate-background-color: #262626;
+
+    color: #eeeeee;
+
+    border: 1px solid #383838;
+
+    gridline-color: #343434;
+}
+
+QTableWidget::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+QHeaderView::section {
+    background-color: #292929;
+
+    color: #cccccc;
+
+    border: none;
+
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 7px;
+}

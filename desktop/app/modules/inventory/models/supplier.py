@@ -1,9 +1,9 @@
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from typing import TYPE_CHECKING, List
 
 from app.core.database.models.base import BaseModel
-
 
 
 if TYPE_CHECKING:
@@ -45,10 +45,10 @@ class Supplier(BaseModel, table=True):
         max_length=500,
     )
 
-    purchase_orders: List["PurchaseOrder"] = Relationship(
-        back_populates="supplier"
+    purchase_orders: Mapped[List["PurchaseOrder"]] = Relationship(
+        back_populates="supplier",
     )
 
-    returns: List["SupplierReturn"] = Relationship(
-        back_populates="supplier"
+    returns: Mapped[List["SupplierReturn"]] = Relationship(
+        back_populates="supplier",
     )

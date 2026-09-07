@@ -1,0 +1,168 @@
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+#dashboardWindow {
+    background-color: #1b1b1b;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+#dashboardHeader {
+    background-color: #232323;
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    border-bottom: 1px solid #363636;
+
+    padding: 12px;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+#dashboardSidebar {
+    background-color: #202020;
+
+    border-right: 1px solid #383838;
+}
+
+
+/* =========================================================
+   MAIN NAVIGATION BUTTONS
+   ========================================================= */
+
+QPushButton[navButton="true"] {
+    background-color: transparent;
+
+    color: #dddddd;
+
+    border: none;
+    border-radius: 6px;
+
+    text-align: left;
+
+    padding: 10px 14px;
+}
+
+QPushButton[navButton="true"]:hover {
+    background-color: #303030;
+    color: #ffffff;
+}
+
+QPushButton[navButton="true"]:checked {
+    background-color: #354b61;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   SUB NAVIGATION
+   ========================================================= */
+
+QPushButton[subButton="true"] {
+    background-color: transparent;
+
+    color: #aaaaaa;
+
+    border: none;
+
+    text-align: left;
+
+    padding: 8px 12px;
+}
+
+QPushButton[subButton="true"]:hover {
+    background-color: #2d2d2d;
+    color: #eeeeee;
+}
+
+
+/* =========================================================
+   DASHBOARD CARDS
+   ========================================================= */
+
+#dashboardCard {
+    background-color: #242424;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+}
+
+#dashboardCard:hover {
+    border-color: #4c9aff;
+}
+
+#dashboardCardTitle {
+    color: #a9a9a9;
+
+    font-size: 13px;
+}
+
+#dashboardCardValue {
+    color: #ffffff;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SECTION TITLES
+   ========================================================= */
+
+#dashboardSectionTitle {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    padding-top: 8px;
+    padding-bottom: 4px;
+}
+
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+#dashboardTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+#dashboardTable::item {
+    padding: 6px;
+}
+
+#dashboardTable::item:selected {
+    background-color: #354b61;
+    color: #ffffff;
+}
+
+#dashboardTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 7px;
+}

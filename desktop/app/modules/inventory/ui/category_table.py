@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Signal, Slot
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
@@ -16,30 +15,42 @@ from app.modules.inventory.models.category import Category
 
 class CategoryTable(QWidget):
     """
-    Displays categories in a table.
+    Displays categories in a responsive table.
 
     This widget is responsible only for displaying data.
     It does not communicate with the service layer.
     """
+
     category_selected = Signal(Category)
 
     def __init__(self) -> None:
+
         super().__init__()
 
         self._categories: list[Category] = []
 
         self._build_ui()
 
-    def _build_ui(self) -> None:
-        self.table = QTableWidget()
+    # =========================================================
+    # UI
+    # =========================================================
 
-        self.table.itemDoubleClicked.connect(
-            self._on_item_double_clicked
+    def _build_ui(self) -> None:
+
+        self.setObjectName(
+            "categoryTableContainer"
         )
 
-        self.table.setSortingEnabled(True)
+        self.table = QTableWidget()
 
-        self.table.setColumnCount(4)
+        self.table.setObjectName(
+            "categoryTable"
+        )
+
+        self.table.setColumnCount(
+            4
+        )
+
         self.table.setHorizontalHeaderLabels(
             [
                 "ID",
@@ -48,6 +59,10 @@ class CategoryTable(QWidget):
                 "Created",
             ]
         )
+
+        # -----------------------------------------------------
+        # Selection
+        # -----------------------------------------------------
 
         self.table.setSelectionBehavior(
             QAbstractItemView.SelectionBehavior.SelectRows
@@ -61,83 +76,228 @@ class CategoryTable(QWidget):
             QAbstractItemView.EditTrigger.NoEditTriggers
         )
 
-        self.table.setAlternatingRowColors(True)
+        # -----------------------------------------------------
+        # Appearance
+        # -----------------------------------------------------
 
-        self.table.verticalHeader().setVisible(False)
+        self.table.setAlternatingRowColors(
+            True
+        )
+
+        self.table.verticalHeader().setVisible(
+            False
+        )
+
+        self.table.setWordWrap(
+            False
+        )
+
+        # -----------------------------------------------------
+        # Sorting
+        # -----------------------------------------------------
+
+        self.table.setSortingEnabled(
+            True
+        )
+
+        # -----------------------------------------------------
+        # Responsive columns
+        # -----------------------------------------------------
 
         header = self.table.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
 
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.table)
+        header.setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
+
+        header.setMinimumSectionSize(
+            80
+        )
+
+        # -----------------------------------------------------
+        # Double-click
+        # -----------------------------------------------------
+
+        self.table.itemDoubleClicked.connect(
+            self._on_item_double_clicked
+        )
+
+        # -----------------------------------------------------
+        # Layout
+        # -----------------------------------------------------
+
+        layout = QVBoxLayout(
+            self
+        )
+
+        layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        layout.addWidget(
+            self.table
+        )
+
+    # =========================================================
+    # DATA
+    # =========================================================
 
     def set_categories(
         self,
         categories: list[Category],
     ) -> None:
-        """
-        Populate the table with categories.
-        """
 
         self._categories = categories
 
-        self.table.setRowCount(len(categories))
+        # Temporarily disable sorting while
+        # populating the table.
+        sorting_enabled = (
+            self.table.isSortingEnabled()
+        )
 
-        for row, category in enumerate(categories):
+        self.table.setSortingEnabled(
+            False
+        )
+
+        self.table.setRowCount(
+            len(categories)
+        )
+
+        for row, category in enumerate(
+            categories
+        ):
+
+            # -------------------------------------------------
+            # ID
+            # -------------------------------------------------
+
+            id_item = QTableWidgetItem(
+                str(category.id)
+            )
+
+            # Store the actual Category ID
+            # inside the table item.
+            id_item.setData(
+                Qt.ItemDataRole.UserRole,
+                category.id,
+            )
+
             self.table.setItem(
                 row,
                 0,
-                QTableWidgetItem(str(category.id)),
+                id_item,
             )
+
+            # -------------------------------------------------
+            # Name
+            # -------------------------------------------------
 
             self.table.setItem(
                 row,
                 1,
-                QTableWidgetItem(category.name),
+                QTableWidgetItem(
+                    category.name
+                ),
             )
+
+            # -------------------------------------------------
+            # Description
+            # -------------------------------------------------
 
             self.table.setItem(
                 row,
                 2,
-                QTableWidgetItem(category.description),
+                QTableWidgetItem(
+                    category.description
+                ),
             )
 
-            created = category.created_at.strftime(
-                "%Y-%m-%d %H:%M"
+            # -------------------------------------------------
+            # Created
+            # -------------------------------------------------
+
+            created = (
+                category.created_at.strftime(
+                    "%Y-%m-%d %H:%M"
+                )
             )
 
             self.table.setItem(
                 row,
                 3,
-                QTableWidgetItem(created),
+                QTableWidgetItem(
+                    created
+                ),
             )
 
-    def selected_category(self) -> Category | None:
-        """
-        Returns the currently selected Category.
-        """
+        self.table.setSortingEnabled(
+            sorting_enabled
+        )
+
+    # =========================================================
+    # SELECTION
+    # =========================================================
+
+    def selected_category(
+        self,
+    ) -> Category | None:
 
         row = self.table.currentRow()
 
         if row < 0:
             return None
 
-        if row >= len(self._categories):
+        id_item = self.table.item(
+            row,
+            0,
+        )
+
+        if id_item is None:
             return None
 
-        return self._categories[row]
+        category_id = id_item.data(
+            Qt.ItemDataRole.UserRole
+        )
 
-    def clear(self) -> None:
-        """
-        Clears the table.
-        """
+        for category in self._categories:
+
+            if category.id == category_id:
+                return category
+
+        return None
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
+
+    def clear(
+        self,
+    ) -> None:
 
         self._categories.clear()
 
-        self.table.setRowCount(0)
-    
-    def _on_item_double_clicked(self):
-        category = self.selected_category()
+        self.table.setRowCount(
+            0
+        )
+
+    # =========================================================
+    # EVENTS
+    # =========================================================
+
+    def _on_item_double_clicked(
+        self,
+        item: QTableWidgetItem,
+    ) -> None:
+
+        category = (
+            self.selected_category()
+        )
 
         if category is not None:
-            self.category_selected.emit(category)
+
+            self.category_selected.emit(
+                category
+            )

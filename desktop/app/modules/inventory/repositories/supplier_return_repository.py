@@ -24,7 +24,7 @@ class SupplierReturnRepository(BaseRepository):
             supplier_return,
         )
 
-        self._commit()
+        self._session.flush()
 
         self._session.refresh(
             supplier_return,
@@ -41,7 +41,7 @@ class SupplierReturnRepository(BaseRepository):
             supplier_return,
         )
 
-        self._commit()
+        self._session.flush()
 
         self._session.refresh(
             supplier_return,
@@ -98,4 +98,10 @@ class SupplierReturnRepository(BaseRepository):
             supplier_return,
         )
 
+        self._session.flush()
+
+    def commit(self) -> None:
         self._commit()
+
+    def rollback(self) -> None:
+        self._session.rollback()

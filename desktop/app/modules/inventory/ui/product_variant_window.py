@@ -1,25 +1,35 @@
+from __future__ import annotations
+
+from uuid import UUID
+
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QHBoxLayout,
+    QMessageBox,
     QPushButton,
+    QSplitter,
     QVBoxLayout,
+    QWidget,
 )
 
 from app.core.ui.base_window import BaseWindow
+
 from app.modules.inventory.exceptions import (
-    InvalidLengthError,
-    InvalidPriceError,
-    InvalidStockQuantityError,
     ProductVariantAlreadyExistsError,
     ProductVariantNotFoundError,
 )
-from app.modules.inventory.models.product_variant import ProductVariant
-from app.modules.inventory.services.product_service import ProductService
+
+from app.modules.inventory.services.product_service import (
+    ProductService,
+)
+
 from app.modules.inventory.services.product_variant_service import (
     ProductVariantService,
 )
+
 from app.modules.inventory.ui.product_variant_form import (
     ProductVariantForm,
 )
+
 from app.modules.inventory.ui.product_variant_table import (
     ProductVariantTable,
 )
@@ -32,12 +42,13 @@ class ProductVariantWindow(BaseWindow):
         variant_service: ProductVariantService,
         product_service: ProductService,
     ) -> None:
+
         super().__init__()
 
         self._variant_service = variant_service
         self._product_service = product_service
 
-        self._selected_variant_id = None
+        self._selected_variant_id: UUID | None = None
 
         self._build_ui()
         self._connect_signals()
@@ -45,75 +56,224 @@ class ProductVariantWindow(BaseWindow):
         self.load_products()
         self.load_variants()
 
+    # =========================================================
+    # UI
+    # =========================================================
+
     def _build_ui(self) -> None:
 
         self.setWindowTitle(
-            "Product Variant Management",
+            "Product Variant Management"
         )
+
+        self.setObjectName(
+            "productVariantWindow"
+        )
+
+        self.resize(
+            1100,
+            650,
+        )
+
+        self.setMinimumSize(
+            850,
+            500,
+        )
+
+        # -----------------------------------------------------
+        # Form
+        # -----------------------------------------------------
 
         self.form = ProductVariantForm()
 
-        self.table = ProductVariantTable()
+        form_container = QVBoxLayout()
+
+        form_container.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        form_container.addWidget(
+            self.form
+        )
 
         self.delete_button = QPushButton(
-            "Delete",
+            "Delete"
         )
 
-        left_layout = QVBoxLayout()
-
-        left_layout.addWidget(
-            self.form,
+        self.delete_button.setObjectName(
+            "productVariantDeleteButton"
         )
 
-        left_layout.addWidget(
-            self.delete_button,
+        self.delete_button.setMinimumHeight(
+            40
         )
 
-        main_layout = QHBoxLayout(self)
+        self.delete_button.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
 
-        main_layout.addLayout(
-            left_layout,
-            1,
+        form_container.addWidget(
+            self.delete_button
+        )
+
+        form_widget = QWidget()
+
+        form_widget.setObjectName(
+            "productVariantFormContainer"
+        )
+
+        form_widget.setLayout(
+            form_container
+        )
+
+        form_widget.setMinimumWidth(
+            320
+        )
+
+        # -----------------------------------------------------
+        # Table
+        # -----------------------------------------------------
+
+        self.table = ProductVariantTable()
+
+        self.table.setObjectName(
+            "productVariantTableContainer"
+        )
+
+        self.table.setMinimumWidth(
+            500
+        )
+
+        # -----------------------------------------------------
+        # Splitter
+        # -----------------------------------------------------
+
+        splitter = QSplitter(
+            Qt.Orientation.Horizontal
+        )
+
+        splitter.setObjectName(
+            "productVariantSplitter"
+        )
+
+        splitter.addWidget(
+            form_widget
+        )
+
+        splitter.addWidget(
+            self.table
+        )
+
+        splitter.setSizes(
+            [
+                350,
+                750,
+            ]
+        )
+
+        # -----------------------------------------------------
+        # Main Layout
+        # -----------------------------------------------------
+
+        main_layout = QVBoxLayout(
+            self
+        )
+
+        main_layout.setContentsMargins(
+            10,
+            10,
+            10,
+            10,
         )
 
         main_layout.addWidget(
-            self.table,
-            2,
+            splitter
         )
+
+    # =========================================================
+    # SIGNALS
+    # =========================================================
 
     def _connect_signals(self) -> None:
 
         self.form.save_button.clicked.connect(
-            self.save,
+            self.save
         )
 
         self.form.clear_button.clicked.connect(
-            self.clear_form,
+            self.clear_form
         )
 
         self.delete_button.clicked.connect(
-            self.delete,
+            self.delete
         )
 
         self.table.variant_selected.connect(
-            self.edit_selected,
+            self.edit_selected
         )
+
+    # =========================================================
+    # PRODUCTS
+    # =========================================================
 
     def load_products(self) -> None:
 
-        products = self._product_service.get_all()
+        products = (
+            self._product_service.get_all()
+        )
 
         self.form.load_products(
-            products,
+            products
         )
+
+    # =========================================================
+    # VARIANTS
+    # =========================================================
 
     def load_variants(self) -> None:
 
-        variants = self._variant_service.get_all()
+        variants = (
+            self._variant_service.get_all()
+        )
+
+        products = (
+            self._product_service.get_all()
+        )
+
+        product_names = {
+            product.id: product.name
+            for product in products
+            if product.id is not None
+        }
 
         self.table.set_variants(
             variants,
+            product_names,
         )
+
+    # =========================================================
+    # REFRESH
+    # =========================================================
+
+    def refresh(self) -> None:
+        """
+        Refresh the Product Variant window after the product
+        list changes.
+
+        Both the product combo box and the variant table need
+        to be refreshed because a newly created product must
+        become available when adding a variant.
+        """
+
+        self.load_products()
+        self.load_variants()
+
+    # =========================================================
+    # SAVE / UPDATE
+    # =========================================================
 
     def save(self) -> None:
 
@@ -124,11 +284,11 @@ class ProductVariantWindow(BaseWindow):
             if self._selected_variant_id is None:
 
                 self._variant_service.create(
-                    **data,
+                    **data
                 )
 
                 self.show_information(
-                    "Product variant created successfully.",
+                    "Product variant created successfully."
                 )
 
             else:
@@ -139,73 +299,93 @@ class ProductVariantWindow(BaseWindow):
                 )
 
                 self.show_information(
-                    "Product variant updated successfully.",
+                    "Product variant updated successfully."
                 )
 
             self.clear_form()
-
             self.load_variants()
 
         except (
             ProductVariantAlreadyExistsError,
-            InvalidLengthError,
-            InvalidStockQuantityError,
-            InvalidPriceError,
         ) as error:
 
-            self.show_error(
+            QMessageBox.warning(
+                self,
+                "Error",
                 str(error),
             )
 
+    # =========================================================
+    # EDIT
+    # =========================================================
+
     def edit_selected(
         self,
-        variant: ProductVariant,
+        variant,
     ) -> None:
 
-        self._selected_variant_id = variant.id
+        if variant.id is None:
+            return
 
-        self.form.set_selected_variant(
-            variant,
+        self._selected_variant_id = (
+            variant.id
+        )
+
+        self.form.set_data(
+            product_id=variant.product_id,
+            name=variant.name,
+            length=variant.length,
+            stock_quantity=variant.stock_quantity,
+            reorder_level=variant.reorder_level,
+            cost_price=variant.cost_price,
+            selling_price=variant.selling_price,
+            sku=variant.sku,
         )
 
         self.form.set_edit_mode()
 
+    # =========================================================
+    # DELETE
+    # =========================================================
+
     def delete(self) -> None:
 
-        variant = self.table.selected_variant()
+        variant = (
+            self.table.selected_variant()
+        )
 
         if variant is None:
             return
 
+        if variant.id is None:
+            return
+
         if not self.ask_confirmation(
             "Delete Product Variant",
-            (
-                f"Delete variant "
-                f"{variant.product.name} - "
-                f"{variant.length}?"
-            ),
+            f'Delete "{variant.name}"?',
         ):
             return
 
         try:
 
             self._variant_service.delete(
-                variant.id,
+                variant.id
             )
 
             self.clear_form()
-
             self.load_variants()
-
-            self.show_information(
-                "Product variant deleted successfully.",
-            )
 
         except ProductVariantNotFoundError as error:
 
-            self.show_error(
+            QMessageBox.warning(
+                self,
+                "Error",
                 str(error),
             )
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
 
     def clear_form(self) -> None:
 
@@ -214,5 +394,3 @@ class ProductVariantWindow(BaseWindow):
         self.form.clear()
 
         self.form.set_create_mode()
-
-        self.table.clear_selection()

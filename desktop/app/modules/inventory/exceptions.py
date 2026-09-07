@@ -143,7 +143,8 @@ class EmptySupplierReturnError(Exception):
 
 
 
-   
-   
+class SupplierHasDependenciesError(Exception):
+    pass
 
-
+class ProductHasVariantsError(Exception):
+    pass

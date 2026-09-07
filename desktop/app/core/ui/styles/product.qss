@@ -1,0 +1,202 @@
+/* =========================================================
+   PRODUCT WINDOW
+   ========================================================= */
+
+#productWindow {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+   FORM CONTAINER
+   ========================================================= */
+
+#productFormContainer {
+    background-color: #202020;
+    border-right: 1px solid #383838;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+#productForm {
+    background-color: #202020;
+}
+
+#productFormTitle {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    padding-bottom: 6px;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#productForm QLineEdit,
+#productForm QComboBox,
+#productForm QTextEdit {
+    background-color: #252525;
+    color: #eeeeee;
+
+    border: 1px solid #3d3d3d;
+    border-radius: 6px;
+
+    padding: 7px 9px;
+}
+
+#productForm QLineEdit:focus,
+#productForm QComboBox:focus,
+#productForm QTextEdit:focus {
+    border: 1px solid #4c9aff;
+}
+
+/* =========================================================
+   COMBO BOX
+   ========================================================= */
+
+#productForm QComboBox {
+    min-height: 20px;
+}
+
+#productForm QComboBox::drop-down {
+    border: none;
+    width: 28px;
+}
+
+#productForm QComboBox QAbstractItemView {
+    background-color: #252525;
+    color: #eeeeee;
+
+    border: 1px solid #3d3d3d;
+    selection-background-color: #354b61;
+    selection-color: #ffffff;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+#productForm QFormLayout QLabel {
+    color: #bbbbbb;
+    font-size: 13px;
+}
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+#productSaveButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+#productSaveButton:hover {
+    background-color: #528eff;
+}
+
+#productSaveButton:pressed {
+    background-color: #326bd6;
+}
+
+/* =========================================================
+   CLEAR BUTTON
+   ========================================================= */
+
+#productClearButton {
+    background-color: #303030;
+    color: #dddddd;
+
+    border: 1px solid #444444;
+    border-radius: 6px;
+
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+#productClearButton:hover {
+    background-color: #3a3a3a;
+}
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+#productDeleteButton {
+    background-color: #3a2424;
+    color: #ffb0b0;
+
+    border: 1px solid #5a3030;
+    border-radius: 6px;
+
+    font-weight: 600;
+}
+
+#productDeleteButton:hover {
+    background-color: #4a2929;
+    border-color: #703838;
+}
+
+#productDeleteButton:pressed {
+    background-color: #552d2d;
+}
+
+/* =========================================================
+   SPLITTER
+   ========================================================= */
+
+#productSplitter::handle {
+    background-color: #363636;
+}
+
+#productSplitter::handle:hover {
+    background-color: #4c9aff;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+#productTable {
+    background-color: #222222;
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+#productTable::item {
+    padding: 6px;
+}
+
+#productTable::item:selected {
+    background-color: #354b61;
+    color: #ffffff;
+}
+
+#productTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+    font-weight: 600;
+}
+
+#productTable QTableCornerButton::section {
+    background-color: #292929;
+}

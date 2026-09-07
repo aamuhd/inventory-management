@@ -3,6 +3,7 @@ from uuid import UUID
 from app.modules.inventory.exceptions import (
     InvalidProductNameError,
     ProductAlreadyExistsError,
+    ProductHasVariantsError,
     ProductNotFoundError,
 )
 from app.modules.inventory.models.product import Product
@@ -118,5 +119,17 @@ class ProductService:
     ) -> None:
 
         product = self.get_by_id(product_id)
+
+        # ------------------------------------------
+        # Prevent deleting products with variants
+        # ------------------------------------------
+
+        if product.variants:
+            raise ProductHasVariantsError(
+                (
+                    f'Cannot delete "{product.name}". '
+                    "This product still has variants."
+                )
+            )
 
         self._repository.delete(product)

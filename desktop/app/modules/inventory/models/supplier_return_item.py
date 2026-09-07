@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 
@@ -29,10 +30,10 @@ class SupplierReturnItem(BaseModel, table=True):
 
     reason: str
 
-    supplier_return: "SupplierReturn" = Relationship(
+    supplier_return: Mapped["SupplierReturn"] = Relationship(
         back_populates="items",
     )
 
-    product_variant: "ProductVariant" = Relationship(
+    product_variant: Mapped["ProductVariant"] = Relationship(
         back_populates="supplier_return_items",
     )

@@ -1,0 +1,141 @@
+/* =========================================================
+   LOGIN WINDOW
+   ========================================================= */
+
+QMainWindow#loginWindow {
+    background-color: #181818;
+}
+
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+QFrame#loginCard {
+    background-color: #242424;
+
+    border: 1px solid #383838;
+    border-radius: 12px;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+QLabel#loginTitle {
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SUBTITLE
+   ========================================================= */
+
+QLabel#loginSubtitle {
+    color: #999999;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FIELD LABEL
+   ========================================================= */
+
+QLabel#loginFieldLabel {
+    color: #dddddd;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+QLineEdit#usernameEdit,
+QLineEdit#passwordEdit {
+    background-color: #1c1c1c;
+
+    color: #ffffff;
+
+    border: 1px solid #3d3d3d;
+    border-radius: 6px;
+
+    padding: 0 11px;
+
+    selection-background-color: #3d6f9e;
+    selection-color: #ffffff;
+}
+
+
+/* =========================================================
+   INPUT HOVER
+   ========================================================= */
+
+QLineEdit#usernameEdit:hover,
+QLineEdit#passwordEdit:hover {
+    border-color: #555555;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+QLineEdit#usernameEdit:focus,
+QLineEdit#passwordEdit:focus {
+    border: 1px solid #4c9aff;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+QPushButton#loginButton {
+    background-color: #3d6f9e;
+
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    padding: 10px 16px;
+}
+
+
+/* =========================================================
+   BUTTON HOVER
+   ========================================================= */
+
+QPushButton#loginButton:hover {
+    background-color: #4b82b5;
+}
+
+
+/* =========================================================
+   BUTTON PRESSED
+   ========================================================= */
+
+QPushButton#loginButton:pressed {
+    background-color: #315b82;
+}
+
+
+/* =========================================================
+   BUTTON DISABLED
+   ========================================================= */
+
+QPushButton#loginButton:disabled {
+    background-color: #303030;
+    color: #666666;
+}

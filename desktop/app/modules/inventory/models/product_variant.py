@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, List
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 
@@ -22,6 +23,8 @@ class ProductVariant(BaseModel, table=True):
         foreign_key="products.id",
         index=True,
     )
+
+    name: str = Field(index=True)
 
     length: int = Field(gt=0)
 
@@ -51,22 +54,22 @@ class ProductVariant(BaseModel, table=True):
         index=True,
     )
 
-    product: "Product" = Relationship(
+    product: Mapped["Product"] = Relationship(
         back_populates="variants",
     )
 
-    movements: List["StockMovement"] = Relationship(
+    movements: Mapped[List["StockMovement"]] = Relationship(
         back_populates="variant"
     )
 
-    purchase_order_items: List["PurchaseOrderItem"] = Relationship(
+    purchase_order_items: Mapped[List["PurchaseOrderItem"]] = Relationship(
         back_populates="product_variant"
     )
 
-    supplier_return_items: List["SupplierReturnItem"] = Relationship(
+    supplier_return_items: Mapped[List["SupplierReturnItem"]] = Relationship(
         back_populates="product_variant"
     )
 
-    sale_items: List["SaleItem"] = Relationship(
+    sale_items: Mapped[List["SaleItem"]] = Relationship(
         back_populates="product_variant",
     )

@@ -1,14 +1,17 @@
 from decimal import Decimal
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
+
 
 if TYPE_CHECKING:
     from app.modules.sales.models.sale import Sale
     from app.modules.inventory.models.product_variant import ProductVariant
+    from app.modules.sales.models.sales_return_item import SalesReturnItem
 
 
 class SaleItem(BaseModel, table=True):
@@ -33,10 +36,14 @@ class SaleItem(BaseModel, table=True):
         max_digits=12,
     )
 
-    sale: "Sale" = Relationship(
+    sale: Mapped["Sale"] = Relationship(
         back_populates="items",
     )
 
-    product_variant: "ProductVariant" = Relationship(
+    product_variant: Mapped["ProductVariant"] = Relationship(
         back_populates="sale_items",
+    )
+
+    return_items: Mapped[List["SalesReturnItem"]] = Relationship(
+        back_populates="sale_item",
     )

@@ -18,7 +18,8 @@ from app.modules.inventory.exceptions import (
     InvalidSupplierReturnStateError, 
     SupplierReturnItemNotFoundError, 
     SupplierReturnNotFoundError
-) 
+)
+from app.modules.inventory.enums.movement_type import MovementType 
 
 
 class SupplierReturnService:
@@ -320,9 +321,10 @@ class SupplierReturnService:
 
             for item in items:
 
-                self._stock_movement_service.damage_stock(
+                self._stock_movement_service.record_movement(
                     variant_id=item.variant_id,
-                    quantity=item.quantity,
+                    movement_type=MovementType.RETURN_TO_SUPPLIER,
+                    quantity=-item.quantity,
                     reference=supplier_return.return_number,
                     notes=item.reason,
                 )
@@ -337,7 +339,12 @@ class SupplierReturnService:
                 )
             )
 
+            self._stock_movement_service.commit()
+
         except Exception:
+
+            self._stock_movement_service.rollback()
+
             raise
 
         return supplier_return

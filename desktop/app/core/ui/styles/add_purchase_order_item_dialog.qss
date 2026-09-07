@@ -1,0 +1,174 @@
+/* =========================================================
+ADD PURCHASE ORDER ITEM DIALOG
+========================================================= */
+
+#addPurchaseOrderItemDialog {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+DIALOG TITLE
+========================================================= */
+
+#addPurchaseOrderItemDialog #dialogTitle {
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* =========================================================
+ITEM FORM GROUP
+========================================================= */
+
+#addPurchaseOrderItemDialog QGroupBox {
+    background-color: #242424;
+
+    color: #dddddd;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+
+    margin-top: 8px;
+    padding: 12px;
+}
+
+#addPurchaseOrderItemDialog QGroupBox::title {
+    color: #dddddd;
+
+    padding: 0 6px;
+}
+
+/* =========================================================
+FORM LABELS
+========================================================= */
+
+#addPurchaseOrderItemDialog QGroupBox QLabel {
+    color: #dddddd;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =========================================================
+INPUTS
+========================================================= */
+
+#addPurchaseOrderItemDialog QComboBox,
+#addPurchaseOrderItemDialog QSpinBox,
+#addPurchaseOrderItemDialog QDoubleSpinBox {
+    background-color: #202020;
+
+    color: #ffffff;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    padding: 7px;
+}
+
+/* =========================================================
+INPUT FOCUS
+========================================================= */
+
+#addPurchaseOrderItemDialog QComboBox:focus,
+#addPurchaseOrderItemDialog QSpinBox:focus,
+#addPurchaseOrderItemDialog QDoubleSpinBox:focus {
+    border: 1px solid #4d90fe;
+}
+
+/* =========================================================
+COMBOBOX
+========================================================= */
+
+#addPurchaseOrderItemDialog QComboBox QAbstractItemView {
+    background-color: #292929;
+
+    color: #ffffff;
+
+    border: 1px solid #464646;
+
+    selection-background-color: #354b61;
+    selection-color: #ffffff;
+}
+
+/* =========================================================
+COST PRICE
+========================================================= */
+
+#addPurchaseOrderItemDialog QDoubleSpinBox {
+    color: #bbbbbb;
+
+    background-color: #252525;
+}
+
+/* =========================================================
+DIALOG BUTTONS
+========================================================= */
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton {
+    min-height: 36px;
+
+    min-width: 90px;
+
+    border-radius: 6px;
+
+    padding: 0 18px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =========================================================
+OK BUTTON
+========================================================= */
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton[text="OK"] {
+    background-color: #3d7eff;
+
+    color: #ffffff;
+
+    border: none;
+}
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton[text="OK"]:hover {
+    background-color: #528eff;
+}
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton[text="OK"]:pressed {
+    background-color: #326bd6;
+}
+
+/* =========================================================
+CANCEL BUTTON
+========================================================= */
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton[text="Cancel"] {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton[text="Cancel"]:hover {
+    background-color: #3a3a3a;
+
+    color: #ffffff;
+}
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton[text="Cancel"]:pressed {
+    background-color: #282828;
+}
+
+/* =========================================================
+DISABLED OK BUTTON
+========================================================= */
+
+#addPurchaseOrderItemDialog QDialogButtonBox QPushButton:disabled {
+    background-color: #292929;
+
+    color: #666666;
+
+    border: 1px solid #353535;
+}

@@ -61,15 +61,21 @@ class CustomerRepository(BaseRepository):
         return list(
             self._session.exec(statement)
         )
+        
+      
 
     def get_by_name(
         self,
         name: str,
     ) -> Customer | None:
-
+        """
         statement = (
             select(Customer)
             .where(Customer.name == name)
         )
 
         return self._session.exec(statement).first()
+        """
+        return self._session.exec(
+            select(Customer).where(Customer.name == name)
+        ).first()

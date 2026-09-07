@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QHeaderView,
     QTableWidget,
     QTableWidgetItem,
@@ -14,19 +17,33 @@ class SaleTable(QWidget):
 
     sale_selected = Signal(Sale)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
+
+        self.setObjectName(
+            "saleTableContainer"
+        )
 
         self._sales: list[Sale] = []
 
         self._build_ui()
         self._connect_signals()
 
-    def _build_ui(self):
+    # =========================================================
+    # UI
+    # =========================================================
+
+    def _build_ui(self) -> None:
 
         self.table = QTableWidget()
 
-        self.table.setColumnCount(6)
+        self.table.setObjectName(
+            "saleTable"
+        )
+
+        self.table.setColumnCount(
+            6
+        )
 
         self.table.setHorizontalHeaderLabels(
             [
@@ -39,34 +56,74 @@ class SaleTable(QWidget):
             ]
         )
 
-        self.table.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeMode.Stretch,
+        self.table.setSelectionBehavior(
+            QAbstractItemView.SelectionBehavior.SelectRows
         )
 
-        layout = QVBoxLayout(self)
+        self.table.setSelectionMode(
+            QAbstractItemView.SelectionMode.SingleSelection
+        )
+
+        self.table.setEditTriggers(
+            QAbstractItemView.EditTrigger.NoEditTriggers
+        )
+
+        self.table.setAlternatingRowColors(
+            True
+        )
+
+        self.table.verticalHeader().setVisible(
+            False
+        )
+
+        header = self.table.horizontalHeader()
+
+        header.setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
+
+        self.table.setSortingEnabled(
+            True
+        )
+
+        layout = QVBoxLayout(
+            self
+        )
 
         layout.addWidget(
-            self.table,
+            self.table
         )
 
-    def _connect_signals(self):
+    # =========================================================
+    # SIGNALS
+    # =========================================================
+
+    def _connect_signals(self) -> None:
 
         self.table.itemSelectionChanged.connect(
-            self._emit_selected,
+            self._emit_selected
         )
+
+    # =========================================================
+    # LOAD
+    # =========================================================
 
     def load(
         self,
         sales: list[Sale],
-    ):
+    ) -> None:
 
-        self._sales = list(sales)
-
-        self.table.setRowCount(
-            len(sales),
+        self._sales = list(
+            sales
         )
 
-        for row, sale in enumerate(sales):
+        self.table.setRowCount(
+            len(sales)
+        )
+
+        for row, sale in enumerate(
+            sales
+        ):
 
             customer = (
                 sale.customer.name
@@ -78,7 +135,7 @@ class SaleTable(QWidget):
                 row,
                 0,
                 QTableWidgetItem(
-                    sale.invoice_number,
+                    sale.invoice_number
                 ),
             )
 
@@ -86,7 +143,7 @@ class SaleTable(QWidget):
                 row,
                 1,
                 QTableWidgetItem(
-                    customer,
+                    customer
                 ),
             )
 
@@ -94,7 +151,9 @@ class SaleTable(QWidget):
                 row,
                 2,
                 QTableWidgetItem(
-                    str(sale.sale_date),
+                    str(
+                        sale.sale_date
+                    )
                 ),
             )
 
@@ -102,7 +161,7 @@ class SaleTable(QWidget):
                 row,
                 3,
                 QTableWidgetItem(
-                    sale.status.value,
+                    sale.status.value
                 ),
             )
 
@@ -110,7 +169,9 @@ class SaleTable(QWidget):
                 row,
                 4,
                 QTableWidgetItem(
-                    str(sale.total_amount),
+                    str(
+                        sale.total_amount
+                    )
                 ),
             )
 
@@ -118,25 +179,17 @@ class SaleTable(QWidget):
                 row,
                 5,
                 QTableWidgetItem(
-                    str(len(sale.items)),
+                    str(
+                        len(
+                            sale.items
+                        )
+                    )
                 ),
             )
 
-    def _emit_selected(self):
-
-        row = self.table.currentRow()
-
-        print("Current row:", row)
-        print("Sales:", self._sales)
-
-        if row < 0:
-            return
-
-        print("Emitting:", self._sales[row])
-
-        self.sale_selected.emit(
-            self._sales[row],
-        )
+    # =========================================================
+    # SELECTION
+    # =========================================================
 
     def selected_sale(
         self,
@@ -147,10 +200,34 @@ class SaleTable(QWidget):
         if row < 0:
             return None
 
+        if row >= len(
+            self._sales
+        ):
+            return None
+
         return self._sales[row]
 
-    def clear(self):
+    def _emit_selected(self) -> None:
+
+        sale = self.selected_sale()
+
+        if sale is None:
+            return
+
+        self.sale_selected.emit(
+            sale
+        )
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
+
+    def clear(self) -> None:
 
         self.table.clearContents()
-        self.table.setRowCount(0)
-        self._sales = []
+
+        self.table.setRowCount(
+            0
+        )
+
+        self._sales.clear()

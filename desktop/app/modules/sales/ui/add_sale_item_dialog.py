@@ -9,20 +9,21 @@ from PySide6.QtWidgets import (
     QSpinBox,
 )
 
-from app.modules.sales.services.sale_service import SaleService
+from app.modules.inventory.services.product_variant_service import (
+    ProductVariantService,
+)
 
 
 class AddSaleItemDialog(QDialog):
 
     def __init__(
         self,
-        variant_service,
+        variant_service: ProductVariantService,
         parent=None,
     ):
         super().__init__(parent)
 
         self._variant_service = variant_service
-
         self._variants = []
 
         self._build_ui()
@@ -89,6 +90,8 @@ class AddSaleItemDialog(QDialog):
 
         self._variants = self._variant_service.get_all()
 
+        self.variant_combo.clear()
+
         for variant in self._variants:
 
             text = (
@@ -112,10 +115,12 @@ class AddSaleItemDialog(QDialog):
 
         variant = self._variants[index]
 
+        self.quantity_spin.setMaximum(
+            variant.stock_quantity
+        )
+
         self.unit_price_spin.setValue(
-            float(
-                variant.selling_price,
-            )
+            float(variant.selling_price),
         )
 
     def values(self):

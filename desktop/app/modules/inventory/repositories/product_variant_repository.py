@@ -63,6 +63,8 @@ class ProductVariantRepository(BaseRepository):
 
     def get_all(self) -> list[ProductVariant]:
 
+        self._session.expire_all()
+
         statement = select(ProductVariant)
 
         return list(
@@ -73,6 +75,8 @@ class ProductVariantRepository(BaseRepository):
         self,
         product_id: UUID,
     ) -> list[ProductVariant]:
+
+        self._session.expire_all()
 
         statement = (
             select(ProductVariant)

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 
@@ -42,10 +43,10 @@ class PurchaseOrderItem(BaseModel, table=True):
         max_digits=12,
     )
 
-    purchase_order: "PurchaseOrder" = Relationship(
+    purchase_order: Mapped["PurchaseOrder"] = Relationship(
         back_populates="items"
     )
 
-    product_variant: "ProductVariant" = Relationship(
+    product_variant: Mapped["ProductVariant"] = Relationship(
         back_populates="purchase_order_items"
     )

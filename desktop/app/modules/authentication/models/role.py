@@ -1,8 +1,10 @@
-from typing import Optional
+from typing import TYPE_CHECKING, List
 
-from sqlmodel import Field
+from sqlmodel import Field, Relationship
 
 from app.core.database.models.base import BaseModel
+if TYPE_CHECKING:
+    from app.modules.authentication.models.user import User
 
 
 class Role(BaseModel, table=True):
@@ -21,4 +23,8 @@ class Role(BaseModel, table=True):
     description: str | None = Field(
         default=None,
         max_length=255,
+    )
+
+    users: List["User"] = Relationship(
+        back_populates="role",
     )

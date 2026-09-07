@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from datetime import date
+
 from PySide6.QtCore import QDate, Signal
 from PySide6.QtWidgets import (
     QComboBox,
@@ -11,8 +15,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from datetime import date
-
 
 class SaleForm(QWidget):
 
@@ -20,22 +22,34 @@ class SaleForm(QWidget):
     update_clicked = Signal()
     clear_clicked = Signal()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
+
+        self.setObjectName(
+            "saleForm"
+        )
 
         self._build_ui()
         self._connect_signals()
 
-    def _build_ui(self):
+    # =========================================================
+    # UI
+    # =========================================================
+
+    def _build_ui(self) -> None:
 
         self.customer_combo = QComboBox()
 
         self.invoice_number_edit = QLineEdit()
 
         self.sale_date_edit = QDateEdit()
-        self.sale_date_edit.setCalendarPopup(True)
+
+        self.sale_date_edit.setCalendarPopup(
+            True
+        )
+
         self.sale_date_edit.setDate(
-           self._today()
+            self._today()
         )
 
         self.notes_edit = QTextEdit()
@@ -43,78 +57,111 @@ class SaleForm(QWidget):
         form_layout = QFormLayout()
 
         form_layout.addRow(
-            "Customer",
+            "Customer:",
             self.customer_combo,
         )
 
         form_layout.addRow(
-            "Invoice Number",
+            "Invoice Number:",
             self.invoice_number_edit,
         )
 
         form_layout.addRow(
-            "Sale Date",
+            "Sale Date:",
             self.sale_date_edit,
         )
 
         form_layout.addRow(
-            "Notes",
+            "Notes:",
             self.notes_edit,
         )
 
+        # -----------------------------------------------------
+        # Buttons
+        # -----------------------------------------------------
+
         self.create_button = QPushButton(
-            "Create",
+            "Create"
+        )
+
+        self.create_button.setObjectName(
+            "createButton"
         )
 
         self.update_button = QPushButton(
-            "Update",
+            "Update"
+        )
+
+        self.update_button.setObjectName(
+            "updateButton"
         )
 
         self.clear_button = QPushButton(
-            "Clear",
+            "Clear"
         )
 
-        self.update_button.setEnabled(False)
+        self.clear_button.setObjectName(
+            "clearButton"
+        )
+
+        self.update_button.setEnabled(
+            False
+        )
 
         button_layout = QHBoxLayout()
 
         button_layout.addWidget(
-            self.create_button,
+            self.create_button
         )
 
         button_layout.addWidget(
-            self.update_button,
+            self.update_button
         )
 
         button_layout.addWidget(
-            self.clear_button,
+            self.clear_button
         )
 
-        layout = QVBoxLayout(self)
+        # -----------------------------------------------------
+        # Main layout
+        # -----------------------------------------------------
+
+        layout = QVBoxLayout(
+            self
+        )
 
         layout.addLayout(
-            form_layout,
+            form_layout
         )
 
         layout.addLayout(
-            button_layout,
+            button_layout
         )
 
-    def _connect_signals(self):
+    # =========================================================
+    # SIGNALS
+    # =========================================================
+
+    def _connect_signals(self) -> None:
 
         self.create_button.clicked.connect(
-            self.create_clicked.emit,
+            self.create_clicked.emit
         )
 
         self.update_button.clicked.connect(
-            self.update_clicked.emit,
+            self.update_clicked.emit
         )
 
         self.clear_button.clicked.connect(
-            self.clear_clicked.emit,
+            self.clear_clicked.emit
         )
 
+    # =========================================================
+    # DATE
+    # =========================================================
+
     def _today(self) -> QDate:
+
         today = date.today()
 
         return QDate(
@@ -123,17 +170,28 @@ class SaleForm(QWidget):
             today.day,
         )
 
-    def clear(self):
+    # =========================================================
+    # CLEAR
+    # =========================================================
 
-        self.customer_combo.setCurrentIndex(-1)
+    def clear(self) -> None:
+
+        self.customer_combo.setCurrentIndex(
+            -1
+        )
 
         self.invoice_number_edit.clear()
 
         self.notes_edit.clear()
-        
+
         self.sale_date_edit.setDate(
-           self._today()
+            self._today()
         )
 
-        self.create_button.setEnabled(True)
-        self.update_button.setEnabled(False)
+        self.create_button.setEnabled(
+            True
+        )
+
+        self.update_button.setEnabled(
+            False
+        )

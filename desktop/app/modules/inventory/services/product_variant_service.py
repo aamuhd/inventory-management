@@ -13,6 +13,7 @@ from app.modules.inventory.repositories.product_variant_repository import (
     ProductVariantRepository,
 )
 from app.modules.inventory.services.product_service import ProductService
+from app.modules.inventory.services.stock_movement_service import StockMovementService
 
 
 class ProductVariantService:
@@ -21,14 +22,17 @@ class ProductVariantService:
         self,
         variant_repository: ProductVariantRepository,
         product_service: ProductService,
+        stock_movement_service: StockMovementService,
     ) -> None:
 
         self._repository = variant_repository
         self._product_service = product_service
+        self._stock_movement_service = stock_movement_service
 
     def create(
         self,
         product_id: UUID,
+        name: str,
         length: int,
         stock_quantity: int,
         reorder_level: int,
@@ -40,6 +44,13 @@ class ProductVariantService:
 
         # Ensure product exists
         self._product_service.get_by_id(product_id)
+
+        name = name.strip()
+
+        if not name:
+            raise ValueError(
+                "Variant name cannot be empty."
+            )
 
         if length <= 0:
             raise InvalidLengthError(
@@ -78,6 +89,7 @@ class ProductVariantService:
 
         variant = ProductVariant(
             product_id=product_id,
+            name=name,
             length=length,
             stock_quantity=stock_quantity,
             reorder_level=reorder_level,
@@ -121,6 +133,7 @@ class ProductVariantService:
         self,
         variant_id: UUID,
         product_id: UUID,
+        name: str,
         length: int,
         stock_quantity: int,
         reorder_level: int,
@@ -175,6 +188,7 @@ class ProductVariantService:
         variant.sqlmodel_update(
             {
                 "product_id": product_id,
+                "name": name,
                 "length": length,
                 "stock_quantity": stock_quantity,
                 "reorder_level": reorder_level,
@@ -208,17 +222,10 @@ class ProductVariantService:
             variant_id,
         )
 
-        new_quantity = (
-            variant.stock_quantity + quantity_change
+        self._stock_movement_service.adjust_stock(
+            variant_id=variant.id,
+            quantity=quantity_change,
+            notes="Stock adjustment",
         )
 
-        if new_quantity < 0:
-            raise InvalidStockQuantityError(
-                "Stock cannot become negative."
-            )
-
-        variant.stock_quantity = new_quantity
-
-        return self._repository.update(
-            variant,
-        )
+        return variant

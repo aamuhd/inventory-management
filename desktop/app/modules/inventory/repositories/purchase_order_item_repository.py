@@ -33,7 +33,7 @@ class PurchaseOrderItemRepository(BaseRepository):
     ) -> PurchaseOrderItem:
 
         self._session.add(item)
-        self._commit()
+        self._session.flush()
         self._session.refresh(item)
 
         return item

@@ -269,9 +269,16 @@ class SupplierReturnWindow(BaseWindow):
 
         try:
 
+            supplier_id = self.form.supplier_id()
+
+            if supplier_id is None:
+                raise ValueError(
+                    "Please select a supplier."
+                )
+
             supplier_return = (
                 self._supplier_return_service.create(
-                    supplier_id=self.form.supplier_id(),
+                    supplier_id=supplier_id,
                     purchase_order_id=self.form.purchase_order_id(),
                     return_number=self.form.return_number(),
                     return_date=self.form.return_date(),
@@ -280,9 +287,11 @@ class SupplierReturnWindow(BaseWindow):
             )
 
             self._load_supplier_returns()
+
             self._supplier_return_selected(
                 supplier_return,
             )
+
         except Exception as error:
 
             self.show_error(
@@ -295,10 +304,18 @@ class SupplierReturnWindow(BaseWindow):
             return
 
         try:
+
+            supplier_id = self.form.supplier_id()
+
+            if supplier_id is None:
+                raise ValueError(
+                    "Please select a supplier."
+                )
+
             supplier_return = (
                 self._supplier_return_service.update(
                     supplier_return_id=self._selected_supplier_return.id,
-                    supplier_id=self.form.supplier_id(),
+                    supplier_id=supplier_id,
                     purchase_order_id=self.form.purchase_order_id(),
                     return_number=self.form.return_number(),
                     return_date=self.form.return_date(),
@@ -307,11 +324,14 @@ class SupplierReturnWindow(BaseWindow):
             )
 
             self._load_supplier_returns()
+
             self._supplier_return_selected(
                 supplier_return,
             )
+
         except Exception as error:
-           self.show_error(
+
+            self.show_error(
                 str(error),
             )
 
@@ -322,9 +342,22 @@ class SupplierReturnWindow(BaseWindow):
 
         self._selected_supplier_return = supplier_return
 
-        self.form.load_suppliers(
-            supplier_return,
+        self.form.set_supplier(
+            supplier_return.supplier_id,
         )
+
+        self._supplier_changed()
+
+        if supplier_return.purchase_order_id is not None:
+
+            index = self.form.purchase_order_combo.findData(
+                supplier_return.purchase_order_id,
+            )
+
+            if index >= 0:
+                self.form.purchase_order_combo.setCurrentIndex(
+                    index,
+                )
 
         self.item_table.load(
             supplier_return.items,
@@ -333,7 +366,7 @@ class SupplierReturnWindow(BaseWindow):
         self.delete_button.setEnabled(
             True,
         )
-        
+
         if supplier_return.status == SupplierReturnStatus.DRAFT:
 
             self.add_item_button.setEnabled(

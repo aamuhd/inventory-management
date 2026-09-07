@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from uuid import UUID
-
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
@@ -16,12 +14,6 @@ from app.modules.inventory.models.product import Product
 
 
 class ProductTable(QWidget):
-    """
-    Displays products in a table.
-
-    This widget is responsible only for displaying data.
-    It does not communicate with the service layer.
-    """
 
     product_selected = Signal(Product)
 
@@ -30,17 +22,28 @@ class ProductTable(QWidget):
 
         self._products: list[Product] = []
 
+        self.setObjectName(
+            "productTableContainer"
+        )
+
         self._build_ui()
 
     def _build_ui(self) -> None:
+
         self.table = QTableWidget()
 
-        self.table.itemDoubleClicked.connect(
-            self._on_item_double_clicked
+        self.table.setObjectName(
+            "productTable"
         )
 
-        self.table.setSortingEnabled(True)
-        self.table.setColumnCount(6)
+        self.table.setSortingEnabled(
+            True
+        )
+
+        self.table.setColumnCount(
+            6
+        )
+
         self.table.setHorizontalHeaderLabels(
             [
                 "ID",
@@ -64,105 +67,223 @@ class ProductTable(QWidget):
             QAbstractItemView.EditTrigger.NoEditTriggers
         )
 
-        self.table.setAlternatingRowColors(True)
+        self.table.setAlternatingRowColors(
+            True
+        )
 
-        self.table.verticalHeader().setVisible(False)
+        self.table.verticalHeader().setVisible(
+            False
+        )
+
+        self.table.setWordWrap(
+            False
+        )
+
+        self.table.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+
+        self.table.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
 
         header = self.table.horizontalHeader()
 
         header.setSectionResizeMode(
-            QHeaderView.ResizeMode.Stretch
+            QHeaderView.ResizeMode.Interactive
         )
 
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.table)
+        header.resizeSection(0, 180)
+        header.resizeSection(1, 160)
+        header.resizeSection(2, 140)
+        header.resizeSection(3, 160)
+        header.resizeSection(4, 220)
+        header.resizeSection(5, 150)
+
+        # -----------------------------------------------------
+        # Hide ID column from the user.
+        #
+        # The ID is still stored in column 0 internally so
+        # selected_product() can continue to identify the
+        # selected Product correctly.
+        # -----------------------------------------------------
+
+        self.table.setColumnHidden(
+            0,
+            True,
+        )
+
+        self.table.itemDoubleClicked.connect(
+            self._on_item_double_clicked
+        )
+
+        layout = QVBoxLayout(
+            self
+        )
+
+        layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        layout.addWidget(
+            self.table
+        )
 
     def set_products(
         self,
         products: list[Product],
         category_names: dict[int, str],
     ) -> None:
-        """
-        Populate the table with products.
-        """
 
         self._products = products
 
-        self.table.setRowCount(len(products))
+        sorting_enabled = (
+            self.table.isSortingEnabled()
+        )
 
-        for row, product in enumerate(products):
+        self.table.setSortingEnabled(
+            False
+        )
+
+        self.table.setRowCount(
+            len(products)
+        )
+
+        for row, product in enumerate(
+            products
+        ):
+
+            id_item = QTableWidgetItem(
+                str(product.id)
+            )
+
+            id_item.setData(
+                Qt.ItemDataRole.UserRole,
+                product.id,
+            )
+
             self.table.setItem(
                 row,
                 0,
-                QTableWidgetItem(str(product.id)),
+                id_item,
             )
+
             self.table.setItem(
                 row,
                 1,
-                QTableWidgetItem(product.name),
+                QTableWidgetItem(
+                    product.name
+                ),
             )
+
             self.table.setItem(
                 row,
                 2,
-                QTableWidgetItem(product.brand or ""),
+                QTableWidgetItem(
+                    product.brand or ""
+                ),
             )
 
-            if product.category_id is None:
-                category_name = ""
-            else:
-                category_name = category_names.get(
-                    product.category_id,
-                    "",
+            category_name = ""
+
+            if product.category_id is not None:
+
+                category_name = (
+                    category_names.get(
+                        product.category_id,
+                        "",
+                    )
                 )
 
             self.table.setItem(
                 row,
                 3,
-                QTableWidgetItem(category_name),
+                QTableWidgetItem(
+                    category_name
+                ),
             )
 
             self.table.setItem(
                 row,
                 4,
-                QTableWidgetItem(product.description or ""),
+                QTableWidgetItem(
+                    product.description or ""
+                ),
             )
 
-            created = product.created_at.strftime(
-                "%Y-%m-%d %H:%M"
+            created = (
+                product.created_at.strftime(
+                    "%Y-%m-%d %H:%M"
+                )
             )
 
             self.table.setItem(
                 row,
                 5,
-                QTableWidgetItem(created),
+                QTableWidgetItem(
+                    created
+                ),
             )
 
-    def selected_product(self) -> Product | None:
-        """
-        Returns the currently selected product.
-        """
+        self.table.setSortingEnabled(
+            sorting_enabled
+        )
+
+        # Make sure the ID remains hidden even after
+        # refreshing the table.
+        self.table.setColumnHidden(
+            0,
+            True,
+        )
+
+    def selected_product(
+        self,
+    ) -> Product | None:
 
         row = self.table.currentRow()
 
         if row < 0:
             return None
 
-        if row >= len(self._products):
+        id_item = self.table.item(
+            row,
+            0,
+        )
+
+        if id_item is None:
             return None
 
-        return self._products[row]
+        product_id = id_item.data(
+            Qt.ItemDataRole.UserRole
+        )
+
+        for product in self._products:
+
+            if product.id == product_id:
+                return product
+
+        return None
 
     def clear(self) -> None:
-        """
-        Clears the table.
-        """
 
         self._products.clear()
 
-        self.table.setRowCount(0)
+        self.table.setRowCount(
+            0
+        )
 
-    def _on_item_double_clicked(self) -> None:
+    def _on_item_double_clicked(
+        self,
+        item: QTableWidgetItem,
+    ) -> None:
+
         product = self.selected_product()
 
         if product is not None:
-            self.product_selected.emit(product)
+
+            self.product_selected.emit(
+                product
+            )

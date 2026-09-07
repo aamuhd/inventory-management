@@ -22,15 +22,9 @@ class SupplierReturnItemRepository(BaseRepository):
         item: SupplierReturnItem,
     ) -> SupplierReturnItem:
 
-        self._session.add(
-            item,
-        )
-
-        self._commit()
-
-        self._session.refresh(
-            item,
-        )
+        self._session.add(item)
+        self._session.flush()
+        self._session.refresh(item)
 
         return item
 
@@ -39,15 +33,9 @@ class SupplierReturnItemRepository(BaseRepository):
         item: SupplierReturnItem,
     ) -> SupplierReturnItem:
 
-        self._session.add(
-            item,
-        )
-
-        self._commit()
-
-        self._session.refresh(
-            item,
-        )
+        self._session.add(item)
+        self._session.flush()
+        self._session.refresh(item)
 
         return item
 
@@ -109,8 +97,5 @@ class SupplierReturnItemRepository(BaseRepository):
         item: SupplierReturnItem,
     ) -> None:
 
-        self._session.delete(
-            item,
-        )
-
-        self._commit()
+        self._session.delete(item)
+        self._session.flush()

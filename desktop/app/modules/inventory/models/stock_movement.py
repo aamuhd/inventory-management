@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 from app.modules.inventory.enums.movement_type import MovementType
@@ -31,6 +32,6 @@ class StockMovement(BaseModel, table=True):
 
     notes: str | None = None
 
-    variant: "ProductVariant" = Relationship(
+    variant: Mapped["ProductVariant"] = Relationship(
         back_populates="movements",
     )

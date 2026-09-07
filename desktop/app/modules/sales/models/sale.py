@@ -4,13 +4,17 @@ from typing import TYPE_CHECKING, List
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 from app.modules.sales.enums.sale_status import SaleStatus
 
+
 if TYPE_CHECKING:
     from app.modules.sales.models.customer import Customer
     from app.modules.sales.models.sale_item import SaleItem
+    from app.modules.sales.models.sale_payment import SalePayment
+    from app.modules.sales.models.sales_return import SalesReturn
 
 
 class Sale(BaseModel, table=True):
@@ -40,10 +44,21 @@ class Sale(BaseModel, table=True):
         max_digits=12,
     )
 
-    customer: "Customer" = Relationship(
+    customer: Mapped["Customer"] = Relationship(
         back_populates="sales",
     )
 
-    items: List["SaleItem"] = Relationship(
+    items: Mapped[List["SaleItem"]] = Relationship(
+        back_populates="sale",
+        sa_relationship_kwargs={
+            "cascade": "all, delete-orphan",
+        },
+    )
+
+    payments: Mapped[List["SalePayment"]] = Relationship(
+        back_populates="sale",
+    )
+
+    returns: Mapped[List["SalesReturn"]] = Relationship(
         back_populates="sale",
     )

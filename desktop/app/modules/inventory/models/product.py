@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 
@@ -25,10 +26,10 @@ class Product(BaseModel, table=True):
         foreign_key="categories.id",
     )
 
-    category: Optional["Category"] = Relationship(
+    category: Mapped[Optional["Category"]] = Relationship(
         back_populates="products",
     )
 
-    variants: List["ProductVariant"] = Relationship(
+    variants: Mapped[List["ProductVariant"]] = Relationship(
         back_populates="product",
     )

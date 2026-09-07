@@ -1,21 +1,43 @@
+from __future__ import annotations
+
+from collections.abc import Callable
+from uuid import UUID
+
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QHBoxLayout,
     QMessageBox,
     QPushButton,
+    QSplitter,
     QVBoxLayout,
+    QWidget,
 )
+
+from app.core.ui.base_window import BaseWindow
 
 from app.modules.inventory.exceptions import (
     InvalidProductNameError,
     ProductAlreadyExistsError,
+    ProductHasVariantsError,
     ProductNotFoundError,
 )
+
 from app.modules.inventory.models.product import Product
-from app.modules.inventory.services.category_service import CategoryService
-from app.modules.inventory.services.product_service import ProductService
-from app.modules.inventory.ui.product_form import ProductForm
-from app.modules.inventory.ui.product_table import ProductTable
-from app.core.ui.base_window import BaseWindow
+
+from app.modules.inventory.services.category_service import (
+    CategoryService,
+)
+
+from app.modules.inventory.services.product_service import (
+    ProductService,
+)
+
+from app.modules.inventory.ui.product_form import (
+    ProductForm,
+)
+
+from app.modules.inventory.ui.product_table import (
+    ProductTable,
+)
 
 
 class ProductWindow(BaseWindow):
@@ -24,13 +46,24 @@ class ProductWindow(BaseWindow):
         self,
         product_service: ProductService,
         category_service: CategoryService,
+        refresh_product_variants: Callable[[], None],
     ) -> None:
+
         super().__init__()
 
-        self._product_service = product_service
-        self._category_service = category_service
+        self._product_service = (
+            product_service
+        )
 
-        self._selected_product_id = None
+        self._category_service = (
+            category_service
+        )
+
+        self._refresh_product_variants = (
+            refresh_product_variants
+        )
+
+        self._selected_product_id: UUID | None = None
 
         self._build_ui()
         self._connect_signals()
@@ -38,27 +71,143 @@ class ProductWindow(BaseWindow):
         self.load_categories()
         self.load_products()
 
+    # =========================================================
+    # UI
+    # =========================================================
+
     def _build_ui(self) -> None:
 
-        self.setWindowTitle("Product Management")
+        self.setWindowTitle(
+            "Product Management"
+        )
+
+        self.setObjectName(
+            "productWindow"
+        )
+
+        self.resize(
+            1100,
+            650,
+        )
+
+        # =====================================================
+        # FORM
+        # =====================================================
 
         self.form = ProductForm()
 
+        self.delete_button = QPushButton(
+            "Delete"
+        )
+
+        self.delete_button.setObjectName(
+            "productDeleteButton"
+        )
+
+        self.delete_button.setMinimumHeight(
+            40
+        )
+
+        form_layout = QVBoxLayout()
+
+        form_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        form_layout.setSpacing(
+            8
+        )
+
+        form_layout.addWidget(
+            self.form
+        )
+
+        form_layout.addWidget(
+            self.delete_button
+        )
+
+        form_widget = QWidget()
+
+        form_widget.setObjectName(
+            "productFormContainer"
+        )
+
+        form_widget.setLayout(
+            form_layout
+        )
+
+        # =====================================================
+        # TABLE
+        # =====================================================
+
         self.table = ProductTable()
 
-        self.delete_button = QPushButton("Delete")
+        # =====================================================
+        # SPLITTER
+        # =====================================================
 
-        left_layout = QVBoxLayout()
-        left_layout.addWidget(self.form)
-        left_layout.addWidget(self.delete_button)
+        splitter = QSplitter(
+            Qt.Orientation.Horizontal
+        )
 
-        main_layout = QHBoxLayout(self)
-        main_layout.addLayout(left_layout, 1)
-        main_layout.addWidget(self.table, 2)
+        splitter.setObjectName(
+            "productSplitter"
+        )
+
+        splitter.addWidget(
+            form_widget
+        )
+
+        splitter.addWidget(
+            self.table
+        )
+
+        splitter.setSizes(
+            [
+                350,
+                750,
+            ]
+        )
+
+        form_widget.setMinimumWidth(
+            320
+        )
+
+        self.table.setMinimumWidth(
+            500
+        )
+
+        # =====================================================
+        # MAIN LAYOUT
+        # =====================================================
+
+        main_layout = QVBoxLayout(
+            self
+        )
+
+        main_layout.setContentsMargins(
+            10,
+            10,
+            10,
+            10,
+        )
+
+        main_layout.addWidget(
+            splitter
+        )
+
+    # =========================================================
+    # SIGNALS
+    # =========================================================
 
     def _connect_signals(self) -> None:
 
-        self.form.save_button.clicked.connect(self.save)
+        self.form.save_button.clicked.connect(
+            self.save
+        )
 
         self.form.clear_button.clicked.connect(
             self.clear_form
@@ -72,17 +221,48 @@ class ProductWindow(BaseWindow):
             self.edit_selected
         )
 
+    # =========================================================
+    # CATEGORIES
+    # =========================================================
+
     def load_categories(self) -> None:
 
-        categories = self._category_service.get_all()
+        categories = (
+            self._category_service.get_all()
+        )
 
-        self.form.load_categories(categories)
+        self.form.load_categories(
+            categories
+        )
+
+    # =========================================================
+    # REFRESH CATEGORIES
+    # =========================================================
+
+    def refresh_categories(self) -> None:
+        """
+        Refresh the category list used by the
+        product form.
+
+        This is called when a category is
+        created, updated, or deleted.
+        """
+
+        self.load_categories()
+
+    # =========================================================
+    # PRODUCTS
+    # =========================================================
 
     def load_products(self) -> None:
 
-        products = self._product_service.get_all()
+        products = (
+            self._product_service.get_all()
+        )
 
-        categories = self._category_service.get_all()
+        categories = (
+            self._category_service.get_all()
+        )
 
         category_names = {
             category.id: category.name
@@ -95,6 +275,10 @@ class ProductWindow(BaseWindow):
             category_names,
         )
 
+    # =========================================================
+    # SAVE / UPDATE
+    # =========================================================
+
     def save(self) -> None:
 
         data = self.form.get_data()
@@ -103,16 +287,22 @@ class ProductWindow(BaseWindow):
 
             if self._selected_product_id is None:
 
-                self._product_service.create(**data)
-                """
-                QMessageBox.information(
-                    self,
-                    "Success",
-                    "Product created successfully.",
+                self._product_service.create(
+                    **data
                 )
-                """
+
+                # -------------------------------------------------
+                # The product list has changed.
+                #
+                # Refresh ProductVariantWindow so the newly
+                # created product immediately appears in its
+                # product combo box.
+                # -------------------------------------------------
+
+                self._refresh_product_variants()
+
                 self.show_information(
-                    "Product created successfully.",
+                    "Product created successfully."
                 )
 
             else:
@@ -121,19 +311,12 @@ class ProductWindow(BaseWindow):
                     self._selected_product_id,
                     **data,
                 )
-                """
-                QMessageBox.information(
-                    self,
-                    "Success",
-                    "Product updated successfully.",
-                )
-                """
+
                 self.show_information(
-                    "Product updated successfully.",
+                    "Product updated successfully."
                 )
 
             self.clear_form()
-
             self.load_products()
 
         except (
@@ -147,38 +330,44 @@ class ProductWindow(BaseWindow):
                 str(error),
             )
 
+    # =========================================================
+    # EDIT
+    # =========================================================
+
     def edit_selected(
         self,
         product: Product,
     ) -> None:
 
-        self._selected_product_id = product.id
+        if product.id is None:
+            return
 
-        self.form.set_data(
-            name=product.name,
-            brand=product.brand,
-            category_id=product.category_id,
-            description=product.description,
+        self._selected_product_id = (
+            product.id
+        )
+
+        self.form.set_selected_product(
+            product
         )
 
         self.form.set_edit_mode()
 
+    # =========================================================
+    # DELETE
+    # =========================================================
+
     def delete(self) -> None:
 
-        product = self.table.selected_product()
+        product = (
+            self.table.selected_product()
+        )
 
         if product is None:
             return
-        """
-        answer = QMessageBox.question(
-            self,
-            "Delete Product",
-            f'Delete "{product.name}"?',
-        )
 
-        if answer != QMessageBox.StandardButton.Yes:
+        if product.id is None:
             return
-        """
+
         if not self.ask_confirmation(
             "Delete Product",
             f'Delete "{product.name}"?',
@@ -187,22 +376,33 @@ class ProductWindow(BaseWindow):
 
         try:
 
-            self._product_service.delete(product.id)
+            self._product_service.delete(
+                product.id
+            )
 
             self.clear_form()
-
             self.load_products()
+
+        except ProductHasVariantsError as error:
+
+            self.show_error(
+                str(error)
+            )
 
         except ProductNotFoundError as error:
 
-            QMessageBox.warning(
-                self,
-                "Error",
-                str(error),
+            self.show_error(
+                str(error)
             )
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
 
     def clear_form(self) -> None:
 
         self._selected_product_id = None
+
         self.form.clear()
+
         self.form.set_create_mode()

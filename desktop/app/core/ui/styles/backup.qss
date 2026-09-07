@@ -1,0 +1,239 @@
+/* =========================================================
+   BACKUP WINDOW
+   ========================================================= */
+
+#backupWindow {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+#backupTitle {
+    color: #ffffff;
+
+    font-size: 20px;
+    font-weight: 600;
+
+    padding-bottom: 2px;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+#backupDescription {
+    color: #aaaaaa;
+
+    font-size: 13px;
+
+    padding-bottom: 3px;
+}
+
+/* =========================================================
+   BACKUP LOCATION
+   ========================================================= */
+
+#backupLocation {
+    background-color: #202020;
+
+    color: #bbbbbb;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    padding: 9px 10px;
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   CREATE BACKUP BUTTON
+   ========================================================= */
+
+#backupCreateButton {
+    background-color: #3d7eff;
+
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 18px;
+}
+
+#backupCreateButton:hover {
+    background-color: #528eff;
+}
+
+#backupCreateButton:pressed {
+    background-color: #326bd6;
+}
+
+#backupCreateButton:disabled {
+    background-color: #303030;
+
+    color: #777777;
+}
+
+/* =========================================================
+   REFRESH BUTTON
+   ========================================================= */
+
+#backupRefreshButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    font-weight: 500;
+
+    padding: 8px 18px;
+}
+
+#backupRefreshButton:hover {
+    background-color: #3a3a3a;
+
+    color: #ffffff;
+}
+
+#backupRefreshButton:pressed {
+    background-color: #282828;
+}
+
+/* =========================================================
+   BACKUP LIST
+   ========================================================= */
+
+#backupList {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    padding: 4px;
+
+    outline: none;
+}
+
+/* =========================================================
+   BACKUP LIST ITEMS
+   ========================================================= */
+
+#backupList::item {
+    padding: 9px;
+
+    border-bottom: 1px solid #333333;
+}
+
+#backupList::item:hover {
+    background-color: #2d2d2d;
+}
+
+#backupList::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+#backupList QScrollBar:vertical {
+    background-color: #202020;
+
+    width: 10px;
+}
+
+#backupList QScrollBar::handle:vertical {
+    background-color: #454545;
+
+    border-radius: 5px;
+
+    min-height: 30px;
+}
+
+#backupList QScrollBar::handle:vertical:hover {
+    background-color: #555555;
+}
+
+#backupList QScrollBar::add-line,
+#backupList QScrollBar::sub-line {
+    background: none;
+
+    border: none;
+
+    height: 0;
+}
+
+/* =========================================================
+   HORIZONTAL SCROLLBAR
+   ========================================================= */
+
+#backupList QScrollBar:horizontal {
+    background-color: #202020;
+
+    height: 10px;
+}
+
+#backupList QScrollBar::handle:horizontal {
+    background-color: #454545;
+
+    border-radius: 5px;
+}
+
+#backupList QScrollBar::handle:horizontal:hover {
+    background-color: #555555;
+}
+
+#backupList QScrollBar::add-line,
+#backupList QScrollBar::sub-line {
+    background: none;
+
+    border: none;
+}
+
+/* =========================================================
+   RESTORE BUTTON
+   ========================================================= */
+
+#backupRestoreButton {
+    background-color: #3a2525;
+
+    color: #f0b0b0;
+
+    border: 1px solid #633737;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 18px;
+}
+
+#backupRestoreButton:hover {
+    background-color: #542d2d;
+
+    color: #ffffff;
+}
+
+#backupRestoreButton:pressed {
+    background-color: #302020;
+}
+
+#backupRestoreButton:disabled {
+    background-color: #303030;
+
+    color: #777777;
+
+    border-color: #3d3d3d;
+}

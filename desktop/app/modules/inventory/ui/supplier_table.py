@@ -1,4 +1,4 @@
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
@@ -13,7 +13,7 @@ from app.modules.inventory.models.supplier import Supplier
 
 class SupplierTable(QWidget):
     """
-    Displays suppliers in a table.
+    Displays suppliers in a responsive table.
 
     This widget is responsible only for displaying data.
     It does not communicate with the service layer.
@@ -24,21 +24,37 @@ class SupplierTable(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
+        self.setObjectName(
+            "supplierTableContainer"
+        )
+
         self._suppliers: list[Supplier] = []
 
         self._build_ui()
+
+    # =========================================================
+    # UI
+    # =========================================================
 
     def _build_ui(self) -> None:
 
         self.table = QTableWidget()
 
+        self.table.setObjectName(
+            "supplierTable"
+        )
+
         self.table.itemDoubleClicked.connect(
             self._on_item_double_clicked
         )
 
-        self.table.setSortingEnabled(True)
+        self.table.setSortingEnabled(
+            True
+        )
 
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(
+            6
+        )
 
         self.table.setHorizontalHeaderLabels(
             [
@@ -50,6 +66,10 @@ class SupplierTable(QWidget):
                 "Notes",
             ]
         )
+
+        # -----------------------------------------------------
+        # Selection
+        # -----------------------------------------------------
 
         self.table.setSelectionBehavior(
             QAbstractItemView.SelectionBehavior.SelectRows
@@ -63,38 +83,130 @@ class SupplierTable(QWidget):
             QAbstractItemView.EditTrigger.NoEditTriggers
         )
 
-        self.table.setAlternatingRowColors(True)
+        # -----------------------------------------------------
+        # Appearance
+        # -----------------------------------------------------
 
-        self.table.verticalHeader().setVisible(False)
+        self.table.setAlternatingRowColors(
+            True
+        )
+
+        self.table.verticalHeader().setVisible(
+            False
+        )
+
+        self.table.setWordWrap(
+            False
+        )
+
+        self.table.setTextElideMode(
+            Qt.TextElideMode.ElideRight
+        )
+
+        self.table.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+
+        self.table.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+
+        # -----------------------------------------------------
+        # Columns
+        # -----------------------------------------------------
 
         header = self.table.horizontalHeader()
 
         header.setSectionResizeMode(
-            QHeaderView.ResizeMode.Stretch
+            QHeaderView.ResizeMode.Interactive
         )
 
-        layout = QVBoxLayout(self)
+        header.resizeSection(
+            0,
+            160,
+        )
 
-        layout.addWidget(self.table)
+        header.resizeSection(
+            1,
+            150,
+        )
+
+        header.resizeSection(
+            2,
+            130,
+        )
+
+        header.resizeSection(
+            3,
+            180,
+        )
+
+        header.resizeSection(
+            4,
+            220,
+        )
+
+        header.resizeSection(
+            5,
+            220,
+        )
+
+        header.setMinimumSectionSize(
+            80
+        )
+
+        # -----------------------------------------------------
+        # Layout
+        # -----------------------------------------------------
+
+        layout = QVBoxLayout(
+            self
+        )
+
+        layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        layout.addWidget(
+            self.table
+        )
+
+    # =========================================================
+    # DATA
+    # =========================================================
 
     def set_suppliers(
         self,
         suppliers: list[Supplier],
     ) -> None:
-        """
-        Populate the table with suppliers.
-        """
 
         self._suppliers = suppliers
 
-        self.table.setRowCount(len(suppliers))
+        sorting_enabled = (
+            self.table.isSortingEnabled()
+        )
 
-        for row, supplier in enumerate(suppliers):
+        self.table.setSortingEnabled(
+            False
+        )
+
+        self.table.setRowCount(
+            len(suppliers)
+        )
+
+        for row, supplier in enumerate(
+            suppliers
+        ):
 
             self.table.setItem(
                 row,
                 0,
-                QTableWidgetItem(supplier.name),
+                QTableWidgetItem(
+                    supplier.name
+                ),
             )
 
             self.table.setItem(
@@ -137,40 +249,59 @@ class SupplierTable(QWidget):
                 ),
             )
 
+        self.table.setSortingEnabled(
+            sorting_enabled
+        )
+
+    # =========================================================
+    # SELECTION
+    # =========================================================
+
     def selected_supplier(
         self,
     ) -> Supplier | None:
-        """
-        Returns the currently selected supplier.
-        """
 
         row = self.table.currentRow()
 
         if row < 0:
             return None
 
-        if row >= len(self._suppliers):
+        if row >= len(
+            self._suppliers
+        ):
             return None
 
         return self._suppliers[row]
 
-    def clear(self) -> None:
-        """
-        Clears the table.
-        """
+    # =========================================================
+    # CLEAR
+    # =========================================================
 
-        self._suppliers.clear()
-
-        self.table.setRowCount(0)
-
-    def _on_item_double_clicked(
+    def clear(
         self,
     ) -> None:
 
-        supplier = self.selected_supplier()
+        self._suppliers.clear()
+
+        self.table.setRowCount(
+            0
+        )
+
+    # =========================================================
+    # EVENTS
+    # =========================================================
+
+    def _on_item_double_clicked(
+        self,
+        item: QTableWidgetItem,
+    ) -> None:
+
+        supplier = (
+            self.selected_supplier()
+        )
 
         if supplier is not None:
 
             self.supplier_selected.emit(
-                supplier,
+                supplier
             )

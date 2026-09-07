@@ -30,6 +30,7 @@ from app.modules.inventory.services.supplier_service import (
     SupplierService,
 )
 from app.modules.inventory.models.purchase_order_item import PurchaseOrderItem
+from app.modules.inventory.enums.movement_type import MovementType
 
 
 class PurchaseOrderService:
@@ -223,7 +224,6 @@ class PurchaseOrderService:
             purchase_order,
         )
 
-
     def receive_item(
         self,
         item_id: UUID,
@@ -251,29 +251,47 @@ class PurchaseOrderService:
                 "Purchase order cannot receive goods."
             )
 
-        outstanding = item.quantity - item.received_quantity
+        outstanding = (
+            item.quantity - item.received_quantity
+        )
+
+        if quantity <= 0:
+            raise OverReceiveError(
+                "Received quantity must be greater than zero."
+            )
 
         if quantity > outstanding:
             raise OverReceiveError(
                 "Cannot receive more than ordered."
             )
 
-        self._stock_movement_service.purchase_stock(
-            variant_id=item.product_variant_id,
-            quantity=quantity,
-            reference=purchase_order.order_number,
-            notes="Purchase Order Receipt",
-        )
+        try:
 
-        item.received_quantity += quantity
+            self._stock_movement_service.record_movement(
+                variant_id=item.product_variant_id,
+                movement_type=MovementType.PURCHASE,
+                quantity=quantity,
+                reference=purchase_order.order_number,
+                notes="Purchase Order Receipt",
+            )
 
-        self._purchase_order_item_repository.update(
-            item,
-        )
+            item.received_quantity += quantity
 
-        self._update_purchase_order_status(
-            purchase_order.id,
-        )
+            self._purchase_order_item_repository.update(
+                item,
+            )
+
+            self._update_purchase_order_status(
+                purchase_order.id,
+            )
+
+            self._stock_movement_service.commit()
+
+        except Exception:
+
+            self._stock_movement_service.rollback()
+
+            raise
 
     def _update_purchase_order_status(
         self,
@@ -347,6 +365,8 @@ class PurchaseOrderService:
             )
         )
 
+        outstanding_items = []
+
         for item in items:
 
             outstanding = (
@@ -354,11 +374,57 @@ class PurchaseOrderService:
             )
 
             if outstanding > 0:
-
-                self.receive_item(
-                    item.id,
-                    outstanding,
+                outstanding_items.append(
+                    (item, outstanding)
                 )
+
+        if not outstanding_items:
+            return
+
+        try:
+
+            #
+            # Receive every outstanding item.
+            #
+            for item, quantity in outstanding_items:
+
+                self._stock_movement_service.record_movement(
+                    variant_id=item.product_variant_id,
+                    movement_type=MovementType.PURCHASE,
+                    quantity=quantity,
+                    reference=purchase_order.order_number,
+                    notes="Purchase Order Receipt",
+                )
+
+                item.received_quantity += quantity
+
+                self._purchase_order_item_repository.update(
+                    item,
+                )
+
+            #
+            # Update PO status once.
+            #
+            purchase_order.status = (
+                PurchaseOrderStatus.RECEIVED
+            )
+
+            purchase_order.received_date = date.today()
+
+            self._purchase_order_repository.update(
+                purchase_order,
+            )
+
+            #
+            # Commit everything together.
+            #
+            self._stock_movement_service.commit()
+
+        except Exception:
+
+            self._stock_movement_service.rollback()
+
+            raise
     
     def get_by_supplier(
         self,

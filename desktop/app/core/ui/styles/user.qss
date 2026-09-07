@@ -1,0 +1,277 @@
+/* =========================================================
+   USER WINDOW
+   ========================================================= */
+
+#userWindow {
+    background-color: #1b1b1b;
+}
+
+/* =========================================================
+   FORM CONTAINER
+   ========================================================= */
+
+#userFormContainer {
+    background-color: #202020;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+#userForm {
+    background-color: #202020;
+}
+
+/* =========================================================
+   FORM TITLE
+   ========================================================= */
+
+#userFormTitle {
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    padding-bottom: 5px;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+#userFormContainer QLabel {
+    color: #cfcfcf;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#userFormContainer QLineEdit,
+#userFormContainer QComboBox {
+    background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #404040;
+    border-radius: 6px;
+
+    padding: 7px 9px;
+}
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+#userFormContainer QLineEdit:focus,
+#userFormContainer QComboBox:focus {
+    border: 1px solid #4c9aff;
+}
+
+/* =========================================================
+   COMBO BOX
+   ========================================================= */
+
+#userFormContainer QComboBox::drop-down {
+    border: none;
+
+    width: 25px;
+}
+
+#userFormContainer QComboBox QAbstractItemView {
+    background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #404040;
+
+    selection-background-color: #354b61;
+    selection-color: #ffffff;
+}
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+#userSaveButton {
+    background-color: #3d7eff;
+
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#userSaveButton:hover {
+    background-color: #528eff;
+}
+
+#userSaveButton:pressed {
+    background-color: #326bd6;
+}
+
+#userSaveButton:disabled {
+    background-color: #303030;
+    color: #777777;
+}
+
+/* =========================================================
+   CLEAR BUTTON
+   ========================================================= */
+
+#userClearButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    font-weight: 500;
+
+    padding: 8px 16px;
+}
+
+#userClearButton:hover {
+    background-color: #3a3a3a;
+
+    color: #ffffff;
+}
+
+#userClearButton:pressed {
+    background-color: #282828;
+}
+
+/* =========================================================
+   DEACTIVATE BUTTON
+   ========================================================= */
+
+#userDeactivateButton {
+    background-color: #3a2525;
+
+    color: #f0b0b0;
+
+    border: 1px solid #633737;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    padding: 8px 16px;
+}
+
+#userDeactivateButton:hover {
+    background-color: #542d2d;
+
+    color: #ffffff;
+}
+
+#userDeactivateButton:pressed {
+    background-color: #302020;
+}
+
+/* =========================================================
+   SPLITTER
+   ========================================================= */
+
+#userSplitter::handle {
+    background-color: #363636;
+
+    width: 2px;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+#userTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+/* =========================================================
+   TABLE ITEMS
+   ========================================================= */
+
+#userTable::item {
+    padding: 7px;
+}
+
+#userTable::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+#userTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+/* =========================================================
+   SCROLLBARS
+   ========================================================= */
+
+#userTable QScrollBar:vertical {
+    background-color: #202020;
+
+    width: 10px;
+}
+
+#userTable QScrollBar::handle:vertical {
+    background-color: #454545;
+
+    border-radius: 5px;
+}
+
+#userTable QScrollBar::handle:vertical:hover {
+    background-color: #555555;
+}
+
+#userTable QScrollBar:horizontal {
+    background-color: #202020;
+
+    height: 10px;
+}
+
+#userTable QScrollBar::handle:horizontal {
+    background-color: #454545;
+
+    border-radius: 5px;
+}
+
+#userTable QScrollBar::add-line,
+#userTable QScrollBar::sub-line {
+    background: none;
+    border: none;
+}

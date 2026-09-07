@@ -1,16 +1,14 @@
 from __future__ import annotations
+
 from decimal import Decimal
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from app.modules.inventory.models.product_variant import ProductVariant
-    from app.modules.inventory.models.product import Product
-
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
     QDoubleSpinBox,
     QFormLayout,
     QHBoxLayout,
+    QLabel,
     QLineEdit,
     QPushButton,
     QSpinBox,
@@ -18,43 +16,216 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.modules.inventory.models.product import Product
+
 
 class ProductVariantForm(QWidget):
 
     def __init__(self) -> None:
         super().__init__()
 
-        self._selected_variant: ProductVariant | None = None
+        self._build_ui()
+
+    # =========================================================
+    # UI
+    # =========================================================
+
+    def _build_ui(self) -> None:
+
+        title = QLabel(
+            "Product Variant Information"
+        )
+
+        title.setObjectName(
+            "productVariantFormTitle"
+        )
+
+        # -----------------------------------------------------
+        # Product
+        # -----------------------------------------------------
 
         self.product_combo = QComboBox()
 
-        self.length_spin = QSpinBox()
-        self.length_spin.setMinimum(1)
+        self.product_combo.setObjectName(
+            "productVariantProductCombo"
+        )
 
-        self.stock_quantity_spin = QSpinBox()
-        self.stock_quantity_spin.setMinimum(0)
+        self.product_combo.setMinimumHeight(
+            35
+        )
 
-        self.reorder_level_spin = QSpinBox()
-        self.reorder_level_spin.setMinimum(0)
+        # -----------------------------------------------------
+        # Variant Name
+        # -----------------------------------------------------
 
-        self.cost_price_spin = QDoubleSpinBox()
-        self.cost_price_spin.setMinimum(0)
-        self.cost_price_spin.setMaximum(1_000_000)
-        self.cost_price_spin.setDecimals(2)
+        self.name_input = QLineEdit()
 
-        self.selling_price_spin = QDoubleSpinBox()
-        self.selling_price_spin.setMinimum(0)
-        self.selling_price_spin.setMaximum(1_000_000)
-        self.selling_price_spin.setDecimals(2)
+        self.name_input.setObjectName(
+            "productVariantNameInput"
+        )
 
-        self.barcode_input = QLineEdit()
+        self.name_input.setPlaceholderText(
+            "Enter variant name"
+        )
+
+        self.name_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # Length
+        # -----------------------------------------------------
+
+        self.length_input = QSpinBox()
+
+        self.length_input.setObjectName(
+            "productVariantLengthInput"
+        )
+
+        self.length_input.setRange(
+            1,
+            999999999,
+        )
+
+        self.length_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # SKU
+        # -----------------------------------------------------
 
         self.sku_input = QLineEdit()
 
-        self.save_button = QPushButton("Save")
-        self.clear_button = QPushButton("Clear")
+        self.sku_input.setObjectName(
+            "productVariantSkuInput"
+        )
+
+        self.sku_input.setPlaceholderText(
+            "Enter SKU"
+        )
+
+        self.sku_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # Stock Quantity
+        # -----------------------------------------------------
+
+        self.stock_quantity_input = QSpinBox()
+
+        self.stock_quantity_input.setObjectName(
+            "productVariantStockInput"
+        )
+
+        self.stock_quantity_input.setRange(
+            0,
+            999999999,
+        )
+
+        self.stock_quantity_input.setValue(
+            0
+        )
+
+        self.stock_quantity_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # Reorder Level
+        # -----------------------------------------------------
+
+        self.reorder_level_input = QSpinBox()
+
+        self.reorder_level_input.setObjectName(
+            "productVariantReorderLevelInput"
+        )
+
+        self.reorder_level_input.setRange(
+            0,
+            999999999,
+        )
+
+        self.reorder_level_input.setValue(
+            5
+        )
+
+        self.reorder_level_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # Cost Price
+        # -----------------------------------------------------
+
+        self.cost_price_input = QDoubleSpinBox()
+
+        self.cost_price_input.setObjectName(
+            "productVariantCostPriceInput"
+        )
+
+        self.cost_price_input.setRange(
+            0.00,
+            999999999.99,
+        )
+
+        self.cost_price_input.setDecimals(
+            2
+        )
+
+        self.cost_price_input.setValue(
+            0.00
+        )
+
+        self.cost_price_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # Selling Price
+        # -----------------------------------------------------
+
+        self.selling_price_input = QDoubleSpinBox()
+
+        self.selling_price_input.setObjectName(
+            "productVariantSellingPriceInput"
+        )
+
+        self.selling_price_input.setRange(
+            0.00,
+            999999999.99,
+        )
+
+        self.selling_price_input.setDecimals(
+            2
+        )
+
+        self.selling_price_input.setValue(
+            0.00
+        )
+
+        self.selling_price_input.setMinimumHeight(
+            35
+        )
+
+        # -----------------------------------------------------
+        # Form
+        # -----------------------------------------------------
 
         form_layout = QFormLayout()
+
+        form_layout.setFieldGrowthPolicy(
+            QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow
+        )
+
+        form_layout.setLabelAlignment(
+            Qt.AlignmentFlag.AlignLeft
+        )
+
+        form_layout.setVerticalSpacing(
+            12
+        )
 
         form_layout.addRow(
             "Product:",
@@ -62,33 +233,13 @@ class ProductVariantForm(QWidget):
         )
 
         form_layout.addRow(
+            "Variant Name:",
+            self.name_input,
+        )
+
+        form_layout.addRow(
             "Length:",
-            self.length_spin,
-        )
-
-        form_layout.addRow(
-            "Stock Quantity:",
-            self.stock_quantity_spin,
-        )
-
-        form_layout.addRow(
-            "Reorder Level:",
-            self.reorder_level_spin,
-        )
-
-        form_layout.addRow(
-            "Cost Price:",
-            self.cost_price_spin,
-        )
-
-        form_layout.addRow(
-            "Selling Price:",
-            self.selling_price_spin,
-        )
-
-        form_layout.addRow(
-            "Barcode:",
-            self.barcode_input,
+            self.length_input,
         )
 
         form_layout.addRow(
@@ -96,15 +247,108 @@ class ProductVariantForm(QWidget):
             self.sku_input,
         )
 
+        form_layout.addRow(
+            "Stock Quantity:",
+            self.stock_quantity_input,
+        )
+
+        form_layout.addRow(
+            "Reorder Level:",
+            self.reorder_level_input,
+        )
+
+        form_layout.addRow(
+            "Cost Price:",
+            self.cost_price_input,
+        )
+
+        form_layout.addRow(
+            "Selling Price:",
+            self.selling_price_input,
+        )
+
+        # -----------------------------------------------------
+        # Buttons
+        # -----------------------------------------------------
+
+        self.save_button = QPushButton(
+            "Save"
+        )
+
+        self.save_button.setObjectName(
+            "productVariantSaveButton"
+        )
+
+        self.save_button.setMinimumHeight(
+            38
+        )
+
+        self.save_button.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
+
+        self.clear_button = QPushButton(
+            "Clear"
+        )
+
+        self.clear_button.setObjectName(
+            "productVariantClearButton"
+        )
+
+        self.clear_button.setMinimumHeight(
+            38
+        )
+
+        self.clear_button.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
+
         button_layout = QHBoxLayout()
 
-        button_layout.addWidget(self.save_button)
-        button_layout.addWidget(self.clear_button)
+        button_layout.addWidget(
+            self.save_button
+        )
 
-        layout = QVBoxLayout(self)
+        button_layout.addWidget(
+            self.clear_button
+        )
 
-        layout.addLayout(form_layout)
-        layout.addLayout(button_layout)
+        # -----------------------------------------------------
+        # Main Layout
+        # -----------------------------------------------------
+
+        layout = QVBoxLayout(
+            self
+        )
+
+        layout.setContentsMargins(
+            15,
+            15,
+            15,
+            15,
+        )
+
+        layout.setSpacing(
+            12
+        )
+
+        layout.addWidget(
+            title
+        )
+
+        layout.addLayout(
+            form_layout
+        )
+
+        layout.addStretch()
+
+        layout.addLayout(
+            button_layout
+        )
+
+    # =========================================================
+    # PRODUCTS
+    # =========================================================
 
     def load_products(
         self,
@@ -120,119 +364,133 @@ class ProductVariantForm(QWidget):
                 product.id,
             )
 
+    # =========================================================
+    # DATA
+    # =========================================================
+
     def get_data(self) -> dict:
 
         return {
             "product_id": self.product_combo.currentData(),
-            "length": self.length_spin.value(),
-            "stock_quantity": self.stock_quantity_spin.value(),
-            "reorder_level": self.reorder_level_spin.value(),
+            "name": self.name_input.text().strip(),
+            "length": self.length_input.value(),
+            "stock_quantity": self.stock_quantity_input.value(),
+            "reorder_level": self.reorder_level_input.value(),
             "cost_price": Decimal(
                 str(
-                    self.cost_price_spin.value(),
+                    self.cost_price_input.value()
                 )
             ),
             "selling_price": Decimal(
                 str(
-                    self.selling_price_spin.value(),
+                    self.selling_price_input.value()
                 )
             ),
-            "barcode": self.barcode_input.text() or None,
-            "sku": self.sku_input.text() or None,
+            "sku": self.sku_input.text().strip() or None,
         }
+
+    # =========================================================
+    # EDIT MODE
+    # =========================================================
 
     def set_data(
         self,
         *,
         product_id,
+        name: str,
         length: int,
         stock_quantity: int,
         reorder_level: int,
         cost_price: Decimal,
         selling_price: Decimal,
-        barcode: str | None,
         sku: str | None,
     ) -> None:
 
-        index = self.product_combo.findData(product_id)
+        index = self.product_combo.findData(
+            product_id
+        )
 
         if index >= 0:
-            self.product_combo.setCurrentIndex(index)
+            self.product_combo.setCurrentIndex(
+                index
+            )
 
-        self.length_spin.setValue(length)
-
-        self.stock_quantity_spin.setValue(stock_quantity)
-
-        self.reorder_level_spin.setValue(reorder_level)
-
-        self.cost_price_spin.setValue(
-            float(cost_price)
+        self.name_input.setText(
+            name
         )
 
-        self.selling_price_spin.setValue(
-            float(selling_price)
-        )
-
-        self.barcode_input.setText(
-            barcode or "",
+        self.length_input.setValue(
+            length
         )
 
         self.sku_input.setText(
-            sku or "",
+            sku or ""
         )
+
+        self.stock_quantity_input.setValue(
+            stock_quantity
+        )
+
+        self.reorder_level_input.setValue(
+            reorder_level
+        )
+
+        self.cost_price_input.setValue(
+            float(cost_price)
+        )
+
+        self.selling_price_input.setValue(
+            float(selling_price)
+        )
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
 
     def clear(self) -> None:
 
-        self.clear_selection()
+        self.name_input.clear()
 
-        self.product_combo.setCurrentIndex(-1)
-
-        self.length_spin.setValue(1)
-
-        self.stock_quantity_spin.setValue(0)
-
-        self.reorder_level_spin.setValue(0)
-
-        self.cost_price_spin.setValue(0)
-
-        self.selling_price_spin.setValue(0)
-
-        self.barcode_input.clear()
+        self.length_input.setValue(
+            1
+        )
 
         self.sku_input.clear()
 
-    def selected_variant(
-        self,
-    ) -> ProductVariant | None:
-
-        return self._selected_variant
-
-    def set_selected_variant(
-        self,
-        variant: ProductVariant,
-    ) -> None:
-
-        self._selected_variant = variant
-
-        self.set_data(
-            product_id=variant.product_id,
-            length=variant.length,
-            stock_quantity=variant.stock_quantity,
-            reorder_level=variant.reorder_level,
-            cost_price=variant.cost_price,
-            selling_price=variant.selling_price,
-            barcode=variant.barcode,
-            sku=variant.sku,
+        self.stock_quantity_input.setValue(
+            0
         )
 
-    def clear_selection(self) -> None:
+        self.reorder_level_input.setValue(
+            5
+        )
 
-        self._selected_variant = None
+        self.cost_price_input.setValue(
+            0.00
+        )
+
+        self.selling_price_input.setValue(
+            0.00
+        )
+
+        self.product_combo.setCurrentIndex(
+            -1
+        )
+
+        self.name_input.setFocus()
+
+    # =========================================================
+    # MODES
+    # =========================================================
 
     def set_edit_mode(self) -> None:
 
-        self.save_button.setText("Update")
+        self.save_button.setText(
+            "Update"
+        )
 
     def set_create_mode(self) -> None:
 
-        self.save_button.setText("Save")
+        self.save_button.setText(
+            "Save"
+        )

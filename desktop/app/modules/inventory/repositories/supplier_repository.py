@@ -54,7 +54,9 @@ class SupplierRepository(BaseRepository):
             supplier_id,
         )
 
-    def get_all(self) -> list[Supplier]:
+    def get_all(
+        self,
+    ) -> list[Supplier]:
 
         statement = select(Supplier)
 
@@ -72,4 +74,16 @@ class SupplierRepository(BaseRepository):
             .where(Supplier.name == name)
         )
 
-        return self._session.exec(statement).first()
+        return self._session.exec(
+            statement
+        ).first()
+
+    def has_related_records(
+        self,
+        supplier: Supplier,
+    ) -> bool:
+
+        return bool(
+            supplier.purchase_orders
+            or supplier.returns
+        )

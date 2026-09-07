@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 if TYPE_CHECKING:
@@ -31,6 +32,6 @@ class Customer(BaseModel, table=True):
         max_length=255,
     )
 
-    sales: list["Sale"] = Relationship(
+    sales: Mapped[list["Sale"]] = Relationship(
         back_populates="customer",
     )

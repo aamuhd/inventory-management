@@ -1,0 +1,425 @@
+/* =========================================================
+   PURCHASE ORDER WINDOW
+   ========================================================= */
+
+#purchaseOrderWindow {
+    background-color: #1b1b1b;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+#purchaseOrderForm {
+    background-color: #242424;
+
+    border: 1px solid #363636;
+    border-radius: 8px;
+
+    padding: 12px;
+}
+
+
+/* =========================================================
+   FORM LABELS
+   ========================================================= */
+
+#purchaseOrderForm QLabel {
+    color: #dddddd;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#purchaseOrderForm QLineEdit,
+#purchaseOrderForm QComboBox,
+#purchaseOrderForm QDateEdit,
+#purchaseOrderForm QPlainTextEdit {
+    background-color: #202020;
+
+    color: #ffffff;
+
+    border: 1px solid #464646;
+    border-radius: 6px;
+
+    padding: 7px;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+#purchaseOrderForm QLineEdit:focus,
+#purchaseOrderForm QComboBox:focus,
+#purchaseOrderForm QDateEdit:focus,
+#purchaseOrderForm QPlainTextEdit:focus {
+    border: 1px solid #4d90fe;
+}
+
+
+/* =========================================================
+   COMBOBOX
+   ========================================================= */
+
+#purchaseOrderForm QComboBox {
+    padding-right: 10px;
+}
+
+#purchaseOrderForm QComboBox QAbstractItemView {
+    background-color: #292929;
+
+    color: #ffffff;
+
+    border: 1px solid #464646;
+
+    selection-background-color: #354b61;
+    selection-color: #ffffff;
+}
+
+
+/* =========================================================
+   DATE EDIT
+   ========================================================= */
+
+#purchaseOrderForm QDateEdit {
+    padding-right: 8px;
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+   ========================================================= */
+
+#createButton,
+#updateButton,
+#clearButton {
+    min-height: 36px;
+
+    border-radius: 6px;
+
+    padding: 0 18px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CREATE
+   ========================================================= */
+
+#createButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+}
+
+#createButton:hover {
+    background-color: #528eff;
+}
+
+#createButton:pressed {
+    background-color: #326bd6;
+}
+
+#createButton:disabled {
+    background-color: #303030;
+    color: #777777;
+}
+
+
+/* =========================================================
+   UPDATE
+   ========================================================= */
+
+#updateButton {
+    background-color: #3d7eff;
+    color: #ffffff;
+
+    border: none;
+}
+
+#updateButton:hover {
+    background-color: #528eff;
+}
+
+#updateButton:pressed {
+    background-color: #326bd6;
+}
+
+#updateButton:disabled {
+    background-color: #303030;
+    color: #777777;
+}
+
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
+#clearButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#clearButton:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+#clearButton:pressed {
+    background-color: #282828;
+}
+
+
+/* =========================================================
+   PURCHASE ORDER TABLE
+   ========================================================= */
+
+#purchaseOrderTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+
+/* =========================================================
+   PURCHASE ORDER TABLE ITEMS
+   ========================================================= */
+
+#purchaseOrderTable::item {
+    padding: 7px;
+}
+
+#purchaseOrderTable::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   PURCHASE ORDER TABLE HEADER
+   ========================================================= */
+
+#purchaseOrderTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PURCHASE ORDER ITEM TABLE
+   ========================================================= */
+
+#purchaseOrderItemTable {
+    background-color: #222222;
+
+    alternate-background-color: #252525;
+
+    color: #eeeeee;
+
+    border: 1px solid #363636;
+    border-radius: 6px;
+
+    gridline-color: #333333;
+}
+
+
+/* =========================================================
+   ITEM TABLE ITEMS
+   ========================================================= */
+
+#purchaseOrderItemTable::item {
+    padding: 7px;
+}
+
+#purchaseOrderItemTable::item:selected {
+    background-color: #354b61;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   ITEM TABLE HEADER
+   ========================================================= */
+
+#purchaseOrderItemTable QHeaderView::section {
+    background-color: #292929;
+
+    color: #bbbbbb;
+
+    border: none;
+    border-bottom: 1px solid #3d3d3d;
+
+    padding: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ITEM BUTTONS
+   ========================================================= */
+
+#addItemButton,
+#editItemButton,
+#deleteItemButton,
+#receiveButton,
+#deleteOrderButton {
+    min-height: 36px;
+
+    border-radius: 6px;
+
+    padding: 0 16px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ADD ITEM
+   ========================================================= */
+
+#addItemButton {
+    background-color: #3d7eff;
+
+    color: #ffffff;
+
+    border: none;
+}
+
+#addItemButton:hover {
+    background-color: #528eff;
+}
+
+#addItemButton:pressed {
+    background-color: #326bd6;
+}
+
+
+/* =========================================================
+   EDIT ITEM
+   ========================================================= */
+
+#editItemButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#editItemButton:hover {
+    background-color: #3a3a3a;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DELETE ITEM
+   ========================================================= */
+
+#deleteItemButton {
+    background-color: #303030;
+
+    color: #dddddd;
+
+    border: 1px solid #464646;
+}
+
+#deleteItemButton:hover {
+    background-color: #493030;
+
+    color: #ffb0b0;
+}
+
+
+/* =========================================================
+   RECEIVE ORDER
+   ========================================================= */
+
+#receiveButton {
+    background-color: #2f7d4a;
+
+    color: #ffffff;
+
+    border: none;
+}
+
+#receiveButton:hover {
+    background-color: #39945a;
+}
+
+#receiveButton:pressed {
+    background-color: #286b3f;
+}
+
+
+/* =========================================================
+   DELETE ORDER
+   ========================================================= */
+
+#deleteOrderButton {
+    background-color: #4a2929;
+
+    color: #ffb0b0;
+
+    border: 1px solid #663838;
+}
+
+#deleteOrderButton:hover {
+    background-color: #5a3030;
+
+    color: #ffffff;
+}
+
+#deleteOrderButton:pressed {
+    background-color: #3d2222;
+}
+
+
+/* =========================================================
+   DISABLED ACTION BUTTONS
+   ========================================================= */
+
+#addItemButton:disabled,
+#editItemButton:disabled,
+#deleteItemButton:disabled,
+#receiveButton:disabled,
+#deleteOrderButton:disabled {
+    background-color: #292929;
+
+    color: #666666;
+
+    border: 1px solid #353535;
+}

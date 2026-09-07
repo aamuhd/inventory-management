@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, List
 from uuid import UUID
 
 from sqlmodel import Field, Relationship
+from sqlalchemy.orm import Mapped
 
 from app.core.database.models.base import BaseModel
 from app.modules.inventory.enums.supplier_return_status import SupplierReturnStatus
@@ -39,15 +40,15 @@ class SupplierReturn(BaseModel, table=True):
 
     notes: str | None = None
 
-    supplier: "Supplier" = Relationship(
+    supplier: Mapped["Supplier"] = Relationship(
         back_populates="returns"
     )
 
-    purchase_order: "PurchaseOrder" = Relationship(
+    purchase_order: Mapped["PurchaseOrder"] = Relationship(
         back_populates="returns"
     )
 
-    items: List["SupplierReturnItem"] = Relationship(
+    items: Mapped[List["SupplierReturnItem"]] = Relationship(
         back_populates="supplier_return",
         cascade_delete=True
     )

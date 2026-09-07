@@ -83,3 +83,5 @@ class SaleItemRepository(BaseRepository):
         )
 
         return self._session.exec(statement).first()
+
+    

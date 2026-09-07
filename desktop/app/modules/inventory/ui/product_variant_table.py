@@ -1,164 +1,344 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QAbstractScrollArea,
+    QHeaderView,
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
 )
 
-if TYPE_CHECKING:
-    from app.modules.inventory.models.product_variant import ProductVariant
+from app.modules.inventory.models.product_variant import ProductVariant
 
 
 class ProductVariantTable(QWidget):
 
-    variant_selected = Signal(object)
+    variant_selected = Signal(ProductVariant)
 
     def __init__(self) -> None:
         super().__init__()
 
         self._variants: list[ProductVariant] = []
 
+        self.setObjectName(
+            "productVariantTableContainer"
+        )
+
+        self._build_ui()
+
+    # =========================================================
+    # UI
+    # =========================================================
+
+    def _build_ui(self) -> None:
+
         self.table = QTableWidget()
 
-        self.table.setColumnCount(8)
+        self.table.setObjectName(
+            "productVariantTable"
+        )
+
+        self.table.setSizeAdjustPolicy(
+            QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored
+        )
+
+        self.table.setSortingEnabled(
+            True
+        )
+
+        self.table.setColumnCount(
+            9
+        )
 
         self.table.setHorizontalHeaderLabels(
             [
                 "Product",
+                "Variant",
                 "Length",
+                "SKU",
                 "Stock",
-                "Reorder",
+                "Reorder Level",
                 "Cost Price",
                 "Selling Price",
-                "SKU",
-                "Barcode",
+                "Created",
             ]
         )
 
         self.table.setSelectionBehavior(
-            QTableWidget.SelectionBehavior.SelectRows,
+            QAbstractItemView.SelectionBehavior.SelectRows
         )
 
         self.table.setSelectionMode(
-            QTableWidget.SelectionMode.SingleSelection,
+            QAbstractItemView.SelectionMode.SingleSelection
         )
 
         self.table.setEditTriggers(
-            QTableWidget.EditTrigger.NoEditTriggers,
+            QAbstractItemView.EditTrigger.NoEditTriggers
         )
 
-        self.table.cellClicked.connect(
-            self._row_selected,
+        self.table.setAlternatingRowColors(
+            True
         )
 
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.table)
+        self.table.setWordWrap(
+            False
+        )
+
+        self.table.verticalHeader().setVisible(
+            False
+        )
+
+        self.table.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+
+        self.table.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+
+        header = self.table.horizontalHeader()
+
+        header.setSectionResizeMode(
+            QHeaderView.ResizeMode.ResizeToContents
+        )
+
+        header.setMinimumSectionSize(
+            80
+        )
+
+        header.setStretchLastSection(
+            True
+        )
+
+        self.table.itemDoubleClicked.connect(
+            self._on_item_double_clicked
+        )
+
+        layout = QVBoxLayout(
+            self
+        )
+
+        layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        layout.addWidget(
+            self.table
+        )
+
+    # =========================================================
+    # DATA
+    # =========================================================
 
     def set_variants(
         self,
         variants: list[ProductVariant],
+        product_names: dict,
     ) -> None:
 
-        self._variants = variants
+        self._variants = list(
+            variants
+        )
 
-        self.table.setRowCount(len(variants))
+        sorting_enabled = (
+            self.table.isSortingEnabled()
+        )
 
-        for row, variant in enumerate(variants):
+        self.table.setSortingEnabled(
+            False
+        )
+
+        self.table.setRowCount(
+            len(variants)
+        )
+
+        for row, variant in enumerate(
+            variants
+        ):
+
+            # -------------------------------------------------
+            # Product
+            # -------------------------------------------------
+
+            product_name = product_names.get(
+                variant.product_id,
+                "",
+            )
 
             self.table.setItem(
                 row,
                 0,
                 QTableWidgetItem(
-                    variant.product.name,
+                    product_name
                 ),
             )
+
+            # -------------------------------------------------
+            # Variant
+            # -------------------------------------------------
 
             self.table.setItem(
                 row,
                 1,
                 QTableWidgetItem(
-                    str(
-                        variant.length,
-                    ),
+                    variant.name
                 ),
+            )
+
+            # -------------------------------------------------
+            # Length
+            # -------------------------------------------------
+
+            length_item = QTableWidgetItem(
+                str(variant.length)
+            )
+
+            length_item.setTextAlignment(
+                Qt.AlignmentFlag.AlignRight
+                | Qt.AlignmentFlag.AlignVCenter
             )
 
             self.table.setItem(
                 row,
                 2,
-                QTableWidgetItem(
-                    str(
-                        variant.stock_quantity,
-                    ),
-                ),
+                length_item,
             )
+
+            # -------------------------------------------------
+            # SKU
+            # -------------------------------------------------
 
             self.table.setItem(
                 row,
                 3,
                 QTableWidgetItem(
-                    str(
-                        variant.reorder_level,
-                    ),
+                    variant.sku or ""
                 ),
+            )
+
+            # -------------------------------------------------
+            # Stock
+            # -------------------------------------------------
+
+            stock_item = QTableWidgetItem(
+                str(variant.stock_quantity)
+            )
+
+            stock_item.setTextAlignment(
+                Qt.AlignmentFlag.AlignRight
+                | Qt.AlignmentFlag.AlignVCenter
             )
 
             self.table.setItem(
                 row,
                 4,
-                QTableWidgetItem(
-                    str(
-                        variant.cost_price,
-                    ),
-                ),
+                stock_item,
+            )
+
+            # -------------------------------------------------
+            # Reorder Level
+            # -------------------------------------------------
+
+            reorder_item = QTableWidgetItem(
+                str(variant.reorder_level)
+            )
+
+            reorder_item.setTextAlignment(
+                Qt.AlignmentFlag.AlignRight
+                | Qt.AlignmentFlag.AlignVCenter
             )
 
             self.table.setItem(
                 row,
                 5,
-                QTableWidgetItem(
-                    str(
-                        variant.selling_price,
-                    ),
-                ),
+                reorder_item,
+            )
+
+            # -------------------------------------------------
+            # Cost Price
+            # -------------------------------------------------
+
+            cost_item = QTableWidgetItem(
+                str(variant.cost_price)
+            )
+
+            cost_item.setTextAlignment(
+                Qt.AlignmentFlag.AlignRight
+                | Qt.AlignmentFlag.AlignVCenter
             )
 
             self.table.setItem(
                 row,
                 6,
-                QTableWidgetItem(
-                    variant.sku or "",
-                ),
+                cost_item,
+            )
+
+            # -------------------------------------------------
+            # Selling Price
+            # -------------------------------------------------
+
+            selling_item = QTableWidgetItem(
+                str(variant.selling_price)
+            )
+
+            selling_item.setTextAlignment(
+                Qt.AlignmentFlag.AlignRight
+                | Qt.AlignmentFlag.AlignVCenter
             )
 
             self.table.setItem(
                 row,
                 7,
+                selling_item,
+            )
+
+            # -------------------------------------------------
+            # Created
+            # -------------------------------------------------
+
+            created = (
+                variant.created_at.strftime(
+                    "%Y-%m-%d %H:%M"
+                )
+            )
+
+            self.table.setItem(
+                row,
+                8,
                 QTableWidgetItem(
-                    variant.barcode or "",
+                    created
                 ),
             )
 
-        self.table.resizeColumnsToContents()
+            # -------------------------------------------------
+            # Store UUID on the first column
+            # -------------------------------------------------
 
-    def _row_selected(
-        self,
-        row: int,
-        column: int,
-    ) -> None:
+            product_item = self.table.item(
+                row,
+                0,
+            )
 
-        del column
+            if product_item is not None:
 
-        if row >= len(self._variants):
-            return
+                product_item.setData(
+                    Qt.ItemDataRole.UserRole,
+                    variant.id,
+                )
 
-        self.variant_selected.emit(
-            self._variants[row],
+        self.table.setSortingEnabled(
+            sorting_enabled
         )
+
+    # =========================================================
+    # SELECTION
+    # =========================================================
 
     def selected_variant(
         self,
@@ -169,10 +349,53 @@ class ProductVariantTable(QWidget):
         if row < 0:
             return None
 
-        return self._variants[row]
+        item = self.table.item(
+            row,
+            0,
+        )
 
-    def clear_selection(
+        if item is None:
+            return None
+
+        variant_id = item.data(
+            Qt.ItemDataRole.UserRole
+        )
+
+        if variant_id is None:
+            return None
+
+        for variant in self._variants:
+
+            if variant.id == variant_id:
+                return variant
+
+        return None
+
+    # =========================================================
+    # CLEAR
+    # =========================================================
+
+    def clear(self) -> None:
+
+        self._variants.clear()
+
+        self.table.setRowCount(
+            0
+        )
+
+    # =========================================================
+    # EVENTS
+    # =========================================================
+
+    def _on_item_double_clicked(
         self,
+        item: QTableWidgetItem,
     ) -> None:
 
-        self.table.clearSelection()
+        variant = self.selected_variant()
+
+        if variant is not None:
+
+            self.variant_selected.emit(
+                variant
+            )

@@ -3,6 +3,7 @@ from uuid import UUID
 from app.modules.inventory.exceptions import (
     InvalidSupplierNameError,
     SupplierAlreadyExistsError,
+    SupplierHasDependenciesError,
     SupplierNotFoundError,
 )
 from app.modules.inventory.models.supplier import Supplier
@@ -135,6 +136,12 @@ class SupplierService:
         supplier = self.get_by_id(
             supplier_id,
         )
+
+        if supplier.purchase_orders or supplier.returns:
+            raise SupplierHasDependenciesError(
+                "Cannot delete this supplier because it has "
+                "purchase orders or supplier returns."
+            )
 
         self._repository.delete(
             supplier,

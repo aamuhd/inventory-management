@@ -105,7 +105,7 @@ class CustomerService:
 
         if (
             existing is not None
-            and existing.id != Customer.id
+            and existing.id != customer.id
         ):
             raise CustomerAlreadyExistsError(
                 f'"{name}" already exists.'

@@ -19,5 +19,6 @@ class MovementType(StrEnum):
     ADJUSTMENT = "Adjustment"
     RETURN_IN = "Return In"
     DAMAGED = "Damaged"
+    SALES_RETURN = "Sales Return"
 
     RETURN_TO_SUPPLIER = "Return To Supplier"

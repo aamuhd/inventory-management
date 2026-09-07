@@ -1,22 +1,36 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QHBoxLayout,
+    QSplitter,
     QMessageBox,
     QPushButton,
     QVBoxLayout,
+    QWidget,
 )
+
+from sqlalchemy.exc import IntegrityError
+
+from app.core.ui.base_window import BaseWindow
 
 from app.modules.inventory.exceptions import (
     InvalidSupplierNameError,
     SupplierAlreadyExistsError,
+    SupplierHasDependenciesError,
     SupplierNotFoundError,
 )
+
 from app.modules.inventory.models.supplier import Supplier
+
 from app.modules.inventory.services.supplier_service import (
     SupplierService,
 )
-from app.modules.inventory.ui.supplier_form import SupplierForm
-from app.modules.inventory.ui.supplier_table import SupplierTable
-from app.core.ui.base_window import BaseWindow
+
+from app.modules.inventory.ui.supplier_form import (
+    SupplierForm,
+)
+
+from app.modules.inventory.ui.supplier_table import (
+    SupplierTable,
+)
 
 
 class SupplierWindow(BaseWindow):
@@ -25,9 +39,12 @@ class SupplierWindow(BaseWindow):
         self,
         supplier_service: SupplierService,
     ) -> None:
+
         super().__init__()
 
-        self._supplier_service = supplier_service
+        self._supplier_service = (
+            supplier_service
+        )
 
         self._selected_supplier_id = None
 
@@ -36,65 +53,190 @@ class SupplierWindow(BaseWindow):
 
         self.load_suppliers()
 
+    # =========================================================
+    # UI
+    # =========================================================
+
     def _build_ui(self) -> None:
 
-        self.setWindowTitle("Supplier Management")
+        self.setWindowTitle(
+            "Supplier Management"
+        )
+
+        self.setObjectName(
+            "supplierWindow"
+        )
+
+        self.setMinimumSize(
+            950,
+            550,
+        )
+
+        self.resize(
+            1200,
+            700,
+        )
+
+        # -----------------------------------------------------
+        # Form
+        # -----------------------------------------------------
 
         self.form = SupplierForm()
 
+        self.delete_button = QPushButton(
+            "Delete"
+        )
+
+        self.delete_button.setObjectName(
+            "deleteButton"
+        )
+
+        self.delete_button.setMinimumHeight(
+            40
+        )
+
+        self.delete_button.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
+
+        form_layout = QVBoxLayout()
+
+        form_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        form_layout.setSpacing(
+            10
+        )
+
+        form_layout.addWidget(
+            self.form
+        )
+
+        form_layout.addWidget(
+            self.delete_button
+        )
+
+        form_widget = QWidget()
+
+        form_widget.setObjectName(
+            "supplierFormContainer"
+        )
+
+        form_widget.setLayout(
+            form_layout
+        )
+
+        # -----------------------------------------------------
+        # Table
+        # -----------------------------------------------------
+
         self.table = SupplierTable()
 
-        self.delete_button = QPushButton("Delete")
+        # -----------------------------------------------------
+        # Splitter
+        # -----------------------------------------------------
 
-        left_layout = QVBoxLayout()
-
-        left_layout.addWidget(
-            self.form,
+        splitter = QSplitter(
+            Qt.Orientation.Horizontal
         )
 
-        left_layout.addWidget(
-            self.delete_button,
+        splitter.setObjectName(
+            "supplierSplitter"
         )
 
-        main_layout = QHBoxLayout(self)
+        splitter.addWidget(
+            form_widget
+        )
 
-        main_layout.addLayout(
-            left_layout,
-            1,
+        splitter.addWidget(
+            self.table
+        )
+
+        splitter.setSizes(
+            [
+                380,
+                820,
+            ]
+        )
+
+        form_widget.setMinimumWidth(
+            330
+        )
+
+        self.table.setMinimumWidth(
+            450
+        )
+
+        # -----------------------------------------------------
+        # Main Layout
+        # -----------------------------------------------------
+
+        main_layout = QVBoxLayout(
+            self
+        )
+
+        main_layout.setContentsMargins(
+            10,
+            10,
+            10,
+            10,
         )
 
         main_layout.addWidget(
-            self.table,
-            2,
+            splitter
         )
 
-    def _connect_signals(self) -> None:
+    # =========================================================
+    # SIGNALS
+    # =========================================================
+
+    def _connect_signals(
+        self,
+    ) -> None:
 
         self.form.save_button.clicked.connect(
-            self.save,
+            self.save
         )
 
         self.form.clear_button.clicked.connect(
-            self.clear_form,
+            self.clear_form
         )
 
         self.delete_button.clicked.connect(
-            self.delete,
+            self.delete
         )
 
         self.table.supplier_selected.connect(
-            self.edit_selected,
+            self.edit_selected
         )
 
-    def load_suppliers(self) -> None:
+    # =========================================================
+    # LOAD
+    # =========================================================
 
-        suppliers = self._supplier_service.get_all()
+    def load_suppliers(
+        self,
+    ) -> None:
+
+        suppliers = (
+            self._supplier_service.get_all()
+        )
 
         self.table.set_suppliers(
-            suppliers,
+            suppliers
         )
 
-    def save(self) -> None:
+    # =========================================================
+    # SAVE
+    # =========================================================
+
+    def save(
+        self,
+    ) -> None:
 
         (
             name,
@@ -117,16 +259,9 @@ class SupplierWindow(BaseWindow):
                     address=address,
                     notes=notes,
                 )
-                """
-                QMessageBox.information(
-                    self,
-                    "Success",
-                    "Supplier created successfully.",
-                )
-                """
-                #####
+
                 self.show_information(
-                    "Supplier created successfully.",
+                    "Supplier created successfully."
                 )
 
             else:
@@ -140,15 +275,9 @@ class SupplierWindow(BaseWindow):
                     address=address,
                     notes=notes,
                 )
-                """
-                QMessageBox.information(
-                    self,
-                    "Success",
-                    "Supplier updated successfully.",
-                )
-                """
+
                 self.show_information(
-                    "Supplier created successfully.",
+                    "Supplier updated successfully."
                 )
 
             self.clear_form()
@@ -166,6 +295,10 @@ class SupplierWindow(BaseWindow):
                 str(error),
             )
 
+    # =========================================================
+    # EDIT
+    # =========================================================
+
     def edit_selected(
         self,
         supplier: Supplier,
@@ -174,7 +307,9 @@ class SupplierWindow(BaseWindow):
         if supplier.id is None:
             return
 
-        self._selected_supplier_id = supplier.id
+        self._selected_supplier_id = (
+            supplier.id
+        )
 
         self.form.set_supplier(
             supplier.name,
@@ -187,22 +322,24 @@ class SupplierWindow(BaseWindow):
 
         self.form.set_edit_mode()
 
-    def delete(self) -> None:
+    # =========================================================
+    # DELETE
+    # =========================================================
 
-        supplier = self.table.selected_supplier()
+    def delete(
+        self,
+    ) -> None:
 
-        if supplier is None or supplier.id is None:
-            return
-        """
-        answer = QMessageBox.question(
-            self,
-            "Delete Supplier",
-            f'Delete "{supplier.name}"?',
+        supplier = (
+            self.table.selected_supplier()
         )
 
-        if answer != QMessageBox.StandardButton.Yes:
+        if (
+            supplier is None
+            or supplier.id is None
+        ):
             return
-        """
+
         if not self.ask_confirmation(
             "Delete Supplier",
             f'Delete "{supplier.name}"?',
@@ -212,12 +349,16 @@ class SupplierWindow(BaseWindow):
         try:
 
             self._supplier_service.delete(
-                supplier.id,
+                supplier.id
             )
 
             self.clear_form()
 
             self.load_suppliers()
+
+            self.show_information(
+                "Supplier deleted successfully."
+            )
 
         except SupplierNotFoundError as error:
 
@@ -227,7 +368,21 @@ class SupplierWindow(BaseWindow):
                 str(error),
             )
 
-    def clear_form(self) -> None:
+        except SupplierHasDependenciesError as error:
+
+            QMessageBox.warning(
+                self,
+                "Cannot Delete Supplier",
+                str(error),
+            )
+            
+    # =========================================================
+    # CLEAR
+    # =========================================================
+
+    def clear_form(
+        self,
+    ) -> None:
 
         self._selected_supplier_id = None
 
